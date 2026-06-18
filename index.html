@@ -15,68 +15,81 @@
       font-family: Arial, Helvetica, sans-serif;
       background: #f5f3ee;
       color: #111;
-      overflow-x: hidden;
+      overflow: hidden;
     }
 
     .hidden {
       display: none !important;
     }
 
-    /* ACCUEIL MINIMAL */
+    /* PAGE D’ACCUEIL */
 
     .home {
-      position: relative;
+      position: fixed;
+      inset: 0;
       width: 100vw;
       height: 100vh;
       overflow: hidden;
       background: #111;
+      cursor: pointer;
     }
 
-    #home-cover {
-      position: absolute;
-      inset: 0;
-      width: 100vw;
-      height: 100vh;
+    .home img {
+      width: 100%;
+      height: 100%;
+      object-fit: cover;
       display: block;
-      cursor: pointer;
     }
 
     .home-name {
       position: absolute;
-      left: 38px;
-      top: 32px;
+      top: 34px;
+      left: 40px;
       z-index: 2;
       border: none;
       background: transparent;
       padding: 0;
-      font-size: 28px;
+      color: #f5f3ee;
+      font-size: 30px;
       font-weight: 400;
       letter-spacing: -0.03em;
-      color: #f5f3ee;
       cursor: pointer;
     }
 
     .home-name:hover {
+      opacity: 0.55;
       background: transparent;
       color: #f5f3ee;
-      opacity: 0.55;
     }
 
-    /* VIEWER */
+    /* VIEWER GLOBAL */
 
-    header {
-      padding: 28px 40px 14px;
-      display: flex;
-      justify-content: space-between;
-      align-items: flex-start;
-      gap: 24px;
+    #app {
+      width: 100vw;
+      height: 100vh;
+      background: #f5f3ee;
+      overflow: hidden;
+    }
+
+    .topbar {
+      height: 58px;
+      padding: 0 24px;
+      display: grid;
+      grid-template-columns: 1fr auto 1fr;
+      align-items: center;
+      gap: 18px;
+      border-bottom: 1px solid rgba(17, 17, 17, 0.12);
+      background: #f5f3ee;
     }
 
     .brand {
       border: none;
       background: transparent;
       padding: 0;
-      text-align: left;
+      justify-self: start;
+      font-size: 20px;
+      font-weight: 400;
+      letter-spacing: -0.03em;
       cursor: pointer;
     }
 
@@ -86,43 +99,36 @@
       opacity: 0.55;
     }
 
-    h1 {
-      margin: 0 0 8px;
-      font-size: 28px;
-      font-weight: 400;
-      letter-spacing: -0.03em;
-    }
-
-    .intro {
-      margin: 0;
-      max-width: 640px;
-      font-size: 15px;
-      line-height: 1.5;
-      color: #333;
-    }
-
-    .top-actions {
+    .center-actions {
       display: flex;
-      gap: 10px;
-      flex-wrap: wrap;
+      align-items: center;
+      justify-content: center;
+      gap: 12px;
+      white-space: nowrap;
+    }
+
+    .right-actions {
+      display: flex;
       justify-content: flex-end;
+      gap: 10px;
+      white-space: nowrap;
     }
 
     a,
     button {
       font: inherit;
       font-size: 13px;
-      border: 1px solid rgba(17, 17, 17, 0.7);
+      border: 1px solid rgba(17, 17, 17, 0.55);
       background: transparent;
       color: #111;
       text-decoration: none;
       cursor: pointer;
-      transition: background 0.2s ease, color 0.2s ease, opacity 0.2s ease;
+      transition: opacity 0.2s ease, background 0.2s ease, color 0.2s ease;
     }
 
     a,
-    .top-actions button {
-      padding: 9px 13px;
+    .topbar button {
+      padding: 8px 11px;
     }
 
     a:hover,
@@ -131,27 +137,17 @@
       color: #f5f3ee;
     }
 
-    .viewer {
-      width: 100%;
-      min-height: calc(100vh - 130px);
-      padding: 8px 40px 36px;
-      display: flex;
-      flex-direction: column;
-      align-items: center;
-    }
-
     .page-nav {
-      margin-bottom: 14px;
       display: flex;
       align-items: center;
-      gap: 8px;
-      font-size: 13px;
+      gap: 7px;
       color: #444;
+      font-size: 13px;
     }
 
     .page-nav input {
-      width: 48px;
-      height: 30px;
+      width: 46px;
+      height: 29px;
       border: 1px solid rgba(17, 17, 17, 0.35);
       background: transparent;
       text-align: center;
@@ -159,25 +155,31 @@
       color: #111;
     }
 
-    .page-nav button {
-      width: 30px;
-      height: 30px;
-      padding: 0;
-      opacity: 0.7;
+    .viewer {
+      width: 100vw;
+      height: calc(100vh - 58px);
+      padding: 18px 54px 28px;
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      overflow: hidden;
     }
 
     .document-wrap {
       position: relative;
       width: fit-content;
       max-width: 100%;
+      max-height: 100%;
     }
 
     #pdf-canvas {
-      max-width: 100%;
-      height: auto;
       display: block;
+      max-width: 100%;
+      max-height: 100%;
+      width: auto;
+      height: auto;
       background: white;
-      box-shadow: 0 12px 40px rgba(0,0,0,0.12);
+      box-shadow: 0 12px 40px rgba(0,0,0,0.13);
     }
 
     .nav-side {
@@ -185,29 +187,29 @@
       top: 50%;
       transform: translateY(-50%);
       width: 34px;
-      height: 58px;
+      height: 62px;
       padding: 0;
       border: none;
       background: rgba(245, 243, 238, 0.72);
       color: #111;
-      font-size: 28px;
+      font-size: 30px;
       line-height: 1;
-      opacity: 0.24;
+      opacity: 0.22;
       z-index: 5;
     }
 
     .nav-side:hover {
       opacity: 0.9;
-      background: rgba(245, 243, 238, 0.95);
+      background: rgba(245, 243, 238, 0.96);
       color: #111;
     }
 
     #prev-side {
-      left: -48px;
+      left: -46px;
     }
 
     #next-side {
-      right: -48px;
+      right: -46px;
     }
 
     /* MENU PROJETS */
@@ -319,24 +321,30 @@
       pointer-events: auto;
     }
 
-    @media (max-width: 900px) {
+    @media (max-width: 850px) {
       .home-name {
+        top: 24px;
         left: 22px;
-        top: 22px;
         font-size: 24px;
       }
 
-      header {
-        padding: 24px 20px 12px;
-        flex-direction: column;
+      .topbar {
+        height: auto;
+        min-height: 72px;
+        padding: 14px 16px;
+        grid-template-columns: 1fr;
+        gap: 10px;
       }
 
-      .top-actions {
-        justify-content: flex-start;
+      .brand,
+      .center-actions,
+      .right-actions {
+        justify-self: start;
       }
 
       .viewer {
-        padding: 10px 12px 28px;
+        height: calc(100vh - 118px);
+        padding: 12px;
       }
 
       #pdf-canvas {
@@ -352,7 +360,7 @@
       }
 
       .nav-side {
-        background: rgba(245, 243, 238, 0.88);
+        background: rgba(245, 243, 238, 0.86);
         opacity: 0.45;
       }
     }
@@ -361,39 +369,34 @@
 
 <body>
   <section id="home" class="home">
-    <canvas id="home-cover"></canvas>
-
-    <button id="home-name" class="home-name">
-      Guillaume Morvan
-    </button>
+    <img src="cover.jpg" alt="Guillaume Morvan — Portfolio" />
+    <button id="home-name" class="home-name">Guillaume Morvan</button>
   </section>
 
   <section id="app" class="hidden">
-    <header>
-      <button id="brand" class="brand">
-        <h1>Guillaume Morvan</h1>
-        <p class="intro">
-          Architecture, réhabilitation et culture constructive — une pratique attentive aux contextes, aux matières et aux conditions concrètes du projet.
-        </p>
-      </button>
+    <header class="topbar">
+      <button id="brand" class="brand">Guillaume Morvan</button>
 
-      <div class="top-actions">
+      <div class="center-actions">
         <button id="projects-btn">Projets</button>
+
+        <div class="page-nav">
+          <button id="prev-small" aria-label="Page précédente">‹</button>
+          <span>Page</span>
+          <input id="page-input" type="number" min="1" value="1" />
+          <span>/</span>
+          <span id="page-count">—</span>
+          <button id="next-small" aria-label="Page suivante">›</button>
+        </div>
+      </div>
+
+      <div class="right-actions">
         <a href="portfolio-guillaume-morvan.pdf" download>Télécharger le PDF</a>
         <a href="portfolio-guillaume-morvan.pdf" target="_blank">Ouvrir le PDF</a>
       </div>
     </header>
 
     <main class="viewer">
-      <div class="page-nav">
-        <button id="prev-small" aria-label="Page précédente">‹</button>
-        <span>Page</span>
-        <input id="page-input" type="number" min="1" value="1" />
-        <span>/</span>
-        <span id="page-count">—</span>
-        <button id="next-small" aria-label="Page suivante">›</button>
-      </div>
-
       <div class="document-wrap">
         <button id="prev-side" class="nav-side" aria-label="Page précédente">‹</button>
         <canvas id="pdf-canvas"></canvas>
@@ -418,11 +421,6 @@
   <script>
     const PDF_URL = "portfolio-guillaume-morvan.pdf";
 
-    // Si l'image d'accueil n'est pas la bonne, change ce numéro.
-    // 1 = première page du PDF.
-    const HOME_PAGE = 1;
-
-    // Ajuste les numéros de page ici après test.
     const PROJECTS = [
       {
         title: "Fondations",
@@ -468,9 +466,6 @@
     const home = document.getElementById("home");
     const app = document.getElementById("app");
 
-    const homeCover = document.getElementById("home-cover");
-    const homeCtx = homeCover.getContext("2d");
-
     const canvas = document.getElementById("pdf-canvas");
     const ctx = canvas.getContext("2d");
 
@@ -503,7 +498,6 @@
       home.classList.remove("hidden");
       closeProjects();
       clearUrl();
-      renderCover();
     }
 
     function showApp(targetPage = 1) {
@@ -512,73 +506,23 @@
       goToPage(targetPage, false);
     }
 
-    function renderCover() {
-      if (!pdfDoc) return;
-
-      pdfDoc.getPage(HOME_PAGE).then(function(page) {
-        const screenWidth = window.innerWidth;
-        const screenHeight = window.innerHeight;
-        const outputScale = window.devicePixelRatio || 1;
-
-        const baseViewport = page.getViewport({ scale: 1 });
-
-        const scale = Math.max(
-          screenWidth / baseViewport.width,
-          screenHeight / baseViewport.height
-        );
-
-        const viewport = page.getViewport({ scale: scale });
-
-        const tempCanvas = document.createElement("canvas");
-        const tempCtx = tempCanvas.getContext("2d");
-
-        tempCanvas.width = Math.floor(viewport.width * outputScale);
-        tempCanvas.height = Math.floor(viewport.height * outputScale);
-
-        const transform = outputScale !== 1
-          ? [outputScale, 0, 0, outputScale, 0, 0]
-          : null;
-
-        page.render({
-          canvasContext: tempCtx,
-          transform: transform,
-          viewport: viewport
-        }).promise.then(function() {
-          homeCover.width = Math.floor(screenWidth * outputScale);
-          homeCover.height = Math.floor(screenHeight * outputScale);
-          homeCover.style.width = screenWidth + "px";
-          homeCover.style.height = screenHeight + "px";
-
-          homeCtx.clearRect(0, 0, homeCover.width, homeCover.height);
-
-          const cropX = Math.max(0, (tempCanvas.width - homeCover.width) / 2);
-          const cropY = Math.max(0, (tempCanvas.height - homeCover.height) / 2);
-
-          homeCtx.drawImage(
-            tempCanvas,
-            cropX,
-            cropY,
-            homeCover.width,
-            homeCover.height,
-            0,
-            0,
-            homeCover.width,
-            homeCover.height
-          );
-        });
-      });
-    }
-
     function renderPage(num) {
       pageRendering = true;
 
       pdfDoc.getPage(num).then(function(page) {
-        const viewerWidth = document.querySelector(".viewer").clientWidth - 24;
+        const viewer = document.querySelector(".viewer");
+        const maxWidth = viewer.clientWidth - 10;
+        const maxHeight = viewer.clientHeight - 10;
+
         const baseViewport = page.getViewport({ scale: 1 });
 
-        const scale = Math.min(viewerWidth / baseViewport.width, 1.45);
-        const viewport = page.getViewport({ scale: scale });
+        const scale = Math.min(
+          maxWidth / baseViewport.width,
+          maxHeight / baseViewport.height,
+          1.65
+        );
 
+        const viewport = page.getViewport({ scale: scale });
         const outputScale = window.devicePixelRatio || 1;
 
         canvas.width = Math.floor(viewport.width * outputScale);
@@ -679,11 +623,7 @@
       });
     }
 
-    document.getElementById("home-name").addEventListener("click", function() {
-      showApp(1);
-    });
-
-    homeCover.addEventListener("click", function() {
+    home.addEventListener("click", function() {
       showApp(1);
     });
 
@@ -734,8 +674,9 @@
     }, { passive: false });
 
     window.addEventListener("resize", function() {
-      if (!home.classList.contains("hidden")) renderCover();
-      if (!app.classList.contains("hidden")) queueRenderPage(pageNum);
+      if (!app.classList.contains("hidden")) {
+        queueRenderPage(pageNum);
+      }
     });
 
     buildProjectList();
@@ -748,8 +689,6 @@
 
       if (initialPage) {
         showApp(Math.min(initialPage, pdf.numPages));
-      } else {
-        renderCover();
       }
     });
   </script>
