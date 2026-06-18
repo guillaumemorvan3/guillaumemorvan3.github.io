@@ -6,19 +6,26 @@
   <title>Guillaume Morvan — Portfolio</title>
 
   <style>
-    * { box-sizing: border-box; }
+    * {
+      box-sizing: border-box;
+    }
 
+    html,
     body {
       margin: 0;
+      width: 100%;
+      height: 100%;
       font-family: Arial, Helvetica, sans-serif;
       background: #f5f3ee;
       color: #111;
       overflow: hidden;
     }
 
-    .hidden { display: none !important; }
+    .hidden {
+      display: none !important;
+    }
 
-    /* ACCUEIL */
+    /* ACCUEIL PLEINE IMAGE */
 
     .home {
       position: fixed;
@@ -30,7 +37,7 @@
       cursor: pointer;
     }
 
-    .home img {
+    .home-image {
       width: 100%;
       height: 100%;
       object-fit: cover;
@@ -54,9 +61,9 @@
     }
 
     .home-name:hover {
+      opacity: 0.55;
       background: transparent;
       color: #f5f3ee;
-      opacity: 0.55;
     }
 
     /* VIEWER */
@@ -69,12 +76,12 @@
     }
 
     .topbar {
-      height: 48px;
-      padding: 0 22px;
+      height: 52px;
+      padding: 0 26px;
       display: flex;
       align-items: center;
       justify-content: space-between;
-      gap: 20px;
+      gap: 24px;
       border-bottom: 1px solid rgba(17, 17, 17, 0.12);
       background: #f5f3ee;
     }
@@ -83,7 +90,7 @@
       border: none;
       background: transparent;
       padding: 0;
-      font-size: 18px;
+      font-size: 19px;
       font-weight: 400;
       letter-spacing: -0.03em;
       cursor: pointer;
@@ -96,19 +103,20 @@
       opacity: 0.55;
     }
 
-    .nav-line {
+    .topbar-center {
       display: flex;
       align-items: center;
       justify-content: center;
-      gap: 12px;
+      gap: 14px;
       flex: 1;
       white-space: nowrap;
     }
 
-    .right-actions {
+    .topbar-right {
       display: flex;
+      align-items: center;
       justify-content: flex-end;
-      gap: 9px;
+      gap: 10px;
       white-space: nowrap;
     }
 
@@ -139,8 +147,8 @@
       display: flex;
       align-items: center;
       gap: 7px;
-      color: #444;
       font-size: 12px;
+      color: #444;
     }
 
     .page-nav input {
@@ -155,8 +163,8 @@
 
     .viewer {
       width: 100vw;
-      height: calc(100vh - 48px);
-      padding: 16px 52px 22px;
+      height: calc(100vh - 52px);
+      padding: 14px 54px 20px;
       display: flex;
       align-items: center;
       justify-content: center;
@@ -173,7 +181,7 @@
     #pdf-canvas {
       display: block;
       background: white;
-      box-shadow: 0 12px 40px rgba(0,0,0,0.13);
+      box-shadow: 0 12px 40px rgba(0, 0, 0, 0.13);
     }
 
     .nav-side {
@@ -198,8 +206,13 @@
       color: #111;
     }
 
-    #prev-side { left: -46px; }
-    #next-side { right: -46px; }
+    #prev-side {
+      left: -46px;
+    }
+
+    #next-side {
+      right: -46px;
+    }
 
     /* MENU PROJETS */
 
@@ -212,7 +225,7 @@
       height: 100vh;
       background: #f5f3ee;
       border-left: 1px solid rgba(17, 17, 17, 0.18);
-      box-shadow: -12px 0 40px rgba(0,0,0,0.08);
+      box-shadow: -12px 0 40px rgba(0, 0, 0, 0.08);
       transform: translateX(100%);
       transition: transform 0.25s ease;
       z-index: 20;
@@ -220,7 +233,9 @@
       overflow-y: auto;
     }
 
-    .drawer.open { transform: translateX(0); }
+    .drawer.open {
+      transform: translateX(0);
+    }
 
     .drawer-header {
       display: flex;
@@ -311,15 +326,15 @@
 
       .topbar {
         height: auto;
-        min-height: 92px;
+        min-height: 96px;
         padding: 12px 14px;
         flex-direction: column;
         align-items: flex-start;
         gap: 8px;
       }
 
-      .nav-line,
-      .right-actions {
+      .topbar-center,
+      .topbar-right {
         justify-content: flex-start;
       }
 
@@ -332,8 +347,13 @@
         box-shadow: none;
       }
 
-      #prev-side { left: 6px; }
-      #next-side { right: 6px; }
+      #prev-side {
+        left: 6px;
+      }
+
+      #next-side {
+        right: 6px;
+      }
 
       .nav-side {
         background: rgba(245, 243, 238, 0.86);
@@ -345,7 +365,7 @@
 
 <body>
   <section id="home" class="home">
-    <img src="cover.jpg" alt="Guillaume Morvan — Portfolio" />
+    <img src="cover.jpg" alt="Guillaume Morvan — Portfolio" class="home-image" />
     <button id="home-name" class="home-name">Guillaume Morvan</button>
   </section>
 
@@ -353,7 +373,7 @@
     <header class="topbar">
       <button id="brand" class="brand">Guillaume Morvan</button>
 
-      <div class="nav-line">
+      <div class="topbar-center">
         <button id="projects-btn">Projets</button>
 
         <div class="page-nav">
@@ -366,7 +386,7 @@
         </div>
       </div>
 
-      <div class="right-actions">
+      <div class="topbar-right">
         <a href="portfolio-guillaume-morvan.pdf" download>Télécharger le PDF</a>
         <a href="portfolio-guillaume-morvan.pdf" target="_blank">Ouvrir le PDF</a>
       </div>
@@ -396,38 +416,38 @@
 
   <script>
     const PDF_URL = "portfolio-guillaume-morvan.pdf";
-    const START_PAGE = 2;
+    const START_PAGE = 1;
 
     const PROJECTS = [
       {
         title: "Fondations",
         subtitle: "Entre technologies contemporaines et bon sens vernaculaire",
-        page: 2
+        page: 4
       },
       {
         title: "Station ferroviaire Melle",
         subtitle: "Évolutivité et appropriation des espaces",
-        page: 4
+        page: 6
       },
       {
         title: "Église Saint-Joseph",
         subtitle: "Réhabilitation du patrimoine : révéler les qualités cachées",
-        page: 10
+        page: 20
       },
       {
         title: "Ferme Nord",
         subtitle: "Réhabilitation du patrimoine : l’harmonieux contraste",
-        page: 20
+        page: 40
       },
       {
         title: "TANK",
         subtitle: "L’architecte dans une pratique engagée pour la qualité",
-        page: 34
+        page: 78
       },
       {
         title: "EDWOOD",
         subtitle: "Le chantier bois : école de la réalité constructive",
-        page: 40
+        page: 90
       }
     ];
 
