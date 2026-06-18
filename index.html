@@ -6,9 +6,7 @@
   <title>Guillaume Morvan — Portfolio</title>
 
   <style>
-    * {
-      box-sizing: border-box;
-    }
+    * { box-sizing: border-box; }
 
     body {
       margin: 0;
@@ -18,11 +16,9 @@
       overflow: hidden;
     }
 
-    .hidden {
-      display: none !important;
-    }
+    .hidden { display: none !important; }
 
-    /* PAGE D’ACCUEIL */
+    /* ACCUEIL */
 
     .home {
       position: fixed;
@@ -38,6 +34,7 @@
       width: 100%;
       height: 100%;
       object-fit: cover;
+      object-position: center;
       display: block;
     }
 
@@ -57,12 +54,12 @@
     }
 
     .home-name:hover {
-      opacity: 0.55;
       background: transparent;
       color: #f5f3ee;
+      opacity: 0.55;
     }
 
-    /* VIEWER GLOBAL */
+    /* VIEWER */
 
     #app {
       width: 100vw;
@@ -72,12 +69,12 @@
     }
 
     .topbar {
-      height: 58px;
-      padding: 0 24px;
-      display: grid;
-      grid-template-columns: 1fr auto 1fr;
+      height: 48px;
+      padding: 0 22px;
+      display: flex;
       align-items: center;
-      gap: 18px;
+      justify-content: space-between;
+      gap: 20px;
       border-bottom: 1px solid rgba(17, 17, 17, 0.12);
       background: #f5f3ee;
     }
@@ -86,11 +83,11 @@
       border: none;
       background: transparent;
       padding: 0;
-      justify-self: start;
-      font-size: 20px;
+      font-size: 18px;
       font-weight: 400;
       letter-spacing: -0.03em;
       cursor: pointer;
+      white-space: nowrap;
     }
 
     .brand:hover {
@@ -99,25 +96,26 @@
       opacity: 0.55;
     }
 
-    .center-actions {
+    .nav-line {
       display: flex;
       align-items: center;
       justify-content: center;
       gap: 12px;
+      flex: 1;
       white-space: nowrap;
     }
 
     .right-actions {
       display: flex;
       justify-content: flex-end;
-      gap: 10px;
+      gap: 9px;
       white-space: nowrap;
     }
 
     a,
     button {
       font: inherit;
-      font-size: 13px;
+      font-size: 12px;
       border: 1px solid rgba(17, 17, 17, 0.55);
       background: transparent;
       color: #111;
@@ -128,7 +126,7 @@
 
     a,
     .topbar button {
-      padding: 8px 11px;
+      padding: 7px 10px;
     }
 
     a:hover,
@@ -142,12 +140,12 @@
       align-items: center;
       gap: 7px;
       color: #444;
-      font-size: 13px;
+      font-size: 12px;
     }
 
     .page-nav input {
-      width: 46px;
-      height: 29px;
+      width: 42px;
+      height: 27px;
       border: 1px solid rgba(17, 17, 17, 0.35);
       background: transparent;
       text-align: center;
@@ -157,8 +155,8 @@
 
     .viewer {
       width: 100vw;
-      height: calc(100vh - 58px);
-      padding: 18px 54px 28px;
+      height: calc(100vh - 48px);
+      padding: 16px 52px 22px;
       display: flex;
       align-items: center;
       justify-content: center;
@@ -174,10 +172,6 @@
 
     #pdf-canvas {
       display: block;
-      max-width: 100%;
-      max-height: 100%;
-      width: auto;
-      height: auto;
       background: white;
       box-shadow: 0 12px 40px rgba(0,0,0,0.13);
     }
@@ -204,13 +198,8 @@
       color: #111;
     }
 
-    #prev-side {
-      left: -46px;
-    }
-
-    #next-side {
-      right: -46px;
-    }
+    #prev-side { left: -46px; }
+    #next-side { right: -46px; }
 
     /* MENU PROJETS */
 
@@ -231,9 +220,7 @@
       overflow-y: auto;
     }
 
-    .drawer.open {
-      transform: translateX(0);
-    }
+    .drawer.open { transform: translateX(0); }
 
     .drawer-header {
       display: flex;
@@ -262,12 +249,6 @@
       opacity: 1;
       background: transparent;
       color: #111;
-    }
-
-    .project-list {
-      display: flex;
-      flex-direction: column;
-      gap: 4px;
     }
 
     .project-item {
@@ -330,20 +311,20 @@
 
       .topbar {
         height: auto;
-        min-height: 72px;
-        padding: 14px 16px;
-        grid-template-columns: 1fr;
-        gap: 10px;
+        min-height: 92px;
+        padding: 12px 14px;
+        flex-direction: column;
+        align-items: flex-start;
+        gap: 8px;
       }
 
-      .brand,
-      .center-actions,
+      .nav-line,
       .right-actions {
-        justify-self: start;
+        justify-content: flex-start;
       }
 
       .viewer {
-        height: calc(100vh - 118px);
+        height: calc(100vh - 120px);
         padding: 12px;
       }
 
@@ -351,13 +332,8 @@
         box-shadow: none;
       }
 
-      #prev-side {
-        left: 6px;
-      }
-
-      #next-side {
-        right: 6px;
-      }
+      #prev-side { left: 6px; }
+      #next-side { right: 6px; }
 
       .nav-side {
         background: rgba(245, 243, 238, 0.86);
@@ -377,7 +353,7 @@
     <header class="topbar">
       <button id="brand" class="brand">Guillaume Morvan</button>
 
-      <div class="center-actions">
+      <div class="nav-line">
         <button id="projects-btn">Projets</button>
 
         <div class="page-nav">
@@ -413,13 +389,14 @@
       <button id="close-drawer" class="close-drawer" aria-label="Fermer">×</button>
     </div>
 
-    <div id="project-list" class="project-list"></div>
+    <div id="project-list"></div>
   </aside>
 
   <script src="https://cdnjs.cloudflare.com/ajax/libs/pdf.js/3.11.174/pdf.min.js"></script>
 
   <script>
     const PDF_URL = "portfolio-guillaume-morvan.pdf";
+    const START_PAGE = 2;
 
     const PROJECTS = [
       {
@@ -458,7 +435,7 @@
       "https://cdnjs.cloudflare.com/ajax/libs/pdf.js/3.11.174/pdf.worker.min.js";
 
     let pdfDoc = null;
-    let pageNum = 1;
+    let pageNum = START_PAGE;
     let pageRendering = false;
     let pageNumPending = null;
     let lastWheelTime = 0;
@@ -475,10 +452,17 @@
     const overlay = document.getElementById("overlay");
     const projectList = document.getElementById("project-list");
 
-    function getInitialPage() {
-      const params = new URLSearchParams(window.location.search);
-      const requestedPage = parseInt(params.get("page"), 10);
-      return Number.isInteger(requestedPage) && requestedPage > 0 ? requestedPage : null;
+    function showHome() {
+      app.classList.add("hidden");
+      home.classList.remove("hidden");
+      closeProjects();
+      history.replaceState({}, "", window.location.pathname);
+    }
+
+    function showApp(targetPage = START_PAGE) {
+      home.classList.add("hidden");
+      app.classList.remove("hidden");
+      goToPage(targetPage, false);
     }
 
     function updateUrl(num) {
@@ -487,39 +471,19 @@
       window.history.replaceState({}, "", url);
     }
 
-    function clearUrl() {
-      const url = new URL(window.location);
-      url.searchParams.delete("page");
-      window.history.replaceState({}, "", url.pathname);
-    }
-
-    function showHome() {
-      app.classList.add("hidden");
-      home.classList.remove("hidden");
-      closeProjects();
-      clearUrl();
-    }
-
-    function showApp(targetPage = 1) {
-      home.classList.add("hidden");
-      app.classList.remove("hidden");
-      goToPage(targetPage, false);
-    }
-
     function renderPage(num) {
       pageRendering = true;
 
       pdfDoc.getPage(num).then(function(page) {
         const viewer = document.querySelector(".viewer");
-        const maxWidth = viewer.clientWidth - 10;
-        const maxHeight = viewer.clientHeight - 10;
+        const maxWidth = viewer.clientWidth - 8;
+        const maxHeight = viewer.clientHeight - 8;
 
         const baseViewport = page.getViewport({ scale: 1 });
 
         const scale = Math.min(
           maxWidth / baseViewport.width,
-          maxHeight / baseViewport.height,
-          1.65
+          maxHeight / baseViewport.height
         );
 
         const viewport = page.getViewport({ scale: scale });
@@ -624,7 +588,7 @@
     }
 
     home.addEventListener("click", function() {
-      showApp(1);
+      showApp(START_PAGE);
     });
 
     document.getElementById("brand").addEventListener("click", showHome);
@@ -685,10 +649,11 @@
       pdfDoc = pdf;
       pageCountEl.textContent = pdf.numPages;
 
-      const initialPage = getInitialPage();
+      const params = new URLSearchParams(window.location.search);
+      const directPage = parseInt(params.get("page"), 10);
 
-      if (initialPage) {
-        showApp(Math.min(initialPage, pdf.numPages));
+      if (Number.isInteger(directPage) && directPage > 0) {
+        showApp(Math.min(directPage, pdf.numPages));
       }
     });
   </script>
