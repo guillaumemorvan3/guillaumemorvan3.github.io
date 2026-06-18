@@ -378,12 +378,10 @@
   </aside>
 
   <script>
-    const IMAGE_PREFIX = "Morvan_Guillaume_Portfolio_2018_2026_réduit";
-    const IMAGE_EXTENSION = ".jpg";
-
-    const FIRST_IMAGE = 2;
-    const LAST_IMAGE = 46;
-    const START_IMAGE = 2;
+    const IMAGE_FOLDER = "pages/";
+    const FIRST_IMAGE = 1;
+    const LAST_IMAGE = 45;
+    const START_IMAGE = 1;
 
     const PROJECTS = [
       {
@@ -430,7 +428,7 @@
     const projectList = document.getElementById("project-list");
 
     function getImageSrc(num) {
-      return encodeURI(`${IMAGE_PREFIX}${num}${IMAGE_EXTENSION}`);
+      return encodeURI(`${IMAGE_FOLDER}page(${num}).jpg`);
     }
 
     function preloadImage(num) {
@@ -467,7 +465,6 @@
       }
 
       currentImage = target;
-
       pageImage.classList.add("loading");
 
       const src = getImageSrc(currentImage);
@@ -478,8 +475,12 @@
         preloadImage(currentImage - 1);
       };
 
-      pageImage.src = src;
+      pageImage.onerror = function() {
+        pageImage.classList.remove("loading");
+        pageImage.alt = "Image introuvable : " + src;
+      };
 
+      pageImage.src = src;
       updateUrl(currentImage);
 
       if (closeDrawer) closeProjects();
