@@ -147,10 +147,21 @@
       overflow: hidden;
     }
 
-    #pdf-canvas {
+    #page-image {
+      max-width: 100vw;
+      max-height: calc(100vh - 44px);
+      width: auto;
+      height: auto;
       display: block;
-      background: white;
-      box-shadow: none;
+      object-fit: contain;
+      opacity: 1;
+      transition: opacity 0.12s ease;
+      user-select: none;
+      -webkit-user-drag: none;
+    }
+
+    #page-image.loading {
+      opacity: 0.35;
     }
 
     .nav-side {
@@ -310,6 +321,10 @@
         height: calc(100vh - 90px);
       }
 
+      #page-image {
+        max-height: calc(100vh - 90px);
+      }
+
       .nav-side {
         top: calc(90px + (100vh - 90px) / 2);
         opacity: 0.28;
@@ -345,7 +360,7 @@
     <main class="viewer">
       <div class="document-wrap">
         <button id="prev-side" class="nav-side" aria-label="Page précédente">‹</button>
-        <canvas id="pdf-canvas"></canvas>
+        <img id="page-image" src="" alt="Portfolio Guillaume Morvan" />
         <button id="next-side" class="nav-side" aria-label="Page suivante">›</button>
       </div>
     </main>
@@ -362,11 +377,13 @@
     <div id="project-list"></div>
   </aside>
 
-  <script src="https://cdnjs.cloudflare.com/ajax/libs/pdf.js/3.11.174/pdf.min.js"></script>
-
   <script>
-    const PDF_URL = "portfolio-guillaume-morvan.pdf";
-    const START_PAGE = 1;
+    const IMAGE_PREFIX = "Morvan_Guillaume_Portfolio_2018_2026_réduit";
+    const IMAGE_EXTENSION = ".jpg";
+
+    const FIRST_IMAGE = 2;
+    const LAST_IMAGE = 46;
+    const START_IMAGE = 2;
 
     const PROJECTS = [
       {
@@ -401,40 +418,26 @@
       }
     ];
 
-    pdfjsLib.GlobalWorkerOptions.workerSrc =
-      "https://cdnjs.cloudflare.com/ajax/libs/pdf.js/3.11.174/pdf.worker.min.js";
-
-    let pdfDoc = null;
-    let pageNum = START_PAGE;
-    let pageRendering = false;
-    let pageNumPending = null;
+    let currentImage = START_IMAGE;
     let lastWheelTime = 0;
 
     const home = document.getElementById("home");
     const app = document.getElementById("app");
-
-    const canvas = document.getElementById("pdf-canvas");
-    const ctx = canvas.getContext("2d");
+    const pageImage = document.getElementById("page-image");
 
     const drawer = document.getElementById("drawer");
     const overlay = document.getElementById("overlay");
     const projectList = document.getElementById("project-list");
 
-    function showHome() {
-      app.classList.add("hidden");
-      home.classList.remove("hidden");
-      closeProjects();
-      history.replaceState({}, "", window.location.pathname);
+    function getImageSrc(num) {
+      return encodeURI(`${IMAGE_PREFIX}${num}${IMAGE_EXTENSION}`);
     }
 
-    function showApp(targetPage = START_PAGE) {
-      home.classList.add("hidden");
-      app.classList.remove("hidden");
-      pageNum = targetPage;
+    function preloadImage(num) {
+      if (num < FIRST_IMAGE || num > LAST_IMAGE) return;
 
-      if (pdfDoc) {
-        goToPage(targetPage, false);
-      }
+      const img = new Image();
+      img.src = getImageSrc(num);
     }
 
     function updateUrl(num) {
@@ -443,89 +446,57 @@
       window.history.replaceState({}, "", url);
     }
 
-    function renderPage(num) {
-      pageRendering = true;
-
-      pdfDoc.getPage(num).then(function(page) {
-        const viewer = document.querySelector(".viewer");
-        const maxWidth = viewer.clientWidth;
-        const maxHeight = viewer.clientHeight;
-
-        const baseViewport = page.getViewport({ scale: 1 });
-
-        const scale = Math.min(
-          maxWidth / baseViewport.width,
-          maxHeight / baseViewport.height
-        );
-
-        const viewport = page.getViewport({ scale: scale });
-        const outputScale = Math.min(window.devicePixelRatio || 1, 1.25);
-
-        canvas.width = Math.floor(viewport.width * outputScale);
-        canvas.height = Math.floor(viewport.height * outputScale);
-        canvas.style.width = Math.floor(viewport.width) + "px";
-        canvas.style.height = Math.floor(viewport.height) + "px";
-
-        const transform = outputScale !== 1
-          ? [outputScale, 0, 0, outputScale, 0, 0]
-          : null;
-
-        const renderTask = page.render({
-          canvasContext: ctx,
-          transform: transform,
-          viewport: viewport
-        });
-
-        renderTask.promise.then(function() {
-          pageRendering = false;
-
-          if (pageNumPending !== null) {
-            renderPage(pageNumPending);
-            pageNumPending = null;
-          }
-        });
-      });
-
-      updateUrl(num);
+    function showHome() {
+      app.classList.add("hidden");
+      home.classList.remove("hidden");
+      closeProjects();
+      history.replaceState({}, "", window.location.pathname);
     }
 
-    function queueRenderPage(num) {
-      if (!pdfDoc) return;
-
-      const safePage = Math.max(1, Math.min(num, pdfDoc.numPages));
-
-      if (pageRendering) {
-        pageNumPending = safePage;
-      } else {
-        renderPage(safePage);
-      }
+    function showApp(targetPage = START_IMAGE) {
+      home.classList.add("hidden");
+      app.classList.remove("hidden");
+      goToPage(targetPage, false);
     }
 
     function goToPage(num, closeDrawer = true) {
-      if (!pdfDoc) return;
-
       const target = parseInt(num, 10);
 
-      if (!target || target < 1 || target > pdfDoc.numPages) {
+      if (!target || target < FIRST_IMAGE || target > LAST_IMAGE) {
         return;
       }
 
-      pageNum = target;
-      queueRenderPage(pageNum);
+      currentImage = target;
+
+      pageImage.classList.add("loading");
+
+      const src = getImageSrc(currentImage);
+
+      pageImage.onload = function() {
+        pageImage.classList.remove("loading");
+        preloadImage(currentImage + 1);
+        preloadImage(currentImage - 1);
+      };
+
+      pageImage.src = src;
+
+      updateUrl(currentImage);
 
       if (closeDrawer) closeProjects();
     }
 
     function previousPage() {
-      if (!pdfDoc || pageNum <= 1 || app.classList.contains("hidden")) return;
-      pageNum--;
-      queueRenderPage(pageNum);
+      if (app.classList.contains("hidden")) return;
+      if (currentImage <= FIRST_IMAGE) return;
+
+      goToPage(currentImage - 1, false);
     }
 
     function nextPage() {
-      if (!pdfDoc || pageNum >= pdfDoc.numPages || app.classList.contains("hidden")) return;
-      pageNum++;
-      queueRenderPage(pageNum);
+      if (app.classList.contains("hidden")) return;
+      if (currentImage >= LAST_IMAGE) return;
+
+      goToPage(currentImage + 1, false);
     }
 
     function openProjects() {
@@ -542,10 +513,11 @@
       PROJECTS.forEach(function(project, index) {
         const button = document.createElement("button");
         button.className = "project-item";
+
         button.innerHTML = `
           <span class="project-title">${String(index + 1).padStart(2, "0")} — ${project.title}</span>
           <span class="project-subtitle">${project.subtitle}</span>
-          <span class="project-page">Page ${project.page}</span>
+          <span class="project-page">Image ${project.page}</span>
         `;
 
         button.addEventListener("click", function() {
@@ -558,7 +530,7 @@
     }
 
     home.addEventListener("click", function() {
-      showApp(START_PAGE);
+      showApp(START_IMAGE);
     });
 
     document.getElementById("brand").addEventListener("click", showHome);
@@ -577,13 +549,13 @@
     });
 
     document.querySelector(".document-wrap").addEventListener("wheel", function(e) {
-      if (!pdfDoc || app.classList.contains("hidden")) return;
+      if (app.classList.contains("hidden")) return;
 
       e.preventDefault();
 
       const now = Date.now();
 
-      if (now - lastWheelTime < 650) return;
+      if (now - lastWheelTime < 420) return;
       if (Math.abs(e.deltaY) < 20) return;
 
       if (e.deltaY > 0) {
@@ -595,26 +567,14 @@
       lastWheelTime = now;
     }, { passive: false });
 
-    window.addEventListener("resize", function() {
-      if (!app.classList.contains("hidden")) {
-        queueRenderPage(pageNum);
-      }
-    });
-
     buildProjectList();
 
-    pdfjsLib.getDocument(PDF_URL).promise.then(function(pdf) {
-      pdfDoc = pdf;
+    const params = new URLSearchParams(window.location.search);
+    const directPage = parseInt(params.get("page"), 10);
 
-      const params = new URLSearchParams(window.location.search);
-      const directPage = parseInt(params.get("page"), 10);
-
-      if (Number.isInteger(directPage) && directPage > 0) {
-        showApp(Math.min(directPage, pdf.numPages));
-      } else if (!app.classList.contains("hidden")) {
-        queueRenderPage(pageNum);
-      }
-    });
+    if (Number.isInteger(directPage) && directPage >= FIRST_IMAGE && directPage <= LAST_IMAGE) {
+      showApp(directPage);
+    }
   </script>
 </body>
 </html>
