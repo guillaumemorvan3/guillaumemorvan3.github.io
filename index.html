@@ -6,7 +6,9 @@
   <title>Guillaume Morvan — Portfolio</title>
 
   <style>
-    * { box-sizing: border-box; }
+    * {
+      box-sizing: border-box;
+    }
 
     body {
       margin: 0;
@@ -16,56 +18,48 @@
       overflow-x: hidden;
     }
 
-    .hidden { display: none !important; }
+    .hidden {
+      display: none !important;
+    }
 
-    /* ACCUEIL */
+    /* ACCUEIL MINIMAL */
 
     .home {
-      min-height: 100vh;
-      padding: 34px 40px;
-      display: flex;
-      flex-direction: column;
-      justify-content: space-between;
+      position: relative;
+      width: 100vw;
+      height: 100vh;
+      overflow: hidden;
+      background: #111;
+    }
+
+    #home-cover {
+      position: absolute;
+      inset: 0;
+      width: 100vw;
+      height: 100vh;
+      display: block;
+      cursor: pointer;
     }
 
     .home-name {
-      align-self: flex-start;
+      position: absolute;
+      left: 38px;
+      top: 32px;
+      z-index: 2;
       border: none;
       background: transparent;
       padding: 0;
       font-size: 28px;
       font-weight: 400;
       letter-spacing: -0.03em;
+      color: #f5f3ee;
       cursor: pointer;
     }
 
     .home-name:hover {
       background: transparent;
-      color: #111;
+      color: #f5f3ee;
       opacity: 0.55;
-    }
-
-    .home-cover-wrap {
-      flex: 1;
-      display: flex;
-      align-items: center;
-      justify-content: center;
-      padding: 40px 0;
-    }
-
-    #home-cover {
-      max-width: 72vw;
-      max-height: 72vh;
-      width: auto;
-      height: auto;
-      background: white;
-      box-shadow: 0 14px 50px rgba(0,0,0,0.12);
-      cursor: pointer;
-    }
-
-    .home-footer {
-      font-size: 13px;
-      color: #555;
     }
 
     /* VIEWER */
@@ -208,8 +202,13 @@
       color: #111;
     }
 
-    #prev-side { left: -48px; }
-    #next-side { right: -48px; }
+    #prev-side {
+      left: -48px;
+    }
+
+    #next-side {
+      right: -48px;
+    }
 
     /* MENU PROJETS */
 
@@ -230,7 +229,9 @@
       overflow-y: auto;
     }
 
-    .drawer.open { transform: translateX(0); }
+    .drawer.open {
+      transform: translateX(0);
+    }
 
     .drawer-header {
       display: flex;
@@ -319,14 +320,10 @@
     }
 
     @media (max-width: 900px) {
-      .home {
-        padding: 24px 20px;
-      }
-
-      #home-cover {
-        max-width: 92vw;
-        max-height: 70vh;
-        box-shadow: none;
+      .home-name {
+        left: 22px;
+        top: 22px;
+        font-size: 24px;
       }
 
       header {
@@ -346,8 +343,13 @@
         box-shadow: none;
       }
 
-      #prev-side { left: 6px; }
-      #next-side { right: 6px; }
+      #prev-side {
+        left: 6px;
+      }
+
+      #next-side {
+        right: 6px;
+      }
 
       .nav-side {
         background: rgba(245, 243, 238, 0.88);
@@ -359,13 +361,11 @@
 
 <body>
   <section id="home" class="home">
-    <button id="home-name" class="home-name">Guillaume Morvan</button>
+    <canvas id="home-cover"></canvas>
 
-    <div class="home-cover-wrap">
-      <canvas id="home-cover"></canvas>
-    </div>
-
-    <div class="home-footer">Portfolio d’architecture</div>
+    <button id="home-name" class="home-name">
+      Guillaume Morvan
+    </button>
   </section>
 
   <section id="app" class="hidden">
@@ -418,6 +418,11 @@
   <script>
     const PDF_URL = "portfolio-guillaume-morvan.pdf";
 
+    // Si l'image d'accueil n'est pas la bonne, change ce numéro.
+    // 1 = première page du PDF.
+    const HOME_PAGE = 1;
+
+    // Ajuste les numéros de page ici après test.
     const PROJECTS = [
       {
         title: "Fondations",
@@ -510,33 +515,56 @@
     function renderCover() {
       if (!pdfDoc) return;
 
-      pdfDoc.getPage(1).then(function(page) {
-        const maxWidth = window.innerWidth * 0.72;
-        const maxHeight = window.innerHeight * 0.72;
+      pdfDoc.getPage(HOME_PAGE).then(function(page) {
+        const screenWidth = window.innerWidth;
+        const screenHeight = window.innerHeight;
+        const outputScale = window.devicePixelRatio || 1;
+
         const baseViewport = page.getViewport({ scale: 1 });
 
-        const scale = Math.min(
-          maxWidth / baseViewport.width,
-          maxHeight / baseViewport.height,
-          1.25
+        const scale = Math.max(
+          screenWidth / baseViewport.width,
+          screenHeight / baseViewport.height
         );
 
         const viewport = page.getViewport({ scale: scale });
-        const outputScale = window.devicePixelRatio || 1;
 
-        homeCover.width = Math.floor(viewport.width * outputScale);
-        homeCover.height = Math.floor(viewport.height * outputScale);
-        homeCover.style.width = Math.floor(viewport.width) + "px";
-        homeCover.style.height = Math.floor(viewport.height) + "px";
+        const tempCanvas = document.createElement("canvas");
+        const tempCtx = tempCanvas.getContext("2d");
+
+        tempCanvas.width = Math.floor(viewport.width * outputScale);
+        tempCanvas.height = Math.floor(viewport.height * outputScale);
 
         const transform = outputScale !== 1
           ? [outputScale, 0, 0, outputScale, 0, 0]
           : null;
 
         page.render({
-          canvasContext: homeCtx,
+          canvasContext: tempCtx,
           transform: transform,
           viewport: viewport
+        }).promise.then(function() {
+          homeCover.width = Math.floor(screenWidth * outputScale);
+          homeCover.height = Math.floor(screenHeight * outputScale);
+          homeCover.style.width = screenWidth + "px";
+          homeCover.style.height = screenHeight + "px";
+
+          homeCtx.clearRect(0, 0, homeCover.width, homeCover.height);
+
+          const cropX = Math.max(0, (tempCanvas.width - homeCover.width) / 2);
+          const cropY = Math.max(0, (tempCanvas.height - homeCover.height) / 2);
+
+          homeCtx.drawImage(
+            tempCanvas,
+            cropX,
+            cropY,
+            homeCover.width,
+            homeCover.height,
+            0,
+            0,
+            homeCover.width,
+            homeCover.height
+          );
         });
       });
     }
