@@ -1,59 +1,241 @@
 <!DOCTYPE html>
 <html lang="fr">
 <head>
-  <meta charset="UTF-8">
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
   <title>Guillaume Morvan — Portfolio</title>
+
   <style>
+    * {
+      box-sizing: border-box;
+    }
+
     body {
       margin: 0;
-      padding: 40px;
       font-family: Arial, sans-serif;
-      background: #f7f7f4;
+      background: #f5f3ee;
       color: #111;
     }
 
-    main {
-      max-width: 1000px;
-      margin: auto;
+    header {
+      padding: 32px 40px 20px;
+      display: flex;
+      justify-content: space-between;
+      align-items: flex-start;
+      gap: 24px;
     }
 
     h1 {
-      font-size: 34px;
+      margin: 0 0 8px;
+      font-size: 28px;
       font-weight: 400;
-      margin-bottom: 8px;
+      letter-spacing: -0.02em;
     }
 
-    p {
-      font-size: 18px;
+    .intro {
+      margin: 0;
+      max-width: 560px;
+      font-size: 15px;
       line-height: 1.5;
-      max-width: 650px;
+      color: #333;
     }
 
-    a {
-      display: inline-block;
-      margin: 24px 0 32px;
-      padding: 12px 18px;
+    .links {
+      display: flex;
+      gap: 10px;
+      flex-wrap: wrap;
+    }
+
+    a, button {
+      font: inherit;
+      font-size: 14px;
+      padding: 10px 14px;
       border: 1px solid #111;
+      background: transparent;
       color: #111;
       text-decoration: none;
+      cursor: pointer;
     }
 
-    iframe {
+    a:hover, button:hover {
+      background: #111;
+      color: #f5f3ee;
+    }
+
+    .viewer {
       width: 100%;
-      height: 85vh;
-      border: 1px solid #ddd;
+      min-height: calc(100vh - 150px);
+      padding: 20px 40px 40px;
+      display: flex;
+      flex-direction: column;
+      align-items: center;
+    }
+
+    .controls {
+      width: 100%;
+      max-width: 1200px;
+      display: flex;
+      justify-content: center;
+      align-items: center;
+      gap: 16px;
+      margin-bottom: 18px;
+    }
+
+    .counter {
+      min-width: 80px;
+      text-align: center;
+      font-size: 14px;
+      color: #333;
+    }
+
+    canvas {
+      max-width: 100%;
+      height: auto;
       background: white;
+      box-shadow: 0 12px 40px rgba(0,0,0,0.12);
+    }
+
+    @media (max-width: 700px) {
+      header {
+        padding: 24px 20px 12px;
+        flex-direction: column;
+      }
+
+      .viewer {
+        padding: 12px 12px 24px;
+      }
+
+      canvas {
+        box-shadow: none;
+      }
     }
   </style>
 </head>
+
 <body>
-  <main>
-    <h1>Guillaume Morvan</h1>
-    <p>Architecte diplômé d’État — portfolio d’architecture, réhabilitation, construction bois et culture constructive.</p>
+  <header>
+    <div>
+      <h1>Guillaume Morvan</h1>
+      <p class="intro">
+        Architecte diplômé d’État — portfolio d’architecture, réhabilitation, construction bois et culture constructive.
+      </p>
+    </div>
 
-    <a href="portfolio-guillaume-morvan.pdf" download>Télécharger le portfolio PDF</a>
+    <div class="links">
+      <a href="portfolio-guillaume-morvan.pdf" download>Télécharger le PDF</a>
+      <a href="portfolio-guillaume-morvan.pdf" target="_blank">Ouvrir le PDF</a>
+    </div>
+  </header>
 
-    <iframe src="portfolio-guillaume-morvan.pdf"></iframe>
+  <main class="viewer">
+    <div class="controls">
+      <button id="prev">←</button>
+      <div class="counter">
+        <span id="page-num">1</span> / <span id="page-count">—</span>
+      </div>
+      <button id="next">→</button>
+    </div>
+
+    <canvas id="pdf-canvas"></canvas>
   </main>
+
+  <script src="https://cdnjs.cloudflare.com/ajax/libs/pdf.js/3.11.174/pdf.min.js"></script>
+
+  <script>
+    const PDF_URL = "portfolio-guillaume-morvan.pdf";
+
+    pdfjsLib.GlobalWorkerOptions.workerSrc =
+      "https://cdnjs.cloudflare.com/ajax/libs/pdf.js/3.11.174/pdf.worker.min.js";
+
+    let pdfDoc = null;
+    let pageNum = 1;
+    let pageRendering = false;
+    let pageNumPending = null;
+
+    const canvas = document.getElementById("pdf-canvas");
+    const ctx = canvas.getContext("2d");
+    const pageNumEl = document.getElementById("page-num");
+    const pageCountEl = document.getElementById("page-count");
+
+    function renderPage(num) {
+      pageRendering = true;
+
+      pdfDoc.getPage(num).then(function(page) {
+        const viewerWidth = document.querySelector(".viewer").clientWidth - 24;
+        const baseViewport = page.getViewport({ scale: 1 });
+
+        const scale = Math.min(viewerWidth / baseViewport.width, 1.45);
+        const viewport = page.getViewport({ scale: scale });
+
+        const outputScale = window.devicePixelRatio || 1;
+
+        canvas.width = Math.floor(viewport.width * outputScale);
+        canvas.height = Math.floor(viewport.height * outputScale);
+        canvas.style.width = Math.floor(viewport.width) + "px";
+        canvas.style.height = Math.floor(viewport.height) + "px";
+
+        const transform = outputScale !== 1
+          ? [outputScale, 0, 0, outputScale, 0, 0]
+          : null;
+
+        const renderContext = {
+          canvasContext: ctx,
+          transform: transform,
+          viewport: viewport
+        };
+
+        const renderTask = page.render(renderContext);
+
+        renderTask.promise.then(function() {
+          pageRendering = false;
+
+          if (pageNumPending !== null) {
+            renderPage(pageNumPending);
+            pageNumPending = null;
+          }
+        });
+      });
+
+      pageNumEl.textContent = num;
+    }
+
+    function queueRenderPage(num) {
+      if (pageRendering) {
+        pageNumPending = num;
+      } else {
+        renderPage(num);
+      }
+    }
+
+    function previousPage() {
+      if (pageNum <= 1) return;
+      pageNum--;
+      queueRenderPage(pageNum);
+    }
+
+    function nextPage() {
+      if (pageNum >= pdfDoc.numPages) return;
+      pageNum++;
+      queueRenderPage(pageNum);
+    }
+
+    document.getElementById("prev").addEventListener("click", previousPage);
+    document.getElementById("next").addEventListener("click", nextPage);
+
+    document.addEventListener("keydown", function(e) {
+      if (e.key === "ArrowLeft") previousPage();
+      if (e.key === "ArrowRight") nextPage();
+    });
+
+    window.addEventListener("resize", function() {
+      queueRenderPage(pageNum);
+    });
+
+    pdfjsLib.getDocument(PDF_URL).promise.then(function(pdf) {
+      pdfDoc = pdf;
+      pageCountEl.textContent = pdf.numPages;
+      renderPage(pageNum);
+    });
+  </script>
 </body>
 </html>
