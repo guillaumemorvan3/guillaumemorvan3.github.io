@@ -1,0 +1,59 @@
+<!DOCTYPE html>
+<html lang="fr">
+<head>
+  <meta charset="UTF-8">
+  <title>Guillaume Morvan — Portfolio</title>
+  <style>
+    body {
+      margin: 0;
+      padding: 40px;
+      font-family: Arial, sans-serif;
+      background: #f7f7f4;
+      color: #111;
+    }
+
+    main {
+      max-width: 1000px;
+      margin: auto;
+    }
+
+    h1 {
+      font-size: 34px;
+      font-weight: 400;
+      margin-bottom: 8px;
+    }
+
+    p {
+      font-size: 18px;
+      line-height: 1.5;
+      max-width: 650px;
+    }
+
+    a {
+      display: inline-block;
+      margin: 24px 0 32px;
+      padding: 12px 18px;
+      border: 1px solid #111;
+      color: #111;
+      text-decoration: none;
+    }
+
+    iframe {
+      width: 100%;
+      height: 85vh;
+      border: 1px solid #ddd;
+      background: white;
+    }
+  </style>
+</head>
+<body>
+  <main>
+    <h1>Guillaume Morvan</h1>
+    <p>Architecte diplômé d’État — portfolio d’architecture, réhabilitation, construction bois et culture constructive.</p>
+
+    <a href="portfolio-guillaume-morvan.pdf" download>Télécharger le portfolio PDF</a>
+
+    <iframe src="portfolio-guillaume-morvan.pdf"></iframe>
+  </main>
+</body>
+</html>
