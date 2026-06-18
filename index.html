@@ -6,9 +6,7 @@
   <title>Guillaume Morvan — Portfolio</title>
 
   <style>
-    * {
-      box-sizing: border-box;
-    }
+    * { box-sizing: border-box; }
 
     body {
       margin: 0;
@@ -18,12 +16,80 @@
       overflow-x: hidden;
     }
 
+    .hidden { display: none !important; }
+
+    /* ACCUEIL */
+
+    .home {
+      min-height: 100vh;
+      padding: 34px 40px;
+      display: flex;
+      flex-direction: column;
+      justify-content: space-between;
+    }
+
+    .home-name {
+      align-self: flex-start;
+      border: none;
+      background: transparent;
+      padding: 0;
+      font-size: 28px;
+      font-weight: 400;
+      letter-spacing: -0.03em;
+      cursor: pointer;
+    }
+
+    .home-name:hover {
+      background: transparent;
+      color: #111;
+      opacity: 0.55;
+    }
+
+    .home-cover-wrap {
+      flex: 1;
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      padding: 40px 0;
+    }
+
+    #home-cover {
+      max-width: 72vw;
+      max-height: 72vh;
+      width: auto;
+      height: auto;
+      background: white;
+      box-shadow: 0 14px 50px rgba(0,0,0,0.12);
+      cursor: pointer;
+    }
+
+    .home-footer {
+      font-size: 13px;
+      color: #555;
+    }
+
+    /* VIEWER */
+
     header {
       padding: 28px 40px 14px;
       display: flex;
       justify-content: space-between;
       align-items: flex-start;
       gap: 24px;
+    }
+
+    .brand {
+      border: none;
+      background: transparent;
+      padding: 0;
+      text-align: left;
+      cursor: pointer;
+    }
+
+    .brand:hover {
+      background: transparent;
+      color: #111;
+      opacity: 0.55;
     }
 
     h1 {
@@ -112,7 +178,7 @@
       max-width: 100%;
     }
 
-    canvas {
+    #pdf-canvas {
       max-width: 100%;
       height: auto;
       display: block;
@@ -142,13 +208,10 @@
       color: #111;
     }
 
-    #prev-side {
-      left: -48px;
-    }
+    #prev-side { left: -48px; }
+    #next-side { right: -48px; }
 
-    #next-side {
-      right: -48px;
-    }
+    /* MENU PROJETS */
 
     .drawer {
       position: fixed;
@@ -167,9 +230,7 @@
       overflow-y: auto;
     }
 
-    .drawer.open {
-      transform: translateX(0);
-    }
+    .drawer.open { transform: translateX(0); }
 
     .drawer-header {
       display: flex;
@@ -258,6 +319,16 @@
     }
 
     @media (max-width: 900px) {
+      .home {
+        padding: 24px 20px;
+      }
+
+      #home-cover {
+        max-width: 92vw;
+        max-height: 70vh;
+        box-shadow: none;
+      }
+
       header {
         padding: 24px 20px 12px;
         flex-direction: column;
@@ -271,17 +342,12 @@
         padding: 10px 12px 28px;
       }
 
-      canvas {
+      #pdf-canvas {
         box-shadow: none;
       }
 
-      #prev-side {
-        left: 6px;
-      }
-
-      #next-side {
-        right: 6px;
-      }
+      #prev-side { left: 6px; }
+      #next-side { right: 6px; }
 
       .nav-side {
         background: rgba(245, 243, 238, 0.88);
@@ -292,38 +358,49 @@
 </head>
 
 <body>
-  <header>
-    <div>
-      <h1>Guillaume Morvan</h1>
-      <p class="intro">
-        Architecture, réhabilitation et culture constructive — une pratique attentive aux contextes, aux matières et aux conditions concrètes du projet.
-      </p>
+  <section id="home" class="home">
+    <button id="home-name" class="home-name">Guillaume Morvan</button>
+
+    <div class="home-cover-wrap">
+      <canvas id="home-cover"></canvas>
     </div>
 
-    <div class="top-actions">
-      <button id="home-btn">Accueil</button>
-      <button id="projects-btn">Projets</button>
-      <a href="portfolio-guillaume-morvan.pdf" download>Télécharger le PDF</a>
-      <a href="portfolio-guillaume-morvan.pdf" target="_blank">Ouvrir le PDF</a>
-    </div>
-  </header>
+    <div class="home-footer">Portfolio d’architecture</div>
+  </section>
 
-  <main class="viewer">
-    <div class="page-nav">
-      <button id="prev-small" aria-label="Page précédente">‹</button>
-      <span>Page</span>
-      <input id="page-input" type="number" min="1" value="1" />
-      <span>/</span>
-      <span id="page-count">—</span>
-      <button id="next-small" aria-label="Page suivante">›</button>
-    </div>
+  <section id="app" class="hidden">
+    <header>
+      <button id="brand" class="brand">
+        <h1>Guillaume Morvan</h1>
+        <p class="intro">
+          Architecture, réhabilitation et culture constructive — une pratique attentive aux contextes, aux matières et aux conditions concrètes du projet.
+        </p>
+      </button>
 
-    <div class="document-wrap">
-      <button id="prev-side" class="nav-side" aria-label="Page précédente">‹</button>
-      <canvas id="pdf-canvas"></canvas>
-      <button id="next-side" class="nav-side" aria-label="Page suivante">›</button>
-    </div>
-  </main>
+      <div class="top-actions">
+        <button id="projects-btn">Projets</button>
+        <a href="portfolio-guillaume-morvan.pdf" download>Télécharger le PDF</a>
+        <a href="portfolio-guillaume-morvan.pdf" target="_blank">Ouvrir le PDF</a>
+      </div>
+    </header>
+
+    <main class="viewer">
+      <div class="page-nav">
+        <button id="prev-small" aria-label="Page précédente">‹</button>
+        <span>Page</span>
+        <input id="page-input" type="number" min="1" value="1" />
+        <span>/</span>
+        <span id="page-count">—</span>
+        <button id="next-small" aria-label="Page suivante">›</button>
+      </div>
+
+      <div class="document-wrap">
+        <button id="prev-side" class="nav-side" aria-label="Page précédente">‹</button>
+        <canvas id="pdf-canvas"></canvas>
+        <button id="next-side" class="nav-side" aria-label="Page suivante">›</button>
+      </div>
+    </main>
+  </section>
 
   <div id="overlay" class="overlay"></div>
 
@@ -341,7 +418,6 @@
   <script>
     const PDF_URL = "portfolio-guillaume-morvan.pdf";
 
-    // Ajuste ici les pages si un projet ne tombe pas exactement au bon endroit.
     const PROJECTS = [
       {
         title: "Fondations",
@@ -384,8 +460,15 @@
     let pageNumPending = null;
     let lastWheelTime = 0;
 
+    const home = document.getElementById("home");
+    const app = document.getElementById("app");
+
+    const homeCover = document.getElementById("home-cover");
+    const homeCtx = homeCover.getContext("2d");
+
     const canvas = document.getElementById("pdf-canvas");
     const ctx = canvas.getContext("2d");
+
     const pageInput = document.getElementById("page-input");
     const pageCountEl = document.getElementById("page-count");
     const drawer = document.getElementById("drawer");
@@ -395,13 +478,67 @@
     function getInitialPage() {
       const params = new URLSearchParams(window.location.search);
       const requestedPage = parseInt(params.get("page"), 10);
-      return Number.isInteger(requestedPage) && requestedPage > 0 ? requestedPage : 1;
+      return Number.isInteger(requestedPage) && requestedPage > 0 ? requestedPage : null;
     }
 
     function updateUrl(num) {
       const url = new URL(window.location);
       url.searchParams.set("page", num);
       window.history.replaceState({}, "", url);
+    }
+
+    function clearUrl() {
+      const url = new URL(window.location);
+      url.searchParams.delete("page");
+      window.history.replaceState({}, "", url.pathname);
+    }
+
+    function showHome() {
+      app.classList.add("hidden");
+      home.classList.remove("hidden");
+      closeProjects();
+      clearUrl();
+      renderCover();
+    }
+
+    function showApp(targetPage = 1) {
+      home.classList.add("hidden");
+      app.classList.remove("hidden");
+      goToPage(targetPage, false);
+    }
+
+    function renderCover() {
+      if (!pdfDoc) return;
+
+      pdfDoc.getPage(1).then(function(page) {
+        const maxWidth = window.innerWidth * 0.72;
+        const maxHeight = window.innerHeight * 0.72;
+        const baseViewport = page.getViewport({ scale: 1 });
+
+        const scale = Math.min(
+          maxWidth / baseViewport.width,
+          maxHeight / baseViewport.height,
+          1.25
+        );
+
+        const viewport = page.getViewport({ scale: scale });
+        const outputScale = window.devicePixelRatio || 1;
+
+        homeCover.width = Math.floor(viewport.width * outputScale);
+        homeCover.height = Math.floor(viewport.height * outputScale);
+        homeCover.style.width = Math.floor(viewport.width) + "px";
+        homeCover.style.height = Math.floor(viewport.height) + "px";
+
+        const transform = outputScale !== 1
+          ? [outputScale, 0, 0, outputScale, 0, 0]
+          : null;
+
+        page.render({
+          canvasContext: homeCtx,
+          transform: transform,
+          viewport: viewport
+        });
+      });
     }
 
     function renderPage(num) {
@@ -425,13 +562,11 @@
           ? [outputScale, 0, 0, outputScale, 0, 0]
           : null;
 
-        const renderContext = {
+        const renderTask = page.render({
           canvasContext: ctx,
           transform: transform,
           viewport: viewport
-        };
-
-        const renderTask = page.render(renderContext);
+        });
 
         renderTask.promise.then(function() {
           pageRendering = false;
@@ -459,7 +594,7 @@
       }
     }
 
-    function goToPage(num) {
+    function goToPage(num, closeDrawer = true) {
       if (!pdfDoc) return;
 
       const target = parseInt(num, 10);
@@ -471,17 +606,18 @@
 
       pageNum = target;
       queueRenderPage(pageNum);
-      closeProjects();
+
+      if (closeDrawer) closeProjects();
     }
 
     function previousPage() {
-      if (!pdfDoc || pageNum <= 1) return;
+      if (!pdfDoc || pageNum <= 1 || app.classList.contains("hidden")) return;
       pageNum--;
       queueRenderPage(pageNum);
     }
 
     function nextPage() {
-      if (!pdfDoc || pageNum >= pdfDoc.numPages) return;
+      if (!pdfDoc || pageNum >= pdfDoc.numPages || app.classList.contains("hidden")) return;
       pageNum++;
       queueRenderPage(pageNum);
     }
@@ -507,16 +643,23 @@
         `;
 
         button.addEventListener("click", function() {
-          goToPage(project.page);
+          showApp(project.page);
+          closeProjects();
         });
 
         projectList.appendChild(button);
       });
     }
 
-    document.getElementById("home-btn").addEventListener("click", function() {
-      goToPage(1);
+    document.getElementById("home-name").addEventListener("click", function() {
+      showApp(1);
     });
+
+    homeCover.addEventListener("click", function() {
+      showApp(1);
+    });
+
+    document.getElementById("brand").addEventListener("click", showHome);
 
     document.getElementById("projects-btn").addEventListener("click", openProjects);
     document.getElementById("close-drawer").addEventListener("click", closeProjects);
@@ -543,8 +686,10 @@
       if (e.key === "ArrowRight") nextPage();
     });
 
-    window.addEventListener("wheel", function(e) {
-      if (!pdfDoc) return;
+    document.querySelector(".document-wrap").addEventListener("wheel", function(e) {
+      if (!pdfDoc || app.classList.contains("hidden")) return;
+
+      e.preventDefault();
 
       const now = Date.now();
 
@@ -558,10 +703,11 @@
       }
 
       lastWheelTime = now;
-    }, { passive: true });
+    }, { passive: false });
 
     window.addEventListener("resize", function() {
-      queueRenderPage(pageNum);
+      if (!home.classList.contains("hidden")) renderCover();
+      if (!app.classList.contains("hidden")) queueRenderPage(pageNum);
     });
 
     buildProjectList();
@@ -570,8 +716,13 @@
       pdfDoc = pdf;
       pageCountEl.textContent = pdf.numPages;
 
-      pageNum = Math.min(getInitialPage(), pdf.numPages);
-      renderPage(pageNum);
+      const initialPage = getInitialPage();
+
+      if (initialPage) {
+        showApp(Math.min(initialPage, pdf.numPages));
+      } else {
+        renderCover();
+      }
     });
   </script>
 </body>
