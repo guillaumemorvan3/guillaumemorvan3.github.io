@@ -382,32 +382,32 @@
       {
         title: "Fondations",
         subtitle: "Entre technologies contemporaines et bon sens vernaculaire",
-        page: 4
+        page: 2
       },
       {
         title: "Station ferroviaire Melle",
         subtitle: "Évolutivité et appropriation des espaces",
-        page: 6
+        page: 4
       },
       {
         title: "Église Saint-Joseph",
         subtitle: "Réhabilitation du patrimoine : révéler les qualités cachées",
-        page: 20
+        page: 10
       },
       {
         title: "Ferme Nord",
         subtitle: "Réhabilitation du patrimoine : l’harmonieux contraste",
-        page: 40
+        page: 20
       },
       {
         title: "TANK",
         subtitle: "L’architecte dans une pratique engagée pour la qualité",
-        page: 78
+        page: 34
       },
       {
         title: "EDWOOD",
         subtitle: "Le chantier bois : école de la réalité constructive",
-        page: 90
+        page: 40
       }
     ];
 
@@ -465,7 +465,7 @@
         );
 
         const viewport = page.getViewport({ scale: scale });
-        const outputScale = window.devicePixelRatio || 1;
+        const outputScale = Math.min(window.devicePixelRatio || 1, 1.25);
 
         canvas.width = Math.floor(viewport.width * outputScale);
         canvas.height = Math.floor(viewport.height * outputScale);
