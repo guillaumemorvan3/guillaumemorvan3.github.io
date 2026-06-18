@@ -62,8 +62,6 @@
 
     .home-name:hover {
       opacity: 0.55;
-      background: transparent;
-      color: #f5f3ee;
     }
 
     /* VIEWER */
@@ -76,7 +74,7 @@
     }
 
     .topbar {
-      height: 50px;
+      height: 44px;
       padding: 0 28px;
       display: flex;
       align-items: center;
@@ -90,16 +88,15 @@
       border: none;
       background: transparent;
       padding: 0;
-      font-size: 19px;
+      font-size: 18px;
       font-weight: 400;
       letter-spacing: -0.03em;
       cursor: pointer;
       white-space: nowrap;
+      color: #111;
     }
 
     .brand:hover {
-      background: transparent;
-      color: #111;
       opacity: 0.55;
     }
 
@@ -107,84 +104,82 @@
       display: flex;
       align-items: center;
       justify-content: flex-end;
-      gap: 10px;
+      gap: 22px;
       white-space: nowrap;
     }
 
-    a,
-    button {
+    .topbar button,
+    .topbar a {
+      border: none;
+      background: transparent;
+      padding: 0;
       font: inherit;
       font-size: 12px;
-      border: 1px solid rgba(17, 17, 17, 0.55);
-      background: transparent;
       color: #111;
       text-decoration: none;
       cursor: pointer;
-      transition: opacity 0.2s ease, background 0.2s ease, color 0.2s ease;
     }
 
-    a,
-    .topbar button {
-      padding: 7px 10px;
-    }
-
-    a:hover,
-    button:hover {
-      background: #111;
-      color: #f5f3ee;
+    .topbar button:hover,
+    .topbar a:hover {
+      opacity: 0.55;
     }
 
     .viewer {
       width: 100vw;
-      height: calc(100vh - 50px);
-      padding: 12px 54px 18px;
+      height: calc(100vh - 44px);
+      padding: 0;
+      margin: 0;
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      overflow: hidden;
+      background: #f5f3ee;
+    }
+
+    .document-wrap {
+      position: relative;
+      width: 100vw;
+      height: calc(100vh - 44px);
       display: flex;
       align-items: center;
       justify-content: center;
       overflow: hidden;
     }
 
-    .document-wrap {
-      position: relative;
-      width: fit-content;
-      max-width: 100%;
-      max-height: 100%;
-    }
-
     #pdf-canvas {
       display: block;
       background: white;
-      box-shadow: 0 12px 40px rgba(0, 0, 0, 0.13);
+      box-shadow: none;
     }
 
     .nav-side {
-      position: absolute;
-      top: 50%;
+      position: fixed;
+      top: calc(44px + (100vh - 44px) / 2);
       transform: translateY(-50%);
-      width: 34px;
-      height: 62px;
+      width: 44px;
+      height: 72px;
       padding: 0;
       border: none;
-      background: rgba(245, 243, 238, 0.72);
+      background: transparent;
       color: #111;
-      font-size: 30px;
+      font-size: 34px;
       line-height: 1;
-      opacity: 0.22;
-      z-index: 5;
+      opacity: 0.16;
+      z-index: 10;
+      cursor: pointer;
     }
 
     .nav-side:hover {
-      opacity: 0.9;
-      background: rgba(245, 243, 238, 0.96);
-      color: #111;
+      opacity: 0.75;
     }
 
     #prev-side {
-      left: -46px;
+      left: 8px;
     }
 
     #next-side {
-      right: -46px;
+      right: 8px;
     }
 
     /* MENU PROJETS */
@@ -229,14 +224,14 @@
       height: 32px;
       padding: 0;
       border: none;
+      background: transparent;
       font-size: 22px;
       opacity: 0.55;
+      cursor: pointer;
     }
 
     .close-drawer:hover {
       opacity: 1;
-      background: transparent;
-      color: #111;
     }
 
     .project-item {
@@ -247,11 +242,10 @@
       text-align: left;
       background: transparent;
       color: #111;
+      cursor: pointer;
     }
 
     .project-item:hover {
-      background: transparent;
-      color: #111;
       opacity: 0.55;
     }
 
@@ -299,7 +293,7 @@
 
       .topbar {
         height: auto;
-        min-height: 76px;
+        min-height: 70px;
         padding: 12px 14px;
         flex-direction: column;
         align-items: flex-start;
@@ -308,28 +302,25 @@
 
       .topbar-right {
         justify-content: flex-start;
+        gap: 18px;
       }
 
-      .viewer {
-        height: calc(100vh - 96px);
-        padding: 12px;
-      }
-
-      #pdf-canvas {
-        box-shadow: none;
-      }
-
-      #prev-side {
-        left: 6px;
-      }
-
-      #next-side {
-        right: 6px;
+      .viewer,
+      .document-wrap {
+        height: calc(100vh - 90px);
       }
 
       .nav-side {
-        background: rgba(245, 243, 238, 0.86);
-        opacity: 0.45;
+        top: calc(90px + (100vh - 90px) / 2);
+        opacity: 0.28;
+      }
+
+      #prev-side {
+        left: 4px;
+      }
+
+      #next-side {
+        right: 4px;
       }
     }
   </style>
@@ -348,7 +339,6 @@
       <div class="topbar-right">
         <button id="projects-btn">Projets</button>
         <a href="portfolio-guillaume-morvan.pdf" download>Télécharger le PDF</a>
-        <a href="portfolio-guillaume-morvan.pdf" target="_blank">Ouvrir le PDF</a>
       </div>
     </header>
 
@@ -440,7 +430,11 @@
     function showApp(targetPage = START_PAGE) {
       home.classList.add("hidden");
       app.classList.remove("hidden");
-      goToPage(targetPage, false);
+      pageNum = targetPage;
+
+      if (pdfDoc) {
+        goToPage(targetPage, false);
+      }
     }
 
     function updateUrl(num) {
@@ -454,8 +448,8 @@
 
       pdfDoc.getPage(num).then(function(page) {
         const viewer = document.querySelector(".viewer");
-        const maxWidth = viewer.clientWidth - 8;
-        const maxHeight = viewer.clientHeight - 8;
+        const maxWidth = viewer.clientWidth;
+        const maxHeight = viewer.clientHeight;
 
         const baseViewport = page.getViewport({ scale: 1 });
 
@@ -617,6 +611,8 @@
 
       if (Number.isInteger(directPage) && directPage > 0) {
         showApp(Math.min(directPage, pdf.numPages));
+      } else if (!app.classList.contains("hidden")) {
+        queueRenderPage(pageNum);
       }
     });
   </script>
