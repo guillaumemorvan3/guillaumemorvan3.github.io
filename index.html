@@ -12,13 +12,14 @@
 
     body {
       margin: 0;
-      font-family: Arial, sans-serif;
+      font-family: Arial, Helvetica, sans-serif;
       background: #f5f3ee;
       color: #111;
+      overflow-x: hidden;
     }
 
     header {
-      padding: 32px 40px 20px;
+      padding: 28px 40px 14px;
       display: flex;
       justify-content: space-between;
       align-items: flex-start;
@@ -29,84 +30,262 @@
       margin: 0 0 8px;
       font-size: 28px;
       font-weight: 400;
-      letter-spacing: -0.02em;
+      letter-spacing: -0.03em;
     }
 
     .intro {
       margin: 0;
-      max-width: 560px;
+      max-width: 640px;
       font-size: 15px;
       line-height: 1.5;
       color: #333;
     }
 
-    .links {
+    .top-actions {
       display: flex;
       gap: 10px;
       flex-wrap: wrap;
+      justify-content: flex-end;
     }
 
-    a, button {
+    a,
+    button {
       font: inherit;
-      font-size: 14px;
-      padding: 10px 14px;
-      border: 1px solid #111;
+      font-size: 13px;
+      border: 1px solid rgba(17, 17, 17, 0.7);
       background: transparent;
       color: #111;
       text-decoration: none;
       cursor: pointer;
+      transition: background 0.2s ease, color 0.2s ease, opacity 0.2s ease;
     }
 
-    a:hover, button:hover {
+    a,
+    .top-actions button {
+      padding: 9px 13px;
+    }
+
+    a:hover,
+    button:hover {
       background: #111;
       color: #f5f3ee;
     }
 
     .viewer {
       width: 100%;
-      min-height: calc(100vh - 150px);
-      padding: 20px 40px 40px;
+      min-height: calc(100vh - 130px);
+      padding: 8px 40px 36px;
       display: flex;
       flex-direction: column;
       align-items: center;
     }
 
-    .controls {
-      width: 100%;
-      max-width: 1200px;
+    .page-nav {
+      margin-bottom: 14px;
       display: flex;
-      justify-content: center;
       align-items: center;
-      gap: 16px;
-      margin-bottom: 18px;
+      gap: 8px;
+      font-size: 13px;
+      color: #444;
     }
 
-    .counter {
-      min-width: 80px;
+    .page-nav input {
+      width: 48px;
+      height: 30px;
+      border: 1px solid rgba(17, 17, 17, 0.35);
+      background: transparent;
       text-align: center;
-      font-size: 14px;
-      color: #333;
+      font: inherit;
+      color: #111;
+    }
+
+    .page-nav button {
+      width: 30px;
+      height: 30px;
+      padding: 0;
+      opacity: 0.7;
+    }
+
+    .document-wrap {
+      position: relative;
+      width: fit-content;
+      max-width: 100%;
     }
 
     canvas {
       max-width: 100%;
       height: auto;
+      display: block;
       background: white;
       box-shadow: 0 12px 40px rgba(0,0,0,0.12);
     }
 
-    @media (max-width: 700px) {
+    .nav-side {
+      position: absolute;
+      top: 50%;
+      transform: translateY(-50%);
+      width: 34px;
+      height: 58px;
+      padding: 0;
+      border: none;
+      background: rgba(245, 243, 238, 0.72);
+      color: #111;
+      font-size: 28px;
+      line-height: 1;
+      opacity: 0.24;
+      z-index: 5;
+    }
+
+    .nav-side:hover {
+      opacity: 0.9;
+      background: rgba(245, 243, 238, 0.95);
+      color: #111;
+    }
+
+    #prev-side {
+      left: -48px;
+    }
+
+    #next-side {
+      right: -48px;
+    }
+
+    .drawer {
+      position: fixed;
+      top: 0;
+      right: 0;
+      width: 360px;
+      max-width: 92vw;
+      height: 100vh;
+      background: #f5f3ee;
+      border-left: 1px solid rgba(17, 17, 17, 0.18);
+      box-shadow: -12px 0 40px rgba(0,0,0,0.08);
+      transform: translateX(100%);
+      transition: transform 0.25s ease;
+      z-index: 20;
+      padding: 28px;
+      overflow-y: auto;
+    }
+
+    .drawer.open {
+      transform: translateX(0);
+    }
+
+    .drawer-header {
+      display: flex;
+      justify-content: space-between;
+      align-items: center;
+      margin-bottom: 28px;
+    }
+
+    .drawer h2 {
+      margin: 0;
+      font-size: 18px;
+      font-weight: 400;
+      letter-spacing: -0.02em;
+    }
+
+    .close-drawer {
+      width: 32px;
+      height: 32px;
+      padding: 0;
+      border: none;
+      font-size: 22px;
+      opacity: 0.55;
+    }
+
+    .close-drawer:hover {
+      opacity: 1;
+      background: transparent;
+      color: #111;
+    }
+
+    .project-list {
+      display: flex;
+      flex-direction: column;
+      gap: 4px;
+    }
+
+    .project-item {
+      width: 100%;
+      padding: 16px 0;
+      border: none;
+      border-bottom: 1px solid rgba(17, 17, 17, 0.16);
+      text-align: left;
+      background: transparent;
+      color: #111;
+    }
+
+    .project-item:hover {
+      background: transparent;
+      color: #111;
+      opacity: 0.55;
+    }
+
+    .project-title {
+      display: block;
+      font-size: 15px;
+      margin-bottom: 5px;
+    }
+
+    .project-subtitle {
+      display: block;
+      font-size: 12px;
+      line-height: 1.35;
+      color: #555;
+    }
+
+    .project-page {
+      display: block;
+      margin-top: 8px;
+      font-size: 11px;
+      color: #777;
+    }
+
+    .overlay {
+      position: fixed;
+      inset: 0;
+      background: rgba(17, 17, 17, 0.12);
+      opacity: 0;
+      pointer-events: none;
+      transition: opacity 0.25s ease;
+      z-index: 15;
+    }
+
+    .overlay.open {
+      opacity: 1;
+      pointer-events: auto;
+    }
+
+    @media (max-width: 900px) {
       header {
         padding: 24px 20px 12px;
         flex-direction: column;
       }
 
+      .top-actions {
+        justify-content: flex-start;
+      }
+
       .viewer {
-        padding: 12px 12px 24px;
+        padding: 10px 12px 28px;
       }
 
       canvas {
         box-shadow: none;
+      }
+
+      #prev-side {
+        left: 6px;
+      }
+
+      #next-side {
+        right: 6px;
+      }
+
+      .nav-side {
+        background: rgba(245, 243, 238, 0.88);
+        opacity: 0.45;
       }
     }
   </style>
@@ -117,32 +296,84 @@
     <div>
       <h1>Guillaume Morvan</h1>
       <p class="intro">
-        Architecte diplômé d’État — portfolio d’architecture, réhabilitation, construction bois et culture constructive.
+        Architecture, réhabilitation et culture constructive — une pratique attentive aux contextes, aux matières et aux conditions concrètes du projet.
       </p>
     </div>
 
-    <div class="links">
+    <div class="top-actions">
+      <button id="home-btn">Accueil</button>
+      <button id="projects-btn">Projets</button>
       <a href="portfolio-guillaume-morvan.pdf" download>Télécharger le PDF</a>
       <a href="portfolio-guillaume-morvan.pdf" target="_blank">Ouvrir le PDF</a>
     </div>
   </header>
 
   <main class="viewer">
-    <div class="controls">
-      <button id="prev">←</button>
-      <div class="counter">
-        <span id="page-num">1</span> / <span id="page-count">—</span>
-      </div>
-      <button id="next">→</button>
+    <div class="page-nav">
+      <button id="prev-small" aria-label="Page précédente">‹</button>
+      <span>Page</span>
+      <input id="page-input" type="number" min="1" value="1" />
+      <span>/</span>
+      <span id="page-count">—</span>
+      <button id="next-small" aria-label="Page suivante">›</button>
     </div>
 
-    <canvas id="pdf-canvas"></canvas>
+    <div class="document-wrap">
+      <button id="prev-side" class="nav-side" aria-label="Page précédente">‹</button>
+      <canvas id="pdf-canvas"></canvas>
+      <button id="next-side" class="nav-side" aria-label="Page suivante">›</button>
+    </div>
   </main>
+
+  <div id="overlay" class="overlay"></div>
+
+  <aside id="drawer" class="drawer">
+    <div class="drawer-header">
+      <h2>Projets</h2>
+      <button id="close-drawer" class="close-drawer" aria-label="Fermer">×</button>
+    </div>
+
+    <div id="project-list" class="project-list"></div>
+  </aside>
 
   <script src="https://cdnjs.cloudflare.com/ajax/libs/pdf.js/3.11.174/pdf.min.js"></script>
 
   <script>
     const PDF_URL = "portfolio-guillaume-morvan.pdf";
+
+    // Ajuste ici les pages si un projet ne tombe pas exactement au bon endroit.
+    const PROJECTS = [
+      {
+        title: "Fondations",
+        subtitle: "Entre technologies contemporaines et bon sens vernaculaire",
+        page: 2
+      },
+      {
+        title: "Station ferroviaire Melle",
+        subtitle: "Évolutivité et appropriation des espaces",
+        page: 4
+      },
+      {
+        title: "Église Saint-Joseph",
+        subtitle: "Réhabilitation du patrimoine : révéler les qualités cachées",
+        page: 10
+      },
+      {
+        title: "Ferme Nord",
+        subtitle: "Réhabilitation du patrimoine : l’harmonieux contraste",
+        page: 20
+      },
+      {
+        title: "TANK",
+        subtitle: "L’architecte dans une pratique engagée pour la qualité",
+        page: 34
+      },
+      {
+        title: "EDWOOD",
+        subtitle: "Le chantier bois : école de la réalité constructive",
+        page: 40
+      }
+    ];
 
     pdfjsLib.GlobalWorkerOptions.workerSrc =
       "https://cdnjs.cloudflare.com/ajax/libs/pdf.js/3.11.174/pdf.worker.min.js";
@@ -151,11 +382,27 @@
     let pageNum = 1;
     let pageRendering = false;
     let pageNumPending = null;
+    let lastWheelTime = 0;
 
     const canvas = document.getElementById("pdf-canvas");
     const ctx = canvas.getContext("2d");
-    const pageNumEl = document.getElementById("page-num");
+    const pageInput = document.getElementById("page-input");
     const pageCountEl = document.getElementById("page-count");
+    const drawer = document.getElementById("drawer");
+    const overlay = document.getElementById("overlay");
+    const projectList = document.getElementById("project-list");
+
+    function getInitialPage() {
+      const params = new URLSearchParams(window.location.search);
+      const requestedPage = parseInt(params.get("page"), 10);
+      return Number.isInteger(requestedPage) && requestedPage > 0 ? requestedPage : 1;
+    }
+
+    function updateUrl(num) {
+      const url = new URL(window.location);
+      url.searchParams.set("page", num);
+      window.history.replaceState({}, "", url);
+    }
 
     function renderPage(num) {
       pageRendering = true;
@@ -196,44 +443,134 @@
         });
       });
 
-      pageNumEl.textContent = num;
+      pageInput.value = num;
+      updateUrl(num);
     }
 
     function queueRenderPage(num) {
+      if (!pdfDoc) return;
+
+      const safePage = Math.max(1, Math.min(num, pdfDoc.numPages));
+
       if (pageRendering) {
-        pageNumPending = num;
+        pageNumPending = safePage;
       } else {
-        renderPage(num);
+        renderPage(safePage);
       }
     }
 
+    function goToPage(num) {
+      if (!pdfDoc) return;
+
+      const target = parseInt(num, 10);
+
+      if (!target || target < 1 || target > pdfDoc.numPages) {
+        pageInput.value = pageNum;
+        return;
+      }
+
+      pageNum = target;
+      queueRenderPage(pageNum);
+      closeProjects();
+    }
+
     function previousPage() {
-      if (pageNum <= 1) return;
+      if (!pdfDoc || pageNum <= 1) return;
       pageNum--;
       queueRenderPage(pageNum);
     }
 
     function nextPage() {
-      if (pageNum >= pdfDoc.numPages) return;
+      if (!pdfDoc || pageNum >= pdfDoc.numPages) return;
       pageNum++;
       queueRenderPage(pageNum);
     }
 
-    document.getElementById("prev").addEventListener("click", previousPage);
-    document.getElementById("next").addEventListener("click", nextPage);
+    function openProjects() {
+      drawer.classList.add("open");
+      overlay.classList.add("open");
+    }
+
+    function closeProjects() {
+      drawer.classList.remove("open");
+      overlay.classList.remove("open");
+    }
+
+    function buildProjectList() {
+      PROJECTS.forEach(function(project, index) {
+        const button = document.createElement("button");
+        button.className = "project-item";
+        button.innerHTML = `
+          <span class="project-title">${String(index + 1).padStart(2, "0")} — ${project.title}</span>
+          <span class="project-subtitle">${project.subtitle}</span>
+          <span class="project-page">Page ${project.page}</span>
+        `;
+
+        button.addEventListener("click", function() {
+          goToPage(project.page);
+        });
+
+        projectList.appendChild(button);
+      });
+    }
+
+    document.getElementById("home-btn").addEventListener("click", function() {
+      goToPage(1);
+    });
+
+    document.getElementById("projects-btn").addEventListener("click", openProjects);
+    document.getElementById("close-drawer").addEventListener("click", closeProjects);
+    overlay.addEventListener("click", closeProjects);
+
+    document.getElementById("prev-small").addEventListener("click", previousPage);
+    document.getElementById("next-small").addEventListener("click", nextPage);
+    document.getElementById("prev-side").addEventListener("click", previousPage);
+    document.getElementById("next-side").addEventListener("click", nextPage);
+
+    pageInput.addEventListener("keydown", function(e) {
+      if (e.key === "Enter") {
+        goToPage(pageInput.value);
+      }
+    });
+
+    pageInput.addEventListener("blur", function() {
+      pageInput.value = pageNum;
+    });
 
     document.addEventListener("keydown", function(e) {
+      if (e.key === "Escape") closeProjects();
       if (e.key === "ArrowLeft") previousPage();
       if (e.key === "ArrowRight") nextPage();
     });
+
+    window.addEventListener("wheel", function(e) {
+      if (!pdfDoc) return;
+
+      const now = Date.now();
+
+      if (now - lastWheelTime < 650) return;
+      if (Math.abs(e.deltaY) < 20) return;
+
+      if (e.deltaY > 0) {
+        nextPage();
+      } else {
+        previousPage();
+      }
+
+      lastWheelTime = now;
+    }, { passive: true });
 
     window.addEventListener("resize", function() {
       queueRenderPage(pageNum);
     });
 
+    buildProjectList();
+
     pdfjsLib.getDocument(PDF_URL).promise.then(function(pdf) {
       pdfDoc = pdf;
       pageCountEl.textContent = pdf.numPages;
+
+      pageNum = Math.min(getInitialPage(), pdf.numPages);
       renderPage(pageNum);
     });
   </script>
