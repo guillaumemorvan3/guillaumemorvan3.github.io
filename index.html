@@ -212,7 +212,7 @@
       transition: opacity 0.2s ease;
     }
 
-    /* À PROPOS — PAGE PAR PAGE */
+    /* À PROPOS */
 
     .about {
       width: 100vw;
@@ -642,12 +642,6 @@
       }
     ];
 
-    /*
-      IMPORTANT :
-      Pour l’instant, les bornes mobile sont identiques aux bornes ordinateur.
-      Si tu découpes les projets en davantage de pages dans pages-mobile/,
-      il faudra modifier uniquement MOBILE_PROJECTS.
-    */
     const MOBILE_PROJECTS = [
       {
         title: "Melle",
@@ -1095,11 +1089,13 @@
     }, { passive: false });
 
     pageImage.addEventListener("touchstart", handleTouchStart, { passive: true });
+
     pageImage.addEventListener("touchend", function(e) {
       handleTouchEnd(e, previousPage, nextPage);
     }, { passive: true });
 
     aboutImage.addEventListener("touchstart", handleTouchStart, { passive: true });
+
     aboutImage.addEventListener("touchend", function(e) {
       handleTouchEnd(e, previousAboutPage, nextAboutPage);
     }, { passive: true });
