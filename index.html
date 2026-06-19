@@ -110,7 +110,7 @@
       white-space: nowrap;
     }
 
-    .topbar button,
+    .topbar button:not(.brand),
     .topbar a {
       border: none;
       background: transparent;
@@ -124,7 +124,7 @@
       cursor: pointer;
     }
 
-    .topbar button:hover,
+    .topbar button:not(.brand):hover,
     .topbar a:hover {
       opacity: 0.6;
     }
@@ -212,7 +212,7 @@
       transition: opacity 0.2s ease;
     }
 
-    /* À PROPOS */
+    /* À PROPOS — IMAGES INDESIGN */
 
     .about {
       width: 100vw;
@@ -223,108 +223,48 @@
       scroll-behavior: smooth;
     }
 
-    .about-section {
+    .about-page {
       min-height: calc(100vh - 44px);
-      padding: 58px 42px;
-      display: grid;
-      grid-template-columns: 1.15fr 0.85fr;
-      gap: 48px;
+      width: 100%;
+      padding: 34px 38px;
+      display: flex;
       align-items: center;
+      justify-content: center;
+      background: #ffffff;
       border-bottom: 1px solid rgba(17, 17, 17, 0.08);
     }
 
-    .about-image {
-      width: 100%;
-      height: calc(100vh - 160px);
-      min-height: 420px;
-      object-fit: cover;
-      object-position: center;
-      display: block;
-      background: #f0f0f0;
-    }
-
-    .about-content {
-      max-width: 520px;
-    }
-
-    .about-kicker {
-      display: block;
-      margin-bottom: 18px;
-      font-size: 11px;
-      letter-spacing: 0.12em;
-      text-transform: uppercase;
-      color: #777;
-    }
-
-    .about-title {
-      margin: 0 0 26px;
-      font-size: 34px;
-      font-weight: 400;
-      letter-spacing: -0.04em;
-      line-height: 1;
-    }
-
-    .about-text {
-      margin: 0 0 22px;
-      font-size: 14px;
-      line-height: 1.65;
-      color: #222;
-    }
-
-    .foundation-list {
-      margin-top: 30px;
-      display: grid;
-      gap: 8px;
-      font-size: 13px;
-      line-height: 1.45;
-    }
-
-    .foundation-list span {
-      display: block;
-    }
-
-    .profile-list {
-      display: grid;
-      gap: 22px;
-    }
-
-    .profile-block h3 {
-      margin: 0 0 10px;
-      font-size: 12px;
-      font-weight: 700;
-      letter-spacing: 0.08em;
-      text-transform: uppercase;
-    }
-
-    .profile-block p {
-      margin: 0;
-      font-size: 13px;
-      line-height: 1.55;
-      color: #222;
-    }
-
-    .skills-list {
-      margin: 0;
-      padding: 0;
-      list-style: none;
-      display: grid;
-      gap: 5px;
-      font-size: 13px;
-      line-height: 1.45;
-    }
-
-    .download-link {
+    .about-page-wrap {
+      position: relative;
       display: inline-block;
-      margin-top: 12px;
-      font-size: 13px;
-      color: #111;
-      text-decoration: none;
-      border-bottom: 1px solid #111;
-      padding-bottom: 2px;
+      max-width: 100%;
+      max-height: calc(100vh - 112px);
     }
 
-    .download-link:hover {
-      opacity: 0.6;
+    .about-full-image {
+      display: block;
+      max-width: calc(100vw - 76px);
+      max-height: calc(100vh - 112px);
+      width: auto;
+      height: auto;
+      object-fit: contain;
+      background: #ffffff;
+    }
+
+    /* Lien invisible placé sur la zone "Télécharger le portfolio" du JPEG parcours */
+    .portfolio-hotspot {
+      position: absolute;
+      left: 58%;
+      top: 76%;
+      width: 28%;
+      height: 9%;
+      display: block;
+      cursor: pointer;
+      background: transparent;
+    }
+
+    .portfolio-hotspot:hover {
+      background: rgba(0, 0, 0, 0.03);
     }
 
     /* VIEWER */
@@ -514,21 +454,6 @@
       .project-grid {
         grid-template-columns: repeat(3, minmax(0, 1fr));
       }
-
-      .about-section {
-        grid-template-columns: 1fr;
-        gap: 28px;
-        align-items: start;
-      }
-
-      .about-image {
-        height: 52vh;
-        min-height: 320px;
-      }
-
-      .about-content {
-        max-width: 760px;
-      }
     }
 
     @media (max-width: 700px) {
@@ -573,18 +498,18 @@
         height: calc(100vh - 90px);
       }
 
-      .about-section {
-        min-height: auto;
-        padding: 34px 18px 42px;
+      .about-page {
+        min-height: calc(100vh - 90px);
+        padding: 22px 14px;
       }
 
-      .about-title {
-        font-size: 28px;
+      .about-page-wrap {
+        max-height: calc(100vh - 134px);
       }
 
-      .about-image {
-        height: 44vh;
-        min-height: 260px;
+      .about-full-image {
+        max-width: calc(100vw - 28px);
+        max-height: calc(100vh - 134px);
       }
 
       .viewer,
@@ -633,70 +558,16 @@
     </main>
 
     <main id="about" class="about hidden">
-      <section class="about-section" id="fondations">
-        <img class="about-image" src="apropos/fondation.jpg" alt="Fondations — Guillaume Morvan" />
-
-        <div class="about-content">
-          <span class="about-kicker">Fondations</span>
-          <h1 class="about-title">À la fois urbain et rural.</h1>
-
-          <p class="about-text">
-            Mes racines se sont développées à la rencontre de deux mondes : l’urbanité des métropoles de Rennes, Lille puis Valenciennes, et la ruralité du centre Finistère dont je suis issu. De cette singularité, je tire une conviction profonde : les réponses aux enjeux actuels d’évolution de nos territoires se trouvent dans la réinterprétation contemporaine des intelligences vernaculaires.
-          </p>
-
-          <p class="about-text">
-            Sans jamais omettre les fondements premiers de l’architecture que sont la solidité, l’usage et la beauté, je souhaite inscrire ma pratique dans cette voie, pour exprimer une architecture à la fois sensible et robuste.
-          </p>
-
-          <div class="foundation-list">
-            <span>À la fois urbain et rural</span>
-            <span>À la fois contemporain et vernaculaire</span>
-            <span>À la fois sensible et robuste</span>
-          </div>
+      <section class="about-page">
+        <div class="about-page-wrap">
+          <img class="about-full-image" src="apropos/fondation.jpg" alt="Fondations — Guillaume Morvan" />
         </div>
       </section>
 
-      <section class="about-section" id="parcours">
-        <img class="about-image" src="apropos/parcours.jpg" alt="Parcours — Guillaume Morvan" />
-
-        <div class="about-content">
-          <span class="about-kicker">Parcours</span>
-          <h1 class="about-title">Architecte diplômé d’État.</h1>
-
-          <div class="profile-list">
-            <div class="profile-block">
-              <h3>Profil</h3>
-              <p>
-                Architecte diplômé d’État en 2024, je construis mon parcours entre conception architecturale, réhabilitation et construction bois. Après une expérience en agence chez TANK Architectes, j’ai prolongé ma formation chez Edwood, en atelier et sur chantier, afin d’approfondir la réalité constructive du projet.
-              </p>
-            </div>
-
-            <div class="profile-block">
-              <h3>Compétences</h3>
-              <ul class="skills-list">
-                <li>Conception architecturale</li>
-                <li>Dessin technique</li>
-                <li>Représentation volumétrique et perspective</li>
-                <li>Construction bois</li>
-                <li>Culture constructive et détails techniques</li>
-              </ul>
-            </div>
-
-            <div class="profile-block">
-              <h3>Contact</h3>
-              <p>
-                Guillaume Morvan<br />
-                Architecte diplômé d’État<br />
-                Valenciennes<br /><br />
-                guillaume.morvan3@gmail.com<br />
-                06 88 90 34 82
-              </p>
-
-              <a class="download-link" href="portfolio-guillaume-morvan.pdf" download>
-                Télécharger le portfolio
-              </a>
-            </div>
-          </div>
+      <section class="about-page">
+        <div class="about-page-wrap">
+          <img class="about-full-image" src="apropos/parcours.jpg" alt="Parcours — Guillaume Morvan" />
+          <a class="portfolio-hotspot" href="portfolio-guillaume-morvan.pdf" download aria-label="Télécharger le portfolio"></a>
         </div>
       </section>
     </main>
@@ -839,17 +710,6 @@
       summary.classList.add("hidden");
       about.classList.add("hidden");
       viewer.classList.add("hidden");
-    }
-
-    function showHome() {
-      site.classList.add("hidden");
-      home.classList.remove("hidden");
-      hideAllMainViews();
-      summary.classList.remove("hidden");
-      currentProject = null;
-      currentImage = null;
-      closeProjects();
-      clearUrl();
     }
 
     function showSummary() {
