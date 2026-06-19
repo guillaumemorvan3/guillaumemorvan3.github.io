@@ -212,35 +212,46 @@
       transition: opacity 0.2s ease;
     }
 
-    /* À PROPOS — JPEG INDESIGN AFFICHÉS TELS QUELS */
+    /* À PROPOS — PAGE PAR PAGE */
 
     .about {
       width: 100vw;
       height: calc(100vh - 44px);
-      overflow-y: auto;
-      overflow-x: hidden;
-      background: #ffffff;
-      scroll-behavior: smooth;
-    }
-
-    .about-page {
-      width: 100vw;
-      min-height: calc(100vh - 44px);
       padding: 0;
       margin: 0;
       display: flex;
       align-items: center;
       justify-content: center;
+      overflow: hidden;
       background: #ffffff;
     }
 
-    .about-full-image {
-      display: block;
+    .about-wrap {
+      position: relative;
       width: 100vw;
-      height: auto;
+      height: calc(100vh - 44px);
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      overflow: hidden;
+    }
+
+    #about-image {
       max-width: 100vw;
+      max-height: calc(100vh - 44px);
+      width: auto;
+      height: auto;
+      display: block;
       object-fit: contain;
+      opacity: 1;
+      transition: opacity 0.12s ease;
+      user-select: none;
+      -webkit-user-drag: none;
       background: #ffffff;
+    }
+
+    #about-image.loading {
+      opacity: 0.35;
     }
 
     /* VIEWER PROJETS */
@@ -310,11 +321,11 @@
       cursor: default;
     }
 
-    #prev-side {
+    .nav-prev {
       left: 8px;
     }
 
-    #next-side {
+    .nav-next {
       right: 8px;
     }
 
@@ -470,19 +481,14 @@
         gap: 16px;
       }
 
-      .about {
-        height: calc(100vh - 90px);
-      }
-
-      .about-page {
-        min-height: calc(100vh - 90px);
-      }
-
+      .about,
+      .about-wrap,
       .viewer,
       .document-wrap {
         height: calc(100vh - 90px);
       }
 
+      #about-image,
       #page-image {
         max-height: calc(100vh - 90px);
       }
@@ -492,11 +498,11 @@
         opacity: 0.28;
       }
 
-      #prev-side {
+      .nav-prev {
         left: 4px;
       }
 
-      #next-side {
+      .nav-next {
         right: 4px;
       }
     }
@@ -524,20 +530,18 @@
     </main>
 
     <main id="about" class="about hidden">
-      <section class="about-page">
-        <img class="about-full-image" src="apropos/fondation.jpg" alt="Fondations — Guillaume Morvan" />
-      </section>
-
-      <section class="about-page">
-        <img class="about-full-image" src="apropos/parcours.jpg" alt="Parcours — Guillaume Morvan" />
-      </section>
+      <div class="about-wrap">
+        <button id="about-prev" class="nav-side nav-prev" aria-label="Page À propos précédente">‹</button>
+        <img id="about-image" src="apropos/fondation.jpg" alt="À propos — Guillaume Morvan" />
+        <button id="about-next" class="nav-side nav-next" aria-label="Page À propos suivante">›</button>
+      </div>
     </main>
 
     <main id="viewer" class="viewer hidden">
       <div class="document-wrap">
-        <button id="prev-side" class="nav-side" aria-label="Page précédente">‹</button>
+        <button id="prev-side" class="nav-side nav-prev" aria-label="Page précédente">‹</button>
         <img id="page-image" src="" alt="Portfolio Guillaume Morvan" />
-        <button id="next-side" class="nav-side" aria-label="Page suivante">›</button>
+        <button id="next-side" class="nav-side nav-next" aria-label="Page suivante">›</button>
       </div>
     </main>
   </section>
@@ -556,6 +560,17 @@
   <script>
     const IMAGE_FOLDER = "pages/";
     const VIGNETTE_FOLDER = "Vignettes/";
+
+    const ABOUT_PAGES = [
+      {
+        src: "apropos/fondation.jpg",
+        alt: "Fondations — Guillaume Morvan"
+      },
+      {
+        src: "apropos/parcours.jpg",
+        alt: "Parcours — Guillaume Morvan"
+      }
+    ];
 
     const PROJECTS = [
       {
@@ -607,6 +622,7 @@
 
     let currentImage = null;
     let currentProject = null;
+    let currentAboutPage = 0;
     let lastWheelTime = 0;
 
     const home = document.getElementById("home");
@@ -614,10 +630,15 @@
     const summary = document.getElementById("summary");
     const about = document.getElementById("about");
     const viewer = document.getElementById("viewer");
+
     const pageImage = document.getElementById("page-image");
+    const aboutImage = document.getElementById("about-image");
 
     const prevSide = document.getElementById("prev-side");
     const nextSide = document.getElementById("next-side");
+
+    const aboutPrev = document.getElementById("about-prev");
+    const aboutNext = document.getElementById("about-next");
 
     const drawer = document.getElementById("drawer");
     const overlay = document.getElementById("overlay");
@@ -638,6 +659,13 @@
 
       const img = new Image();
       img.src = getImageSrc(num);
+    }
+
+    function preloadAboutPage(index) {
+      if (index < 0 || index >= ABOUT_PAGES.length) return;
+
+      const img = new Image();
+      img.src = ABOUT_PAGES[index].src;
     }
 
     function findProjectByPage(page) {
@@ -667,6 +695,11 @@
       nextSide.disabled = currentImage >= currentProject.end;
     }
 
+    function updateAboutNavState() {
+      aboutPrev.disabled = currentAboutPage <= 0;
+      aboutNext.disabled = currentAboutPage >= ABOUT_PAGES.length - 1;
+    }
+
     function hideAllMainViews() {
       summary.classList.add("hidden");
       about.classList.add("hidden");
@@ -689,11 +722,11 @@
       site.classList.remove("hidden");
       hideAllMainViews();
       about.classList.remove("hidden");
-      about.scrollTop = 0;
       currentProject = null;
       currentImage = null;
       closeProjects();
       clearUrl();
+      goToAboutPage(0);
     }
 
     function showViewer(project, targetPage) {
@@ -705,6 +738,45 @@
       viewer.classList.remove("hidden");
 
       goToPage(targetPage || project.start, false);
+    }
+
+    function goToAboutPage(index) {
+      if (index < 0 || index >= ABOUT_PAGES.length) return;
+
+      currentAboutPage = index;
+      aboutImage.classList.add("loading");
+
+      const page = ABOUT_PAGES[currentAboutPage];
+
+      aboutImage.onload = function() {
+        aboutImage.classList.remove("loading");
+        preloadAboutPage(currentAboutPage + 1);
+        preloadAboutPage(currentAboutPage - 1);
+      };
+
+      aboutImage.onerror = function() {
+        aboutImage.classList.remove("loading");
+        aboutImage.alt = "Image introuvable : " + page.src;
+      };
+
+      aboutImage.src = page.src;
+      aboutImage.alt = page.alt;
+
+      updateAboutNavState();
+    }
+
+    function previousAboutPage() {
+      if (about.classList.contains("hidden")) return;
+      if (currentAboutPage <= 0) return;
+
+      goToAboutPage(currentAboutPage - 1);
+    }
+
+    function nextAboutPage() {
+      if (about.classList.contains("hidden")) return;
+      if (currentAboutPage >= ABOUT_PAGES.length - 1) return;
+
+      goToAboutPage(currentAboutPage + 1);
     }
 
     function goToPage(num, closeDrawer = true) {
@@ -830,10 +902,21 @@
     prevSide.addEventListener("click", previousPage);
     nextSide.addEventListener("click", nextPage);
 
+    aboutPrev.addEventListener("click", previousAboutPage);
+    aboutNext.addEventListener("click", nextAboutPage);
+
     document.addEventListener("keydown", function(e) {
       if (e.key === "Escape") closeProjects();
-      if (e.key === "ArrowLeft") previousPage();
-      if (e.key === "ArrowRight") nextPage();
+
+      if (e.key === "ArrowLeft") {
+        if (!viewer.classList.contains("hidden")) previousPage();
+        if (!about.classList.contains("hidden")) previousAboutPage();
+      }
+
+      if (e.key === "ArrowRight") {
+        if (!viewer.classList.contains("hidden")) nextPage();
+        if (!about.classList.contains("hidden")) nextAboutPage();
+      }
     });
 
     pageImage.addEventListener("wheel", function(e) {
@@ -855,8 +938,28 @@
       lastWheelTime = now;
     }, { passive: false });
 
+    aboutImage.addEventListener("wheel", function(e) {
+      if (about.classList.contains("hidden")) return;
+
+      e.preventDefault();
+
+      const now = Date.now();
+
+      if (now - lastWheelTime < 420) return;
+      if (Math.abs(e.deltaY) < 20) return;
+
+      if (e.deltaY > 0) {
+        nextAboutPage();
+      } else {
+        previousAboutPage();
+      }
+
+      lastWheelTime = now;
+    }, { passive: false });
+
     buildProjectCards();
     buildProjectList();
+    updateAboutNavState();
 
     const params = new URLSearchParams(window.location.search);
     const directPage = parseInt(params.get("page"), 10);
