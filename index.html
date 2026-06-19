@@ -500,9 +500,6 @@
     const IMAGE_FOLDER = "pages/";
     const VIGNETTE_FOLDER = "Vignettes/";
 
-    const FIRST_IMAGE = 1;
-    const LAST_IMAGE = 45;
-
     const PROJECTS = [
       {
         title: "Melle",
@@ -551,7 +548,7 @@
       }
     ];
 
-    let currentImage = 1;
+    let currentImage = null;
     let currentProject = null;
     let lastWheelTime = 0;
 
@@ -602,7 +599,7 @@
     }
 
     function updateNavState() {
-      if (!currentProject) {
+      if (!currentProject || currentImage === null) {
         prevSide.disabled = true;
         nextSide.disabled = true;
         return;
@@ -618,6 +615,7 @@
       summary.classList.remove("hidden");
       viewer.classList.add("hidden");
       currentProject = null;
+      currentImage = null;
       closeProjects();
       clearUrl();
     }
@@ -628,6 +626,7 @@
       summary.classList.remove("hidden");
       viewer.classList.add("hidden");
       currentProject = null;
+      currentImage = null;
       closeProjects();
       clearUrl();
     }
@@ -699,6 +698,8 @@
     }
 
     function buildProjectCards() {
+      projectGrid.innerHTML = "";
+
       PROJECTS.forEach(function(project, index) {
         const button = document.createElement("button");
         button.className = "project-card";
@@ -721,6 +722,8 @@
     }
 
     function buildProjectList() {
+      projectList.innerHTML = "";
+
       PROJECTS.forEach(function(project, index) {
         const button = document.createElement("button");
         button.className = "project-item";
@@ -741,11 +744,14 @@
     }
 
     home.addEventListener("click", showSummary);
+    document.getElementById("home-name").addEventListener("click", showSummary);
 
     document.getElementById("brand").addEventListener("click", showSummary);
 
     document.getElementById("projects-btn").addEventListener("click", function() {
       if (site.classList.contains("hidden")) {
+        showSummary();
+      } else if (viewer.classList.contains("hidden")) {
         showSummary();
       } else {
         openProjects();
@@ -764,7 +770,7 @@
       if (e.key === "ArrowRight") nextPage();
     });
 
-    document.querySelector(".document-wrap").addEventListener("wheel", function(e) {
+    pageImage.addEventListener("wheel", function(e) {
       if (viewer.classList.contains("hidden")) return;
 
       e.preventDefault();
