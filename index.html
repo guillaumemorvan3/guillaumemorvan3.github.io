@@ -16,7 +16,7 @@
       width: 100%;
       height: 100%;
       font-family: Arial, Helvetica, sans-serif;
-      background: #f8f7f3;
+      background: #fbfaf7;
       color: #111;
       overflow: hidden;
     }
@@ -25,7 +25,7 @@
       display: none !important;
     }
 
-    /* ACCUEIL */
+    /* ACCUEIL IMAGE */
 
     .home {
       position: fixed;
@@ -53,7 +53,7 @@
       border: none;
       background: transparent;
       padding: 0;
-      color: #f8f7f3;
+      color: #fbfaf7;
       font-size: 30px;
       font-weight: 700;
       letter-spacing: -0.04em;
@@ -64,12 +64,12 @@
       opacity: 0.6;
     }
 
-    /* STRUCTURE GÉNÉRALE */
+    /* STRUCTURE */
 
     #site {
       width: 100vw;
       height: 100vh;
-      background: #f8f7f3;
+      background: #fbfaf7;
       overflow: hidden;
     }
 
@@ -81,7 +81,7 @@
       justify-content: space-between;
       gap: 24px;
       border-bottom: 1px solid rgba(17, 17, 17, 0.10);
-      background: #f8f7f3;
+      background: #fbfaf7;
     }
 
     .brand {
@@ -115,6 +115,7 @@
       padding: 0;
       font: inherit;
       font-size: 12px;
+      font-weight: 400;
       color: #111;
       text-decoration: none;
       cursor: pointer;
@@ -125,45 +126,25 @@
       opacity: 0.6;
     }
 
-    /* PAGE SOMMAIRE — VIGNETTES */
+    /* PAGE VIGNETTES */
 
     .summary {
       width: 100vw;
       height: calc(100vh - 44px);
-      padding: 42px 36px 34px;
+      padding: 54px 36px 40px;
       overflow: hidden;
-      background: #f8f7f3;
+      background: #fbfaf7;
       display: flex;
-      flex-direction: column;
+      align-items: center;
       justify-content: center;
-      gap: 28px;
-    }
-
-    .summary-intro {
-      max-width: 760px;
-      margin: 0 auto;
-      text-align: center;
-    }
-
-    .summary-intro h1 {
-      margin: 0 0 12px;
-      font-size: 24px;
-      font-weight: 700;
-      letter-spacing: -0.04em;
-    }
-
-    .summary-intro p {
-      margin: 0;
-      font-size: 13px;
-      line-height: 1.55;
-      color: #333;
     }
 
     .project-grid {
       width: 100%;
       display: grid;
-      grid-template-columns: repeat(6, minmax(0, 1fr));
-      gap: 18px;
+      grid-template-columns: repeat(5, minmax(0, 1fr));
+      gap: 22px;
+      align-items: start;
     }
 
     .project-card {
@@ -192,12 +173,13 @@
       display: block;
       object-fit: cover;
       object-position: center;
-      background: #e8e6df;
+      background: #efeee9;
       transition: filter 0.2s ease;
     }
 
     .card-text {
       padding-top: 12px;
+      display: block;
     }
 
     .card-title {
@@ -227,7 +209,7 @@
       transition: opacity 0.2s ease;
     }
 
-    /* VIEWER IMAGES */
+    /* VIEWER */
 
     .viewer {
       width: 100vw;
@@ -238,7 +220,7 @@
       align-items: center;
       justify-content: center;
       overflow: hidden;
-      background: #f8f7f3;
+      background: #fbfaf7;
     }
 
     .document-wrap {
@@ -289,6 +271,11 @@
       opacity: 0.75;
     }
 
+    .nav-side:disabled {
+      opacity: 0.04;
+      cursor: default;
+    }
+
     #prev-side {
       left: 8px;
     }
@@ -297,7 +284,7 @@
       right: 8px;
     }
 
-    /* MENU PROJETS LATÉRAL */
+    /* MENU PROJETS */
 
     .drawer {
       position: fixed;
@@ -306,7 +293,7 @@
       width: 360px;
       max-width: 92vw;
       height: 100vh;
-      background: #f8f7f3;
+      background: #fbfaf7;
       border-left: 1px solid rgba(17, 17, 17, 0.16);
       box-shadow: -12px 0 40px rgba(0, 0, 0, 0.08);
       transform: translateX(100%);
@@ -402,7 +389,7 @@
 
     @media (max-width: 1100px) {
       .summary {
-        justify-content: flex-start;
+        align-items: flex-start;
         overflow-y: auto;
       }
 
@@ -435,12 +422,8 @@
       .summary {
         height: calc(100vh - 90px);
         padding: 28px 16px 30px;
-        justify-content: flex-start;
+        align-items: flex-start;
         overflow-y: auto;
-      }
-
-      .summary-intro {
-        text-align: left;
       }
 
       .project-grid {
@@ -490,69 +473,7 @@
     </header>
 
     <main id="summary" class="summary">
-      <div class="summary-intro">
-        <h1>Construire à partir de ce qui est déjà là.</h1>
-        <p>
-          Une sélection de travaux entre réhabilitation, projet urbain, construction bois et culture constructive.
-          Chaque entrée ouvre une manière d’aborder le projet : par le contexte, la matière, l’usage, le patrimoine ou la mise en œuvre.
-        </p>
-      </div>
-
-      <div class="project-grid">
-        <button class="project-card" data-page="1">
-          <img class="thumb" src="vignettes/fondations.jpg" alt="Fondations" />
-          <span class="card-text">
-            <span class="card-title">01 — Fondations</span>
-            <span class="card-type">Positionnement</span>
-            <span class="card-line">Entre technologies contemporaines et bon sens vernaculaire.</span>
-          </span>
-        </button>
-
-        <button class="project-card" data-page="4">
-          <img class="thumb" src="vignettes/melle.jpg" alt="Station ferroviaire Melle" />
-          <span class="card-text">
-            <span class="card-title">02 — Melle</span>
-            <span class="card-type">Projet urbain et bâtiment mixte</span>
-            <span class="card-line">Évolutivité et appropriation des espaces.</span>
-          </span>
-        </button>
-
-        <button class="project-card" data-page="10">
-          <img class="thumb" src="vignettes/saint-joseph.jpg" alt="Église Saint-Joseph" />
-          <span class="card-text">
-            <span class="card-title">03 — Saint-Joseph</span>
-            <span class="card-type">Réhabilitation patrimoniale</span>
-            <span class="card-line">Révéler les qualités cachées du patrimoine.</span>
-          </span>
-        </button>
-
-        <button class="project-card" data-page="20">
-          <img class="thumb" src="vignettes/ferme-nord.jpg" alt="Ferme Nord" />
-          <span class="card-text">
-            <span class="card-title">04 — Ferme Nord</span>
-            <span class="card-type">Réhabilitation et extension</span>
-            <span class="card-line">L’harmonieux contraste.</span>
-          </span>
-        </button>
-
-        <button class="project-card" data-page="34">
-          <img class="thumb" src="vignettes/tank.jpg" alt="TANK Architectes" />
-          <span class="card-text">
-            <span class="card-title">05 — TANK</span>
-            <span class="card-type">Expérience en agence</span>
-            <span class="card-line">La qualité architecturale comme exigence collective.</span>
-          </span>
-        </button>
-
-        <button class="project-card" data-page="40">
-          <img class="thumb" src="vignettes/edwood.jpg" alt="Edwood" />
-          <span class="card-text">
-            <span class="card-title">06 — Edwood</span>
-            <span class="card-type">Construction bois</span>
-            <span class="card-line">Le chantier comme école de la réalité constructive.</span>
-          </span>
-        </button>
-      </div>
+      <div id="project-grid" class="project-grid"></div>
     </main>
 
     <main id="viewer" class="viewer hidden">
@@ -577,44 +498,61 @@
 
   <script>
     const IMAGE_FOLDER = "pages/";
+    const VIGNETTE_FOLDER = "Vignettes/";
+
     const FIRST_IMAGE = 1;
     const LAST_IMAGE = 45;
-    const START_IMAGE = 1;
 
     const PROJECTS = [
       {
-        title: "Fondations",
-        subtitle: "Entre technologies contemporaines et bon sens vernaculaire",
-        page: 1
+        title: "Melle",
+        fullTitle: "Station ferroviaire Melle",
+        type: "Projet urbain et bâtiment mixte",
+        line: "Évolutivité et appropriation des espaces.",
+        thumb: "melle.jpg",
+        start: 4,
+        end: 8
       },
       {
-        title: "Station ferroviaire Melle",
-        subtitle: "Évolutivité et appropriation des espaces",
-        page: 4
-      },
-      {
-        title: "Église Saint-Joseph",
-        subtitle: "Réhabilitation du patrimoine : révéler les qualités cachées",
-        page: 10
+        title: "Saint-Joseph",
+        fullTitle: "Église Saint-Joseph",
+        type: "Réhabilitation patrimoniale",
+        line: "Révéler les qualités cachées du patrimoine.",
+        thumb: "saint-joseph.jpg",
+        start: 9,
+        end: 17
       },
       {
         title: "Ferme Nord",
-        subtitle: "Réhabilitation du patrimoine : l’harmonieux contraste",
-        page: 20
+        fullTitle: "Ferme Nord",
+        type: "Réhabilitation et extension",
+        line: "L’harmonieux contraste.",
+        thumb: "ferme-nord.jpg",
+        start: 18,
+        end: 33
       },
       {
-        title: "TANK Architectes",
-        subtitle: "La qualité architecturale comme exigence collective",
-        page: 34
+        title: "TANK",
+        fullTitle: "TANK Architectes",
+        type: "Expérience en agence",
+        line: "La qualité architecturale comme exigence collective.",
+        thumb: "tank.jpg",
+        start: 34,
+        end: 39
       },
       {
-        title: "EDWOOD",
-        subtitle: "Le chantier comme école de la réalité constructive",
-        page: 40
+        title: "Edwood",
+        fullTitle: "Edwood",
+        type: "Construction bois",
+        line: "Le chantier comme école de la réalité constructive.",
+        thumb: "edwood.jpg",
+        start: 40,
+        end: 45
       }
     ];
 
-    let currentImage = START_IMAGE;
+    let currentImage = 1;
+    let currentProject = null;
     let lastWheelTime = 0;
 
     const home = document.getElementById("home");
@@ -623,19 +561,34 @@
     const viewer = document.getElementById("viewer");
     const pageImage = document.getElementById("page-image");
 
+    const prevSide = document.getElementById("prev-side");
+    const nextSide = document.getElementById("next-side");
+
     const drawer = document.getElementById("drawer");
     const overlay = document.getElementById("overlay");
     const projectList = document.getElementById("project-list");
+    const projectGrid = document.getElementById("project-grid");
 
     function getImageSrc(num) {
       return encodeURI(`${IMAGE_FOLDER}page (${num}).jpg`);
     }
 
+    function getVignetteSrc(filename) {
+      return encodeURI(`${VIGNETTE_FOLDER}${filename}`);
+    }
+
     function preloadImage(num) {
-      if (num < FIRST_IMAGE || num > LAST_IMAGE) return;
+      if (!currentProject) return;
+      if (num < currentProject.start || num > currentProject.end) return;
 
       const img = new Image();
       img.src = getImageSrc(num);
+    }
+
+    function findProjectByPage(page) {
+      return PROJECTS.find(function(project) {
+        return page >= project.start && page <= project.end;
+      }) || null;
     }
 
     function updateUrl(num) {
@@ -648,11 +601,23 @@
       history.replaceState({}, "", window.location.pathname);
     }
 
+    function updateNavState() {
+      if (!currentProject) {
+        prevSide.disabled = true;
+        nextSide.disabled = true;
+        return;
+      }
+
+      prevSide.disabled = currentImage <= currentProject.start;
+      nextSide.disabled = currentImage >= currentProject.end;
+    }
+
     function showHome() {
       site.classList.add("hidden");
       home.classList.remove("hidden");
       summary.classList.remove("hidden");
       viewer.classList.add("hidden");
+      currentProject = null;
       closeProjects();
       clearUrl();
     }
@@ -662,24 +627,27 @@
       site.classList.remove("hidden");
       summary.classList.remove("hidden");
       viewer.classList.add("hidden");
+      currentProject = null;
       closeProjects();
       clearUrl();
     }
 
-    function showViewer(targetPage = START_IMAGE) {
+    function showViewer(project, targetPage) {
+      currentProject = project;
+
       home.classList.add("hidden");
       site.classList.remove("hidden");
       summary.classList.add("hidden");
       viewer.classList.remove("hidden");
-      goToPage(targetPage, false);
+
+      goToPage(targetPage || project.start, false);
     }
 
     function goToPage(num, closeDrawer = true) {
       const target = parseInt(num, 10);
 
-      if (!target || target < FIRST_IMAGE || target > LAST_IMAGE) {
-        return;
-      }
+      if (!currentProject) return;
+      if (!target || target < currentProject.start || target > currentProject.end) return;
 
       currentImage = target;
       pageImage.classList.add("loading");
@@ -699,20 +667,23 @@
 
       pageImage.src = src;
       updateUrl(currentImage);
+      updateNavState();
 
       if (closeDrawer) closeProjects();
     }
 
     function previousPage() {
       if (viewer.classList.contains("hidden")) return;
-      if (currentImage <= FIRST_IMAGE) return;
+      if (!currentProject) return;
+      if (currentImage <= currentProject.start) return;
 
       goToPage(currentImage - 1, false);
     }
 
     function nextPage() {
       if (viewer.classList.contains("hidden")) return;
-      if (currentImage >= LAST_IMAGE) return;
+      if (!currentProject) return;
+      if (currentImage >= currentProject.end) return;
 
       goToPage(currentImage + 1, false);
     }
@@ -727,19 +698,41 @@
       overlay.classList.remove("open");
     }
 
+    function buildProjectCards() {
+      PROJECTS.forEach(function(project, index) {
+        const button = document.createElement("button");
+        button.className = "project-card";
+
+        button.innerHTML = `
+          <img class="thumb" src="${getVignetteSrc(project.thumb)}" alt="${project.fullTitle}" />
+          <span class="card-text">
+            <span class="card-title">${String(index + 1).padStart(2, "0")} — ${project.title}</span>
+            <span class="card-type">${project.type}</span>
+            <span class="card-line">${project.line}</span>
+          </span>
+        `;
+
+        button.addEventListener("click", function() {
+          showViewer(project, project.start);
+        });
+
+        projectGrid.appendChild(button);
+      });
+    }
+
     function buildProjectList() {
       PROJECTS.forEach(function(project, index) {
         const button = document.createElement("button");
         button.className = "project-item";
 
         button.innerHTML = `
-          <span class="project-title">${String(index + 1).padStart(2, "0")} — ${project.title}</span>
-          <span class="project-subtitle">${project.subtitle}</span>
-          <span class="project-page">Image ${project.page}</span>
+          <span class="project-title">${String(index + 1).padStart(2, "0")} — ${project.fullTitle}</span>
+          <span class="project-subtitle">${project.line}</span>
+          <span class="project-page">Pages ${project.start} à ${project.end}</span>
         `;
 
         button.addEventListener("click", function() {
-          showViewer(project.page);
+          showViewer(project, project.start);
           closeProjects();
         });
 
@@ -749,7 +742,8 @@
 
     home.addEventListener("click", showSummary);
 
-    document.getElementById("brand").addEventListener("click", showHome);
+    document.getElementById("brand").addEventListener("click", showSummary);
+
     document.getElementById("projects-btn").addEventListener("click", function() {
       if (site.classList.contains("hidden")) {
         showSummary();
@@ -761,14 +755,8 @@
     document.getElementById("close-drawer").addEventListener("click", closeProjects);
     overlay.addEventListener("click", closeProjects);
 
-    document.getElementById("prev-side").addEventListener("click", previousPage);
-    document.getElementById("next-side").addEventListener("click", nextPage);
-
-    document.querySelectorAll(".project-card").forEach(function(card) {
-      card.addEventListener("click", function() {
-        showViewer(card.dataset.page);
-      });
-    });
+    prevSide.addEventListener("click", previousPage);
+    nextSide.addEventListener("click", nextPage);
 
     document.addEventListener("keydown", function(e) {
       if (e.key === "Escape") closeProjects();
@@ -795,13 +783,15 @@
       lastWheelTime = now;
     }, { passive: false });
 
+    buildProjectCards();
     buildProjectList();
 
     const params = new URLSearchParams(window.location.search);
     const directPage = parseInt(params.get("page"), 10);
+    const directProject = findProjectByPage(directPage);
 
-    if (Number.isInteger(directPage) && directPage >= FIRST_IMAGE && directPage <= LAST_IMAGE) {
-      showViewer(directPage);
+    if (directProject) {
+      showViewer(directProject, directPage);
     }
   </script>
 </body>
