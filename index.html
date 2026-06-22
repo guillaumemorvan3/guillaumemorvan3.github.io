@@ -81,6 +81,12 @@
       gap: 18px;
     }
 
+    .mobile-header-row {
+      display: flex;
+      align-items: center;
+      justify-content: space-between;
+    }
+
     #brand.brand {
       border: none;
       background: transparent;
@@ -94,7 +100,6 @@
       color: #111;
     }
 
-    .mobile-header-row,
     .mobile-project-line,
     .mobile-menu-button,
     .mobile-info-header-button {
@@ -258,14 +263,12 @@
       touch-action: pan-y;
     }
 
-    .mobile-bottom-bar,
-    .mobile-info-panel {
+    .mobile-bottom-bar {
       display: none;
     }
 
-    .mobile-grid-button,
-    #mobile-grid-button {
-      display: none !important;
+    .mobile-info-panel {
+      display: none;
     }
 
     .nav-side {
@@ -424,12 +427,6 @@
         background: #ffffff;
       }
 
-      #site.menu-open .topbar {
-        height: 132px;
-        min-height: 132px;
-        padding: 34px 34px 14px;
-      }
-
       .brand-block {
         display: block;
         width: 100%;
@@ -489,10 +486,6 @@
         gap: 18px;
         width: 100%;
         margin-top: 30px;
-      }
-
-      #site.menu-open .mobile-project-line {
-        display: flex;
       }
 
       #mobile-current-title {
@@ -605,31 +598,22 @@
       }
 
       .mobile-info-panel {
+        display: none;
+      }
+
+      .mobile-info-panel.open {
+        display: block;
         position: fixed;
         left: 0;
         right: 0;
         top: 132px;
-        z-index: 48;
-        display: block;
+        z-index: 80;
         background: #ffffff;
         border-top: 1px solid rgba(17, 17, 17, 0.10);
         border-bottom: 1px solid rgba(17, 17, 17, 0.10);
         padding: 26px 34px 30px;
         max-height: 58vh;
         overflow-y: auto;
-
-        opacity: 0;
-        visibility: hidden;
-        pointer-events: none;
-        transform: translateY(-12px);
-        transition: opacity 0.2s ease, visibility 0.2s ease, transform 0.2s ease;
-      }
-
-      .mobile-info-panel.open {
-        opacity: 1;
-        visibility: visible;
-        pointer-events: auto;
-        transform: translateY(0);
       }
 
       .mobile-info-panel p {
@@ -671,7 +655,7 @@
         padding: 72px 16px 24px;
         border-left: 1px solid rgba(17, 17, 17, 0.10);
         box-shadow: -8px 0 24px rgba(0, 0, 0, 0.06);
-        z-index: 50;
+        z-index: 90;
         background: #ffffff;
       }
 
@@ -807,6 +791,58 @@
         filePrefix: "page",
         start: 4,
         end: 8
+      },
+      {
+        slug: "saint-joseph",
+        title: "Saint-Joseph",
+        fullTitle: "Église Saint-Joseph",
+        type: "Réhabilitation patrimoniale",
+        line: "Révéler les qualités cachées du patrimoine.",
+        projectInfo: "Le projet interroge la capacité d’un édifice patrimonial à accueillir de nouveaux usages sans perdre sa présence ni sa mémoire. L’intervention cherche à révéler les qualités existantes tout en introduisant une réponse contemporaine, attentive à la lumière, aux usages et à la lisibilité constructive.",
+        thumb: "saint-joseph.jpg",
+        folder: "pages/",
+        filePrefix: "page",
+        start: 9,
+        end: 17
+      },
+      {
+        slug: "ferme-nord",
+        title: "Ferme Nord",
+        fullTitle: "Ferme Nord",
+        type: "Réhabilitation et extension",
+        line: "L’harmonieux contraste.",
+        projectInfo: "La Ferme Nord met en tension patrimoine agricole, extension contemporaine et paysage dunaire. Le projet s’appuie sur les tracés existants pour inscrire les nouveaux volumes dans une continuité lisible, tout en affirmant une intervention contemporaine capable d’ouvrir le site à de nouveaux usages.",
+        thumb: "ferme-nord.jpg",
+        folder: "pages/",
+        filePrefix: "page",
+        start: 18,
+        end: 33
+      },
+      {
+        slug: "tank",
+        title: "TANK",
+        fullTitle: "TANK Architectes",
+        type: "Expérience en agence",
+        line: "L’architecte dans une pratique engagée pour la qualité.",
+        projectInfo: "L’expérience chez TANK Architectes m’a permis d’approcher une pratique collective exigeante, où la qualité architecturale se construit dans le dialogue entre dessin, programme, contraintes techniques, économie du projet et attention portée aux usages.",
+        thumb: "tank.jpg",
+        folder: "pages/",
+        filePrefix: "page",
+        start: 34,
+        end: 39
+      },
+      {
+        slug: "edwood",
+        title: "Edwood",
+        fullTitle: "Edwood",
+        type: "Construction bois",
+        line: "Le chantier comme école de la réalité constructive.",
+        projectInfo: "Chez Edwood, l’expérience en atelier et sur chantier m’a permis d’approfondir la réalité constructive du projet. La construction bois y devient un apprentissage direct de la matière, du détail, de la mise en œuvre et des contraintes concrètes de fabrication.",
+        thumb: "edwood.jpg",
+        folder: "pages/",
+        filePrefix: "page",
+        start: 40,
+        end: 43
       }
     ];
 
@@ -823,6 +859,58 @@
         filePrefix: "melle",
         start: 1,
         end: 9
+      },
+      {
+        slug: "saint-joseph",
+        title: "Saint-Joseph",
+        fullTitle: "Église Saint-Joseph",
+        type: "Réhabilitation patrimoniale",
+        line: "Révéler les qualités cachées du patrimoine.",
+        projectInfo: "Le projet interroge la capacité d’un édifice patrimonial à accueillir de nouveaux usages sans perdre sa présence ni sa mémoire. L’intervention cherche à révéler les qualités existantes tout en introduisant une réponse contemporaine, attentive à la lumière, aux usages et à la lisibilité constructive.",
+        thumb: "saint-joseph.jpg",
+        folder: "pages/",
+        filePrefix: "page",
+        start: 9,
+        end: 17
+      },
+      {
+        slug: "ferme-nord",
+        title: "Ferme Nord",
+        fullTitle: "Ferme Nord",
+        type: "Réhabilitation et extension",
+        line: "L’harmonieux contraste.",
+        projectInfo: "La Ferme Nord met en tension patrimoine agricole, extension contemporaine et paysage dunaire. Le projet s’appuie sur les tracés existants pour inscrire les nouveaux volumes dans une continuité lisible, tout en affirmant une intervention contemporaine capable d’ouvrir le site à de nouveaux usages.",
+        thumb: "ferme-nord.jpg",
+        folder: "pages/",
+        filePrefix: "page",
+        start: 18,
+        end: 33
+      },
+      {
+        slug: "tank",
+        title: "TANK",
+        fullTitle: "TANK Architectes",
+        type: "Expérience en agence",
+        line: "L’architecte dans une pratique engagée pour la qualité.",
+        projectInfo: "L’expérience chez TANK Architectes m’a permis d’approcher une pratique collective exigeante, où la qualité architecturale se construit dans le dialogue entre dessin, programme, contraintes techniques, économie du projet et attention portée aux usages.",
+        thumb: "tank.jpg",
+        folder: "pages/",
+        filePrefix: "page",
+        start: 34,
+        end: 39
+      },
+      {
+        slug: "edwood",
+        title: "Edwood",
+        fullTitle: "Edwood",
+        type: "Construction bois",
+        line: "Le chantier comme école de la réalité constructive.",
+        projectInfo: "Chez Edwood, l’expérience en atelier et sur chantier m’a permis d’approfondir la réalité constructive du projet. La construction bois y devient un apprentissage direct de la matière, du détail, de la mise en œuvre et des contraintes concrètes de fabrication.",
+        thumb: "edwood.jpg",
+        folder: "pages/",
+        filePrefix: "page",
+        start: 40,
+        end: 43
       }
     ];
 
