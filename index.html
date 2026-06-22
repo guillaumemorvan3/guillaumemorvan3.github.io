@@ -433,7 +433,7 @@
       }
     }
 
-    /* MODIFICATIONS UNIQUEMENT MOBILE */
+    /* MOBILE */
 
     @media (max-width: 700px) {
       .home-name {
@@ -516,6 +516,10 @@
       .nav-side {
         top: calc(52px + (100vh - 52px) / 2);
         opacity: 0.20;
+      }
+
+      .viewer .nav-side {
+        display: none;
       }
 
       .nav-prev {
@@ -1025,7 +1029,37 @@
       touchStartY = e.changedTouches[0].screenY;
     }
 
-    function handleTouchEnd(e, previousFunction, nextFunction) {
+    function handleProjectTouchEnd(e) {
+      const touchEndX = e.changedTouches[0].screenX;
+      const touchEndY = e.changedTouches[0].screenY;
+
+      const deltaX = touchEndX - touchStartX;
+      const deltaY = touchEndY - touchStartY;
+
+      if (isMobile()) {
+        if (Math.abs(deltaY) < 45) return;
+        if (Math.abs(deltaY) < Math.abs(deltaX)) return;
+
+        if (deltaY < 0) {
+          nextPage();
+        } else {
+          previousPage();
+        }
+
+        return;
+      }
+
+      if (Math.abs(deltaX) < 45) return;
+      if (Math.abs(deltaX) < Math.abs(deltaY)) return;
+
+      if (deltaX < 0) {
+        nextPage();
+      } else {
+        previousPage();
+      }
+    }
+
+    function handleAboutTouchEnd(e) {
       const touchEndX = e.changedTouches[0].screenX;
       const touchEndY = e.changedTouches[0].screenY;
 
@@ -1036,9 +1070,9 @@
       if (Math.abs(deltaX) < Math.abs(deltaY)) return;
 
       if (deltaX < 0) {
-        nextFunction();
+        nextAboutPage();
       } else {
-        previousFunction();
+        previousAboutPage();
       }
     }
 
@@ -1079,6 +1113,14 @@
         if (!viewer.classList.contains("hidden")) nextPage();
         if (!about.classList.contains("hidden")) nextAboutPage();
       }
+
+      if (e.key === "ArrowUp") {
+        if (!viewer.classList.contains("hidden")) previousPage();
+      }
+
+      if (e.key === "ArrowDown") {
+        if (!viewer.classList.contains("hidden")) nextPage();
+      }
     });
 
     pageImage.addEventListener("wheel", function(e) {
@@ -1092,16 +1134,10 @@
     }, { passive: false });
 
     pageImage.addEventListener("touchstart", handleTouchStart, { passive: true });
-
-    pageImage.addEventListener("touchend", function(e) {
-      handleTouchEnd(e, previousPage, nextPage);
-    }, { passive: true });
+    pageImage.addEventListener("touchend", handleProjectTouchEnd, { passive: true });
 
     aboutImage.addEventListener("touchstart", handleTouchStart, { passive: true });
-
-    aboutImage.addEventListener("touchend", function(e) {
-      handleTouchEnd(e, previousAboutPage, nextAboutPage);
-    }, { passive: true });
+    aboutImage.addEventListener("touchend", handleAboutTouchEnd, { passive: true });
 
     window.addEventListener("resize", function() {
       clearTimeout(window.responsiveTimer);
