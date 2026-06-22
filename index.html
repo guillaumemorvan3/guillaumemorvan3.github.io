@@ -433,6 +433,8 @@
       }
     }
 
+    /* MODIFICATIONS UNIQUEMENT MOBILE */
+
     @media (max-width: 700px) {
       .home-name {
         top: 24px;
@@ -441,27 +443,38 @@
       }
 
       .topbar {
-        height: auto;
-        min-height: 70px;
-        padding: 12px 14px;
-        flex-direction: column;
-        align-items: flex-start;
-        gap: 8px;
+        height: 52px;
+        min-height: 52px;
+        padding: 0 20px;
+        flex-direction: row;
+        align-items: center;
+        justify-content: space-between;
+        gap: 12px;
       }
 
       #brand.brand {
-        font-size: 20px;
+        font-size: 17px;
+        line-height: 1;
+        letter-spacing: 0.04em;
       }
 
       .topbar-right {
-        justify-content: flex-start;
-        gap: 18px;
-        flex-wrap: wrap;
+        display: flex;
+        align-items: center;
+        justify-content: flex-end;
+        gap: 16px;
+        flex-wrap: nowrap;
+      }
+
+      .topbar button:not(.brand),
+      .topbar a {
+        font-size: 11px;
+        line-height: 1;
       }
 
       .summary {
-        height: calc(100vh - 90px);
-        padding: 24px 0 28px;
+        height: calc(100vh - 52px);
+        padding: 20px 0 24px;
         align-items: center;
         justify-content: flex-start;
         overflow: hidden;
@@ -491,17 +504,17 @@
       .about-wrap,
       .viewer,
       .document-wrap {
-        height: calc(100vh - 90px);
+        height: calc(100vh - 52px);
       }
 
       #about-image,
       #page-image {
         max-width: 100vw;
-        max-height: calc(100vh - 90px);
+        max-height: calc(100vh - 52px);
       }
 
       .nav-side {
-        top: calc(90px + (100vh - 90px) / 2);
+        top: calc(52px + (100vh - 52px) / 2);
         opacity: 0.20;
       }
 
@@ -566,9 +579,6 @@
 
   <script>
     const DESKTOP_BREAKPOINT = 700;
-
-    const DESKTOP_IMAGE_FOLDER = "pages/";
-    const MOBILE_IMAGE_FOLDER = "pages-mobile/";
 
     const VIGNETTE_FOLDER = "Vignettes/";
 
@@ -753,12 +763,6 @@
 
       const img = new Image();
       img.src = getAboutSrc(num);
-    }
-
-    function findProjectByPage(page) {
-      return getProjects().find(function(project) {
-        return page >= project.start && page <= project.end;
-      }) || null;
     }
 
     function updateUrl(num) {
@@ -1110,7 +1114,9 @@
 
     const params = new URLSearchParams(window.location.search);
     const directPage = parseInt(params.get("page"), 10);
-    const directProject = findProjectByPage(directPage);
+    const directProject = getProjects().find(function(project) {
+      return directPage >= project.start && directPage <= project.end;
+    });
 
     if (directProject) {
       showViewer(directProject, directPage);
