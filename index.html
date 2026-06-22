@@ -107,6 +107,7 @@
     }
 
     .mobile-project-line,
+    .mobile-project-actions,
     .mobile-menu-button,
     .mobile-info-header-button {
       display: none;
@@ -479,9 +480,15 @@
       .topbar {
         height: 116px;
         min-height: 116px;
-        padding: 22px 20px 14px;
+        padding: 22px 34px 14px;
         align-items: flex-start;
         border-bottom: none;
+      }
+
+      #site.menu-open .topbar {
+        height: 74px;
+        min-height: 74px;
+        padding: 22px 34px 14px;
       }
 
       .brand-block {
@@ -489,7 +496,11 @@
         flex-direction: column;
         align-items: flex-start;
         gap: 22px;
-        width: calc(100vw - 84px);
+        width: 100%;
+      }
+
+      #site.menu-open .brand-block {
+        gap: 0;
       }
 
       #brand.brand {
@@ -507,6 +518,10 @@
         width: 100%;
       }
 
+      #site.menu-open .mobile-project-line {
+        display: none;
+      }
+
       #mobile-current-title {
         display: block;
         font-size: 20px;
@@ -518,6 +533,14 @@
         text-overflow: ellipsis;
       }
 
+      .mobile-project-actions {
+        display: flex;
+        align-items: center;
+        justify-content: flex-end;
+        gap: 24px;
+        flex-shrink: 0;
+      }
+
       .mobile-info-header-button {
         display: none;
         border: none;
@@ -526,7 +549,7 @@
         font: inherit;
         font-size: 18px;
         line-height: 1.2;
-        color: rgba(17, 17, 17, 0.45);
+        color: #111;
         cursor: pointer;
         white-space: nowrap;
       }
@@ -540,16 +563,42 @@
       }
 
       .mobile-menu-button {
-        display: block;
+        display: flex;
+        align-items: center;
+        justify-content: center;
+        width: 32px;
+        height: 32px;
         border: none;
         background: transparent;
         padding: 0;
-        margin-top: 0;
-        font-size: 34px;
-        line-height: 1;
-        font-weight: 300;
         color: #111;
         cursor: pointer;
+      }
+
+      .mobile-menu-button span {
+        display: block;
+        width: 26px;
+        height: 2px;
+        background: #111;
+        position: relative;
+      }
+
+      .mobile-menu-button span::before,
+      .mobile-menu-button span::after {
+        content: "";
+        position: absolute;
+        left: 0;
+        width: 26px;
+        height: 2px;
+        background: #111;
+      }
+
+      .mobile-menu-button span::before {
+        top: -8px;
+      }
+
+      .mobile-menu-button span::after {
+        top: 8px;
       }
 
       .summary {
@@ -566,7 +615,7 @@
         overflow-x: auto;
         overflow-y: hidden;
         gap: 16px;
-        padding: 0 20px 14px;
+        padding: 0 34px 14px;
         scroll-snap-type: x mandatory;
         -webkit-overflow-scrolling: touch;
       }
@@ -613,7 +662,7 @@
         bottom: 0;
         width: 100vw;
         height: 70px;
-        padding: 0 20px;
+        padding: 0 34px;
         background: #ffffff;
         z-index: 14;
         border-top: 1px solid rgba(17, 17, 17, 0.05);
@@ -651,10 +700,10 @@
         background: #ffffff;
         border-top: 1px solid rgba(17, 17, 17, 0.10);
         border-bottom: 1px solid rgba(17, 17, 17, 0.10);
-        padding: 24px 24px 28px;
+        padding: 26px 34px 30px;
         transform: translateY(-110%);
         transition: transform 0.25s ease;
-        max-height: 46vh;
+        max-height: 56vh;
         overflow-y: auto;
       }
 
@@ -692,8 +741,15 @@
       }
 
       .drawer {
-        width: 78vw;
-        padding: 30px 28px;
+        top: 74px;
+        right: 0;
+        width: 100vw;
+        max-width: 100vw;
+        height: calc(100vh - 74px);
+        padding: 34px;
+        border-left: none;
+        box-shadow: none;
+        z-index: 20;
       }
 
       .drawer-nav {
@@ -702,11 +758,26 @@
       }
 
       .drawer h2 {
-        font-size: 20px;
+        display: none;
+      }
+
+      .drawer-header {
+        justify-content: flex-end;
+        margin-bottom: 12px;
+      }
+
+      .close-drawer {
+        font-size: 28px;
+        opacity: 1;
       }
 
       .drawer #project-list {
         display: none;
+      }
+
+      .drawer-nav button {
+        font-size: 24px;
+        padding: 22px 0;
       }
     }
   </style>
@@ -725,7 +796,13 @@
 
         <div class="mobile-project-line">
           <div id="mobile-current-title">Projets</div>
-          <button id="mobile-info-header-button" class="mobile-info-header-button">Info</button>
+
+          <div class="mobile-project-actions">
+            <button id="mobile-info-header-button" class="mobile-info-header-button">Info</button>
+            <button id="mobile-menu-button" class="mobile-menu-button" aria-label="Menu">
+              <span></span>
+            </button>
+          </div>
         </div>
       </div>
 
@@ -733,8 +810,6 @@
         <button id="projects-btn">Projets</button>
         <button id="about-btn">À propos</button>
       </div>
-
-      <button id="mobile-menu-button" class="mobile-menu-button" aria-label="Menu">☰</button>
     </header>
 
     <main id="summary" class="summary">
@@ -800,6 +875,7 @@
         fullTitle: "Station ferroviaire Melle",
         type: "Projet urbain et bâtiment mixte",
         line: "Évolutivité et appropriation des espaces.",
+        projectInfo: "À Gand, le projet investit le parc ferroviaire de Ledeberg, au sud de la ville. Il interroge la transformation d’un site infrastructurel en un lieu habité, traversé et appropriable. La proposition met en place une trame constructive capable d’accueillir des usages évolutifs, en articulant logements, circulations et espaces communs.",
         thumb: "melle.jpg",
         folder: "pages/",
         filePrefix: "page",
@@ -812,6 +888,7 @@
         fullTitle: "Église Saint-Joseph",
         type: "Réhabilitation patrimoniale",
         line: "Révéler les qualités cachées du patrimoine.",
+        projectInfo: "Le projet interroge la capacité d’un édifice patrimonial à accueillir de nouveaux usages sans perdre sa présence ni sa mémoire. L’intervention cherche à révéler les qualités existantes tout en introduisant une réponse contemporaine, attentive à la lumière, aux usages et à la lisibilité constructive.",
         thumb: "saint-joseph.jpg",
         folder: "pages/",
         filePrefix: "page",
@@ -824,6 +901,7 @@
         fullTitle: "Ferme Nord",
         type: "Réhabilitation et extension",
         line: "L’harmonieux contraste.",
+        projectInfo: "La Ferme Nord met en tension patrimoine agricole, extension contemporaine et paysage dunaire. Le projet s’appuie sur les tracés existants pour inscrire les nouveaux volumes dans une continuité lisible, tout en affirmant une intervention contemporaine capable d’ouvrir le site à de nouveaux usages.",
         thumb: "ferme-nord.jpg",
         folder: "pages/",
         filePrefix: "page",
@@ -836,6 +914,7 @@
         fullTitle: "TANK Architectes",
         type: "Expérience en agence",
         line: "L’architecte dans une pratique engagée pour la qualité.",
+        projectInfo: "L’expérience chez TANK Architectes m’a permis d’approcher une pratique collective exigeante, où la qualité architecturale se construit dans le dialogue entre dessin, programme, contraintes techniques, économie du projet et attention portée aux usages.",
         thumb: "tank.jpg",
         folder: "pages/",
         filePrefix: "page",
@@ -848,6 +927,7 @@
         fullTitle: "Edwood",
         type: "Construction bois",
         line: "Le chantier comme école de la réalité constructive.",
+        projectInfo: "Chez Edwood, l’expérience en atelier et sur chantier m’a permis d’approfondir la réalité constructive du projet. La construction bois y devient un apprentissage direct de la matière, du détail, de la mise en œuvre et des contraintes concrètes de fabrication.",
         thumb: "edwood.jpg",
         folder: "pages/",
         filePrefix: "page",
@@ -863,22 +943,12 @@
         fullTitle: "Station ferroviaire Melle",
         type: "Projet urbain et bâtiment mixte",
         line: "Évolutivité et appropriation des espaces.",
+        projectInfo: "À Gand, le projet investit le parc ferroviaire de Ledeberg, au sud de la ville. Il interroge la transformation d’un site infrastructurel en un lieu habité, traversé et appropriable. La proposition met en place une trame constructive capable d’accueillir des usages évolutifs, en articulant logements, circulations et espaces communs. Le projet cherche ainsi à fabriquer une nouvelle centralité de quartier sans effacer le caractère ferroviaire du site.",
         thumb: "melle.jpg",
         folder: "pages-mobile/melle/",
         filePrefix: "melle",
         start: 1,
-        end: 9,
-        infos: {
-          1: "Le projet investit le parc ferroviaire de Ledeberg, au sud de Gand, pour interroger la transformation d’un site infrastructurel en lieu habité et appropriable.",
-          2: "Le site est compris comme une lisière active entre ville, rail et espaces partagés.",
-          3: "Le plan met en place une structure capable d’accueillir des usages évolutifs.",
-          4: "La trame constructive organise les logements et permet leur transformation dans le temps.",
-          5: "Le projet cherche à articuler structure, usage et appropriation quotidienne.",
-          6: "Les typologies sont pensées comme des supports ouverts, capables d’évoluer avec les habitants.",
-          7: "Le dessin met en relation logements, circulation et espaces communs.",
-          8: "Les espaces partagés prolongent l’habitat et fabriquent une nouvelle centralité de quartier.",
-          9: "Le projet propose une manière d’habiter un territoire contraint sans effacer son caractère ferroviaire."
-        }
+        end: 9
       },
       {
         slug: "saint-joseph",
@@ -886,6 +956,7 @@
         fullTitle: "Église Saint-Joseph",
         type: "Réhabilitation patrimoniale",
         line: "Révéler les qualités cachées du patrimoine.",
+        projectInfo: "Le projet interroge la capacité d’un édifice patrimonial à accueillir de nouveaux usages sans perdre sa présence ni sa mémoire. L’intervention cherche à révéler les qualités existantes tout en introduisant une réponse contemporaine, attentive à la lumière, aux usages et à la lisibilité constructive.",
         thumb: "saint-joseph.jpg",
         folder: "pages/",
         filePrefix: "page",
@@ -898,6 +969,7 @@
         fullTitle: "Ferme Nord",
         type: "Réhabilitation et extension",
         line: "L’harmonieux contraste.",
+        projectInfo: "La Ferme Nord met en tension patrimoine agricole, extension contemporaine et paysage dunaire. Le projet s’appuie sur les tracés existants pour inscrire les nouveaux volumes dans une continuité lisible, tout en affirmant une intervention contemporaine capable d’ouvrir le site à de nouveaux usages.",
         thumb: "ferme-nord.jpg",
         folder: "pages/",
         filePrefix: "page",
@@ -910,6 +982,7 @@
         fullTitle: "TANK Architectes",
         type: "Expérience en agence",
         line: "L’architecte dans une pratique engagée pour la qualité.",
+        projectInfo: "L’expérience chez TANK Architectes m’a permis d’approcher une pratique collective exigeante, où la qualité architecturale se construit dans le dialogue entre dessin, programme, contraintes techniques, économie du projet et attention portée aux usages.",
         thumb: "tank.jpg",
         folder: "pages/",
         filePrefix: "page",
@@ -922,6 +995,7 @@
         fullTitle: "Edwood",
         type: "Construction bois",
         line: "Le chantier comme école de la réalité constructive.",
+        projectInfo: "Chez Edwood, l’expérience en atelier et sur chantier m’a permis d’approfondir la réalité constructive du projet. La construction bois y devient un apprentissage direct de la matière, du détail, de la mise en œuvre et des contraintes concrètes de fabrication.",
         thumb: "edwood.jpg",
         folder: "pages/",
         filePrefix: "page",
@@ -1021,13 +1095,7 @@
       const index = currentImage - currentProject.start + 1;
 
       mobileCounter.textContent = `${index}/${total}`;
-
-      const info =
-        currentProject.infos && currentProject.infos[currentImage]
-          ? currentProject.infos[currentImage]
-          : currentProject.line;
-
-      mobileInfoText.textContent = info;
+      mobileInfoText.textContent = currentProject.projectInfo || currentProject.line || "";
     }
 
     function updateNavState() {
@@ -1164,17 +1232,24 @@
     }
 
     function openProjects() {
+      closeInfoPanel();
       drawer.classList.add("open");
       overlay.classList.add("open");
+
+      if (isMobile()) {
+        site.classList.add("menu-open");
+      }
     }
 
     function closeProjects() {
       drawer.classList.remove("open");
       overlay.classList.remove("open");
+      site.classList.remove("menu-open");
     }
 
     function openInfoPanel() {
       if (viewer.classList.contains("hidden")) return;
+      closeProjects();
       mobileInfoPanel.classList.add("open");
     }
 
