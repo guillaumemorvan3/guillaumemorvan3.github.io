@@ -263,6 +263,11 @@
       display: none;
     }
 
+    .mobile-grid-button,
+    #mobile-grid-button {
+      display: none !important;
+    }
+
     .nav-side {
       position: fixed;
       top: calc(44px + (100vh - 44px) / 2);
@@ -300,7 +305,7 @@
       box-shadow: -12px 0 40px rgba(0, 0, 0, 0.08);
       transform: translateX(100%);
       transition: transform 0.25s ease;
-      z-index: 20;
+      z-index: 50;
       padding: 28px;
       overflow-y: auto;
     }
@@ -380,11 +385,11 @@
     .overlay {
       position: fixed;
       inset: 0;
-      background: rgba(17, 17, 17, 0.12);
+      background: rgba(17, 17, 17, 0.04);
       opacity: 0;
       pointer-events: none;
       transition: opacity 0.25s ease;
-      z-index: 15;
+      z-index: 45;
     }
 
     .overlay.open {
@@ -411,17 +416,18 @@
       }
 
       .topbar {
-        height: 126px;
-        min-height: 126px;
-        padding: 28px 34px 14px;
+        height: 132px;
+        min-height: 132px;
+        padding: 34px 34px 14px;
         display: block;
         border-bottom: none;
+        background: #ffffff;
       }
 
       #site.menu-open .topbar {
-        height: 78px;
-        min-height: 78px;
-        padding: 28px 34px 14px;
+        height: 132px;
+        min-height: 132px;
+        padding: 34px 34px 14px;
       }
 
       .brand-block {
@@ -446,8 +452,8 @@
         display: flex;
         align-items: center;
         justify-content: center;
-        width: 32px;
-        height: 32px;
+        width: 44px;
+        height: 34px;
         border: none;
         background: transparent;
         padding: 0;
@@ -457,7 +463,7 @@
 
       .mobile-menu-button span {
         display: block;
-        width: 25px;
+        width: 31px;
         height: 2px;
         background: #111;
         position: relative;
@@ -468,34 +474,34 @@
         content: "";
         position: absolute;
         left: 0;
-        width: 25px;
+        width: 31px;
         height: 2px;
         background: #111;
       }
 
-      .mobile-menu-button span::before { top: -8px; }
-      .mobile-menu-button span::after { top: 8px; }
+      .mobile-menu-button span::before { top: -9px; }
+      .mobile-menu-button span::after { top: 9px; }
 
       .mobile-project-line {
         display: flex;
-        align-items: flex-start;
+        align-items: center;
         justify-content: space-between;
         gap: 18px;
         width: 100%;
-        margin-top: 32px;
+        margin-top: 30px;
       }
 
       #site.menu-open .mobile-project-line {
-        display: none;
+        display: flex;
       }
 
       #mobile-current-title {
         display: block;
-        font-size: 18px;
-        line-height: 1.2;
+        font-size: 20px;
+        line-height: 1.15;
         font-weight: 400;
-        letter-spacing: -0.02em;
-        max-width: calc(100vw - 130px);
+        letter-spacing: -0.03em;
+        max-width: calc(100vw - 132px);
         white-space: nowrap;
         overflow: hidden;
         text-overflow: ellipsis;
@@ -503,6 +509,7 @@
 
       .mobile-info-header-button {
         display: none;
+        width: 44px;
         border: none;
         background: transparent;
         padding: 0;
@@ -512,8 +519,7 @@
         color: #111;
         cursor: pointer;
         white-space: nowrap;
-        text-align: right;
-        min-width: 32px;
+        text-align: center;
       }
 
       .mobile-info-header-button.visible {
@@ -525,7 +531,7 @@
       }
 
       .summary {
-        height: calc(100vh - 126px);
+        height: calc(100vh - 132px);
         padding: 24px 0 30px;
         align-items: center;
         justify-content: flex-start;
@@ -553,16 +559,16 @@
       }
 
       .viewer {
-        height: calc(100vh - 126px);
+        height: calc(100vh - 132px);
         display: block;
         position: relative;
         padding: 0;
       }
 
       .document-wrap {
-        height: calc(100vh - 126px - 54px);
+        height: calc(100vh - 132px - 54px);
         width: 100vw;
-        padding: 10px 4px 16px;
+        padding: 16px 4px 20px;
         display: flex;
         align-items: center;
         justify-content: center;
@@ -602,8 +608,8 @@
         position: fixed;
         left: 0;
         right: 0;
-        top: 126px;
-        z-index: 18;
+        top: 132px;
+        z-index: 48;
         display: block;
         background: #ffffff;
         border-top: 1px solid rgba(17, 17, 17, 0.10);
@@ -628,7 +634,7 @@
 
       .about,
       .about-wrap {
-        height: calc(100vh - 126px);
+        height: calc(100vh - 132px);
       }
 
       #about-image {
@@ -640,7 +646,7 @@
       }
 
       .nav-side {
-        top: calc(126px + (100vh - 126px) / 2);
+        top: calc(132px + (100vh - 132px) / 2);
         opacity: 0.20;
       }
 
@@ -649,21 +655,22 @@
       }
 
       .drawer {
-        top: 78px;
+        top: 0;
         right: 0;
-        width: 36vw;
-        min-width: 138px;
-        max-width: 36vw;
-        height: calc(100vh - 78px);
-        padding: 24px 18px;
-        border-left: 1px solid rgba(17, 17, 17, 0.08);
+        width: 33.333vw;
+        min-width: 128px;
+        max-width: 33.333vw;
+        height: 100vh;
+        padding: 72px 16px 24px;
+        border-left: 1px solid rgba(17, 17, 17, 0.10);
         box-shadow: -8px 0 24px rgba(0, 0, 0, 0.06);
-        z-index: 20;
+        z-index: 50;
+        background: #ffffff;
       }
 
       .drawer-header {
         justify-content: flex-end;
-        margin-bottom: 18px;
+        margin-bottom: 28px;
       }
 
       .drawer h2 {
@@ -671,7 +678,9 @@
       }
 
       .close-drawer {
-        font-size: 26px;
+        width: 34px;
+        height: 34px;
+        font-size: 28px;
         opacity: 1;
       }
 
@@ -689,16 +698,20 @@
         display: none;
       }
 
+      .overlay {
+        background: transparent;
+      }
+
       #site.menu-open .summary {
-        height: calc(100vh - 78px);
+        height: calc(100vh - 132px);
       }
 
       #site.menu-open .viewer {
-        height: calc(100vh - 78px);
+        height: calc(100vh - 132px);
       }
 
       #site.menu-open .document-wrap {
-        height: calc(100vh - 78px - 54px);
+        height: calc(100vh - 132px - 54px);
       }
     }
   </style>
@@ -793,7 +806,7 @@
         fullTitle: "Station ferroviaire Melle",
         type: "Projet urbain et bâtiment mixte",
         line: "Évolutivité et appropriation des espaces.",
-        projectInfo: "À Gand, le projet investit le parc ferroviaire de Ledeberg, au sud de la ville. Il interroge la transformation d’un site infrastructurel en un lieu habité, traversé et appropriable. La proposition met en place une trame constructive capable d’accueillir des usages évolutifs, en articulant logements, circulations et espaces communs.",
+        projectInfo: "Le projet investit le parc ferroviaire de Ledeberg, au sud de Gand, dans un tissu pavillonnaire dense. Il propose un bâtiment mixte associant logements, commerces et espaces communs, conçu autour des notions d’évolutivité et d’appropriation. La flexibilité repose sur une trame de 4 × 4 m et une structure poteaux-poutres en bois, permettant aux logements d’évoluer dans le temps. Les espaces traversants, la rue intérieure couverte, les programmes partagés et les matériaux naturels — bois de peuplier, terre crue, sol en terre coulée — cherchent à créer un climat propice aux usages, aux rencontres et à la présence du végétal.",
         thumb: "melle.jpg",
         folder: "pages/",
         filePrefix: "page",
@@ -861,7 +874,7 @@
         fullTitle: "Station ferroviaire Melle",
         type: "Projet urbain et bâtiment mixte",
         line: "Évolutivité et appropriation des espaces.",
-        projectInfo: "À Gand, le projet investit le parc ferroviaire de Ledeberg, au sud de la ville. Il interroge la transformation d’un site infrastructurel en un lieu habité, traversé et appropriable. La proposition met en place une trame constructive capable d’accueillir des usages évolutifs, en articulant logements, circulations et espaces communs. Le projet cherche ainsi à fabriquer une nouvelle centralité de quartier sans effacer le caractère ferroviaire du site.",
+        projectInfo: "Le projet investit le parc ferroviaire de Ledeberg, au sud de Gand, dans un tissu pavillonnaire dense. Il propose un bâtiment mixte associant logements, commerces et espaces communs, conçu autour des notions d’évolutivité et d’appropriation. La flexibilité repose sur une trame de 4 × 4 m et une structure poteaux-poutres en bois, permettant aux logements d’évoluer dans le temps. Les espaces traversants, la rue intérieure couverte, les programmes partagés et les matériaux naturels — bois de peuplier, terre crue, sol en terre coulée — cherchent à créer un climat propice aux usages, aux rencontres et à la présence du végétal.",
         thumb: "melle.jpg",
         folder: "pages-mobile/melle/",
         filePrefix: "melle",
@@ -1114,7 +1127,7 @@
       closeInfoPanel();
       drawer.classList.add("open");
       overlay.classList.add("open");
-      if (isMobile()) site.classList.add("menu-open");
+      site.classList.add("menu-open");
     }
 
     function closeProjects() {
