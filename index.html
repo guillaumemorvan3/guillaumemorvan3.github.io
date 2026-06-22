@@ -463,17 +463,20 @@
       }
     }
 
+    /* MODIFICATIONS UNIQUEMENT MOBILE */
+
     @media (max-width: 700px) {
       .home-name {
         top: 24px;
         left: 22px;
         font-size: 25px;
+        letter-spacing: 0.02em;
       }
 
       .topbar {
-        height: 128px;
-        min-height: 128px;
-        padding: 28px 34px 22px;
+        height: 112px;
+        min-height: 112px;
+        padding: 24px 22px 18px;
         align-items: flex-start;
         border-bottom: none;
       }
@@ -482,18 +485,19 @@
         display: flex;
         flex-direction: column;
         align-items: flex-start;
-        gap: 24px;
+        gap: 26px;
       }
 
       #brand.brand {
-        font-size: 30px;
+        font-size: 25px;
         line-height: 1;
         letter-spacing: 0.02em;
+        color: #111;
       }
 
       .mobile-current-title {
         display: block;
-        font-size: 22px;
+        font-size: 21px;
         line-height: 1.2;
         font-weight: 400;
         letter-spacing: -0.02em;
@@ -508,7 +512,8 @@
         border: none;
         background: transparent;
         padding: 0;
-        font-size: 52px;
+        margin-top: -3px;
+        font-size: 48px;
         line-height: 0.75;
         font-weight: 400;
         color: #111;
@@ -516,7 +521,7 @@
       }
 
       .summary {
-        height: calc(100vh - 128px);
+        height: calc(100vh - 112px);
         padding: 24px 0 30px;
         align-items: center;
         justify-content: flex-start;
@@ -529,13 +534,13 @@
         overflow-x: auto;
         overflow-y: hidden;
         gap: 16px;
-        padding: 0 34px 14px;
+        padding: 0 22px 14px;
         scroll-snap-type: x mandatory;
         -webkit-overflow-scrolling: touch;
       }
 
       .project-card {
-        flex: 0 0 76vw;
+        flex: 0 0 78vw;
         scroll-snap-align: center;
       }
 
@@ -547,7 +552,7 @@
       .document-wrap,
       .about,
       .about-wrap {
-        height: calc(100vh - 128px);
+        height: calc(100vh - 112px);
       }
 
       .viewer {
@@ -555,29 +560,31 @@
       }
 
       .document-wrap {
-        align-items: flex-start;
+        align-items: center;
         justify-content: center;
-        padding: 38px 36px 34px;
+        padding: 0;
+        width: 100vw;
+        height: calc(100vh - 112px);
       }
 
       #page-image {
-        width: calc(100vw - 72px);
-        max-width: calc(100vw - 72px);
-        max-height: calc(100vh - 210px);
-        height: auto;
+        width: 100vw;
+        height: 100%;
+        max-width: 100vw;
+        max-height: none;
         object-fit: contain;
       }
 
       #about-image {
-        width: calc(100vw - 72px);
-        max-width: calc(100vw - 72px);
-        max-height: calc(100vh - 210px);
-        height: auto;
+        width: 100vw;
+        height: 100%;
+        max-width: 100vw;
+        max-height: none;
         object-fit: contain;
       }
 
       .nav-side {
-        top: calc(128px + (100vh - 128px) / 2);
+        top: calc(112px + (100vh - 112px) / 2);
         opacity: 0.20;
       }
 
@@ -586,17 +593,21 @@
       }
 
       .drawer {
-        width: 82vw;
+        width: 78vw;
         padding: 30px 28px;
       }
 
       .drawer-nav {
         display: block;
-        margin-bottom: 28px;
+        margin-bottom: 0;
       }
 
       .drawer h2 {
         font-size: 20px;
+      }
+
+      .drawer #project-list {
+        display: none;
       }
     }
   </style>
@@ -654,7 +665,6 @@
 
     <div class="drawer-nav">
       <button id="drawer-home">Accueil</button>
-      <button id="drawer-projects">Projets</button>
       <button id="drawer-about">À propos</button>
     </div>
 
@@ -1100,11 +1110,6 @@
     });
 
     document.getElementById("drawer-home").addEventListener("click", function() {
-      showSummary();
-      closeProjects();
-    });
-
-    document.getElementById("drawer-projects").addEventListener("click", function() {
       showSummary();
       closeProjects();
     });
