@@ -62,19 +62,14 @@
     }
 
     .topbar {
-      height: 132px;
-      min-height: 132px;
+      height: 84px;
+      min-height: 84px;
       padding: 34px 34px 14px;
       display: block;
       border-bottom: none;
       background: #ffffff;
       position: relative;
       z-index: 30;
-    }
-
-    .brand-block {
-      display: block;
-      width: 100%;
     }
 
     .mobile-header-row {
@@ -132,50 +127,10 @@
     .mobile-menu-button span::before { top: -9px; }
     .mobile-menu-button span::after { top: 9px; }
 
-    .mobile-project-line {
-      display: flex;
-      align-items: center;
-      justify-content: space-between;
-      gap: 18px;
-      width: 100%;
-      margin-top: 30px;
-    }
-
-    #mobile-current-title {
-      display: block;
-      font-size: 20px;
-      line-height: 1.15;
-      font-weight: 400;
-      letter-spacing: -0.03em;
-      max-width: calc(100vw - 132px);
-      white-space: nowrap;
-      overflow: hidden;
-      text-overflow: ellipsis;
-    }
-
-    .mobile-info-header-button {
-      display: none;
-      width: 44px;
-      border: none;
-      background: transparent;
-      padding: 0;
-      font: inherit;
-      font-size: 15px;
-      line-height: 1.2;
-      color: #111;
-      cursor: pointer;
-      white-space: nowrap;
-      text-align: center;
-    }
-
-    .mobile-info-header-button.visible {
-      display: block;
-    }
-
     .summary {
       width: 100vw;
-      height: calc(100vh - 132px);
-      padding: 24px 0 30px;
+      height: calc(100vh - 84px);
+      padding: 18px 0 30px;
       overflow: hidden;
       background: #ffffff;
       display: flex;
@@ -247,7 +202,7 @@
 
     .viewer {
       width: 100vw;
-      height: calc(100vh - 132px);
+      height: calc(100vh - 84px);
       display: block;
       position: relative;
       padding: 0;
@@ -256,9 +211,9 @@
     }
 
     .document-wrap {
-      height: calc(100vh - 132px - 54px);
+      height: calc(100vh - 84px - 48px - 46px);
       width: 100vw;
-      padding: 16px 4px 20px;
+      padding: 2px 4px 8px;
       display: flex;
       align-items: center;
       justify-content: center;
@@ -276,6 +231,41 @@
       touch-action: pan-y;
     }
 
+    .mobile-project-bottom {
+      height: 48px;
+      padding: 0 34px;
+      display: flex;
+      align-items: center;
+      justify-content: space-between;
+      gap: 18px;
+      background: #ffffff;
+    }
+
+    #mobile-current-title {
+      display: block;
+      font-size: 20px;
+      line-height: 1.15;
+      font-weight: 400;
+      letter-spacing: -0.03em;
+      max-width: calc(100vw - 132px);
+      white-space: nowrap;
+      overflow: hidden;
+      text-overflow: ellipsis;
+    }
+
+    .mobile-info-button {
+      border: none;
+      background: transparent;
+      padding: 0;
+      font: inherit;
+      font-size: 15px;
+      line-height: 1.2;
+      color: #111;
+      cursor: pointer;
+      white-space: nowrap;
+      text-align: right;
+    }
+
     .mobile-bottom-bar {
       display: grid;
       grid-template-columns: 1fr auto 1fr;
@@ -284,7 +274,7 @@
       left: 0;
       bottom: 0;
       width: 100vw;
-      height: 54px;
+      height: 46px;
       padding: 0 34px;
       background: #ffffff;
       z-index: 14;
@@ -307,7 +297,7 @@
       position: fixed;
       left: 0;
       right: 0;
-      top: 132px;
+      bottom: 46px;
       z-index: 80;
       background: #ffffff;
       border-top: 1px solid rgba(17, 17, 17, 0.10);
@@ -326,7 +316,7 @@
 
     .about {
       width: 100vw;
-      height: calc(100vh - 132px);
+      height: calc(100vh - 84px);
       display: flex;
       align-items: center;
       justify-content: center;
@@ -336,7 +326,7 @@
 
     .about-wrap {
       width: 100vw;
-      height: calc(100vh - 132px);
+      height: calc(100vh - 84px);
       display: flex;
       align-items: center;
       justify-content: center;
@@ -434,18 +424,11 @@
 
   <section id="site" class="hidden">
     <header class="topbar">
-      <div class="brand-block">
-        <div class="mobile-header-row">
-          <button id="brand">GUILLAUME MORVAN</button>
-          <button id="mobile-menu-button" class="mobile-menu-button" aria-label="Menu">
-            <span></span>
-          </button>
-        </div>
-
-        <div class="mobile-project-line">
-          <div id="mobile-current-title">Projets</div>
-          <button id="mobile-info-header-button" class="mobile-info-header-button">Info</button>
-        </div>
+      <div class="mobile-header-row">
+        <button id="brand">GUILLAUME MORVAN</button>
+        <button id="mobile-menu-button" class="mobile-menu-button" aria-label="Menu">
+          <span></span>
+        </button>
       </div>
     </header>
 
@@ -462,6 +445,11 @@
     <main id="viewer" class="viewer hidden">
       <div class="document-wrap">
         <img id="page-image" src="" alt="Portfolio Guillaume Morvan" />
+      </div>
+
+      <div class="mobile-project-bottom">
+        <div id="mobile-current-title">Projet</div>
+        <button id="mobile-info-button" class="mobile-info-button">Info</button>
       </div>
 
       <div id="mobile-bottom-bar" class="mobile-bottom-bar">
@@ -577,7 +565,7 @@
     const overlay = document.getElementById("overlay");
     const projectGrid = document.getElementById("project-grid");
     const mobileCurrentTitle = document.getElementById("mobile-current-title");
-    const mobileInfoHeaderButton = document.getElementById("mobile-info-header-button");
+    const mobileInfoButton = document.getElementById("mobile-info-button");
     const mobileCounter = document.getElementById("mobile-counter");
     const mobileInfoPanel = document.getElementById("mobile-info-panel");
     const mobileInfoText = document.getElementById("mobile-info-text");
@@ -605,12 +593,6 @@
       history.replaceState({}, "", url);
     }
 
-    function setHeaderState(title, showInfo) {
-      mobileCurrentTitle.textContent = title;
-      if (showInfo) mobileInfoHeaderButton.classList.add("visible");
-      else mobileInfoHeaderButton.classList.remove("visible");
-    }
-
     function hideAllMainViews() {
       summary.classList.add("hidden");
       about.classList.add("hidden");
@@ -625,7 +607,6 @@
       summary.classList.remove("hidden");
       currentProject = null;
       currentImage = null;
-      setHeaderState("Projets", false);
       closeDrawer();
       clearUrl();
     }
@@ -637,7 +618,6 @@
       about.classList.remove("hidden");
       currentProject = null;
       currentImage = null;
-      setHeaderState("À propos", false);
       closeDrawer();
       clearUrl();
       goToAboutPage(1);
@@ -649,7 +629,7 @@
       site.classList.remove("hidden");
       hideAllMainViews();
       viewer.classList.remove("hidden");
-      setHeaderState(project.fullTitle, true);
+      mobileCurrentTitle.textContent = project.fullTitle;
       goToPage(targetPage || project.start);
     }
 
@@ -774,7 +754,7 @@
       closeInfoPanel();
     });
 
-    mobileInfoHeaderButton.addEventListener("click", toggleInfoPanel);
+    mobileInfoButton.addEventListener("click", toggleInfoPanel);
 
     pageImage.addEventListener("touchstart", handleTouchStart, { passive: true });
     pageImage.addEventListener("touchend", handleProjectTouchEnd, { passive: true });
