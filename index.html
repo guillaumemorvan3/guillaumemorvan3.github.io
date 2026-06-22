@@ -82,9 +82,7 @@
     }
 
     .mobile-header-row {
-      display: flex;
-      align-items: center;
-      justify-content: space-between;
+      display: block;
     }
 
     #brand.brand {
@@ -125,6 +123,12 @@
       color: #111;
       text-decoration: none;
       cursor: pointer;
+    }
+
+    .topbar button:hover,
+    .project-card:hover,
+    .project-item:hover {
+      opacity: 0.65;
     }
 
     .summary {
@@ -263,10 +267,7 @@
       touch-action: pan-y;
     }
 
-    .mobile-bottom-bar {
-      display: none;
-    }
-
+    .mobile-bottom-bar,
     .mobile-info-panel {
       display: none;
     }
@@ -286,6 +287,10 @@
       opacity: 0.16;
       z-index: 10;
       cursor: pointer;
+    }
+
+    .nav-side:hover {
+      opacity: 0.75;
     }
 
     .nav-side:disabled {
@@ -341,18 +346,6 @@
 
     .drawer-nav { display: none; }
 
-    .drawer-nav button {
-      width: 100%;
-      padding: 16px 0;
-      border: none;
-      border-bottom: 1px solid rgba(17, 17, 17, 0.12);
-      background: transparent;
-      text-align: left;
-      font-size: 18px;
-      color: #111;
-      cursor: pointer;
-    }
-
     .project-item {
       width: 100%;
       padding: 16px 0;
@@ -388,7 +381,7 @@
     .overlay {
       position: fixed;
       inset: 0;
-      background: rgba(17, 17, 17, 0.04);
+      background: rgba(17, 17, 17, 0.06);
       opacity: 0;
       pointer-events: none;
       transition: opacity 0.25s ease;
@@ -680,9 +673,16 @@
       }
 
       .drawer-nav button {
+        width: 100%;
+        padding: 18px 0;
+        border: none;
+        border-bottom: 1px solid rgba(17, 17, 17, 0.12);
+        background: transparent;
+        text-align: left;
         font-size: 17px;
         line-height: 1.2;
-        padding: 18px 0;
+        color: #111;
+        cursor: pointer;
       }
 
       .drawer #project-list {
@@ -757,7 +757,7 @@
 
   <aside id="drawer" class="drawer">
     <div class="drawer-header">
-      <h2>Menu</h2>
+      <h2>Projets</h2>
       <button id="close-drawer" class="close-drawer" aria-label="Fermer">×</button>
     </div>
 
@@ -785,7 +785,7 @@
         fullTitle: "Station ferroviaire Melle",
         type: "Projet urbain et bâtiment mixte",
         line: "Évolutivité et appropriation des espaces.",
-        projectInfo: "Le projet investit le parc ferroviaire de Ledeberg, au sud de Gand, dans un tissu pavillonnaire dense. Il propose un bâtiment mixte associant logements, commerces et espaces communs, conçu autour des notions d’évolutivité et d’appropriation. La flexibilité repose sur une trame de 4 × 4 m et une structure poteaux-poutres en bois, permettant aux logements d’évoluer dans le temps. Les espaces traversants, la rue intérieure couverte, les programmes partagés et les matériaux naturels — bois de peuplier, terre crue, sol en terre coulée — cherchent à créer un climat propice aux usages, aux rencontres et à la présence du végétal.",
+        projectInfo: "Le projet investit le parc ferroviaire de Ledeberg, au sud de Gand, dans un tissu pavillonnaire dense. Il propose un bâtiment mixte associant logements, commerces et espaces communs, conçu autour des notions d’évolutivité et d’appropriation.",
         thumb: "melle.jpg",
         folder: "pages/",
         filePrefix: "page",
@@ -798,7 +798,7 @@
         fullTitle: "Église Saint-Joseph",
         type: "Réhabilitation patrimoniale",
         line: "Révéler les qualités cachées du patrimoine.",
-        projectInfo: "Le projet interroge la capacité d’un édifice patrimonial à accueillir de nouveaux usages sans perdre sa présence ni sa mémoire. L’intervention cherche à révéler les qualités existantes tout en introduisant une réponse contemporaine, attentive à la lumière, aux usages et à la lisibilité constructive.",
+        projectInfo: "Le projet interroge la capacité d’un édifice patrimonial à accueillir de nouveaux usages sans perdre sa présence ni sa mémoire.",
         thumb: "saint-joseph.jpg",
         folder: "pages/",
         filePrefix: "page",
@@ -811,7 +811,7 @@
         fullTitle: "Ferme Nord",
         type: "Réhabilitation et extension",
         line: "L’harmonieux contraste.",
-        projectInfo: "La Ferme Nord met en tension patrimoine agricole, extension contemporaine et paysage dunaire. Le projet s’appuie sur les tracés existants pour inscrire les nouveaux volumes dans une continuité lisible, tout en affirmant une intervention contemporaine capable d’ouvrir le site à de nouveaux usages.",
+        projectInfo: "La Ferme Nord met en tension patrimoine agricole, extension contemporaine et paysage dunaire.",
         thumb: "ferme-nord.jpg",
         folder: "pages/",
         filePrefix: "page",
@@ -824,7 +824,7 @@
         fullTitle: "TANK Architectes",
         type: "Expérience en agence",
         line: "L’architecte dans une pratique engagée pour la qualité.",
-        projectInfo: "L’expérience chez TANK Architectes m’a permis d’approcher une pratique collective exigeante, où la qualité architecturale se construit dans le dialogue entre dessin, programme, contraintes techniques, économie du projet et attention portée aux usages.",
+        projectInfo: "L’expérience chez TANK Architectes m’a permis d’approcher une pratique collective exigeante.",
         thumb: "tank.jpg",
         folder: "pages/",
         filePrefix: "page",
@@ -837,7 +837,7 @@
         fullTitle: "Edwood",
         type: "Construction bois",
         line: "Le chantier comme école de la réalité constructive.",
-        projectInfo: "Chez Edwood, l’expérience en atelier et sur chantier m’a permis d’approfondir la réalité constructive du projet. La construction bois y devient un apprentissage direct de la matière, du détail, de la mise en œuvre et des contraintes concrètes de fabrication.",
+        projectInfo: "Chez Edwood, l’expérience en atelier et sur chantier m’a permis d’approfondir la réalité constructive du projet.",
         thumb: "edwood.jpg",
         folder: "pages/",
         filePrefix: "page",
@@ -866,7 +866,7 @@
         fullTitle: "Église Saint-Joseph",
         type: "Réhabilitation patrimoniale",
         line: "Révéler les qualités cachées du patrimoine.",
-        projectInfo: "Le projet interroge la capacité d’un édifice patrimonial à accueillir de nouveaux usages sans perdre sa présence ni sa mémoire. L’intervention cherche à révéler les qualités existantes tout en introduisant une réponse contemporaine, attentive à la lumière, aux usages et à la lisibilité constructive.",
+        projectInfo: "Le projet interroge la capacité d’un édifice patrimonial à accueillir de nouveaux usages sans perdre sa présence ni sa mémoire.",
         thumb: "saint-joseph.jpg",
         folder: "pages/",
         filePrefix: "page",
@@ -879,7 +879,7 @@
         fullTitle: "Ferme Nord",
         type: "Réhabilitation et extension",
         line: "L’harmonieux contraste.",
-        projectInfo: "La Ferme Nord met en tension patrimoine agricole, extension contemporaine et paysage dunaire. Le projet s’appuie sur les tracés existants pour inscrire les nouveaux volumes dans une continuité lisible, tout en affirmant une intervention contemporaine capable d’ouvrir le site à de nouveaux usages.",
+        projectInfo: "La Ferme Nord met en tension patrimoine agricole, extension contemporaine et paysage dunaire.",
         thumb: "ferme-nord.jpg",
         folder: "pages/",
         filePrefix: "page",
@@ -892,7 +892,7 @@
         fullTitle: "TANK Architectes",
         type: "Expérience en agence",
         line: "L’architecte dans une pratique engagée pour la qualité.",
-        projectInfo: "L’expérience chez TANK Architectes m’a permis d’approcher une pratique collective exigeante, où la qualité architecturale se construit dans le dialogue entre dessin, programme, contraintes techniques, économie du projet et attention portée aux usages.",
+        projectInfo: "L’expérience chez TANK Architectes m’a permis d’approcher une pratique collective exigeante.",
         thumb: "tank.jpg",
         folder: "pages/",
         filePrefix: "page",
@@ -905,7 +905,7 @@
         fullTitle: "Edwood",
         type: "Construction bois",
         line: "Le chantier comme école de la réalité constructive.",
-        projectInfo: "Chez Edwood, l’expérience en atelier et sur chantier m’a permis d’approfondir la réalité constructive du projet. La construction bois y devient un apprentissage direct de la matière, du détail, de la mise en œuvre et des contraintes concrètes de fabrication.",
+        projectInfo: "Chez Edwood, l’expérience en atelier et sur chantier m’a permis d’approfondir la réalité constructive du projet.",
         thumb: "edwood.jpg",
         folder: "pages/",
         filePrefix: "page",
