@@ -81,6 +81,12 @@
       background: #ffffff;
     }
 
+    .brand-block {
+      display: flex;
+      align-items: center;
+      gap: 18px;
+    }
+
     #brand.brand {
       border: none;
       background: transparent;
@@ -96,6 +102,14 @@
 
     #brand.brand:hover {
       opacity: 0.6;
+    }
+
+    .mobile-current-title {
+      display: none;
+    }
+
+    .mobile-plus {
+      display: none;
     }
 
     .topbar-right {
@@ -371,6 +385,22 @@
       opacity: 1;
     }
 
+    .drawer-nav {
+      display: none;
+    }
+
+    .drawer-nav button {
+      width: 100%;
+      padding: 16px 0;
+      border: none;
+      border-bottom: 1px solid rgba(17, 17, 17, 0.12);
+      background: transparent;
+      text-align: left;
+      font-size: 18px;
+      color: #111;
+      cursor: pointer;
+    }
+
     .project-item {
       width: 100%;
       padding: 16px 0;
@@ -433,8 +463,6 @@
       }
     }
 
-    /* MOBILE */
-
     @media (max-width: 700px) {
       .home-name {
         top: 24px;
@@ -443,38 +471,53 @@
       }
 
       .topbar {
-        height: 52px;
-        min-height: 52px;
-        padding: 0 20px;
-        flex-direction: row;
-        align-items: center;
-        justify-content: space-between;
-        gap: 12px;
+        height: 128px;
+        min-height: 128px;
+        padding: 28px 34px 22px;
+        align-items: flex-start;
+        border-bottom: none;
+      }
+
+      .brand-block {
+        display: flex;
+        flex-direction: column;
+        align-items: flex-start;
+        gap: 24px;
       }
 
       #brand.brand {
-        font-size: 17px;
+        font-size: 30px;
         line-height: 1;
-        letter-spacing: 0.04em;
+        letter-spacing: 0.02em;
+      }
+
+      .mobile-current-title {
+        display: block;
+        font-size: 22px;
+        line-height: 1.2;
+        font-weight: 400;
+        letter-spacing: -0.02em;
       }
 
       .topbar-right {
-        display: flex;
-        align-items: center;
-        justify-content: flex-end;
-        gap: 16px;
-        flex-wrap: nowrap;
+        display: none;
       }
 
-      .topbar button:not(.brand),
-      .topbar a {
-        font-size: 11px;
-        line-height: 1;
+      .mobile-plus {
+        display: block;
+        border: none;
+        background: transparent;
+        padding: 0;
+        font-size: 52px;
+        line-height: 0.75;
+        font-weight: 400;
+        color: #111;
+        cursor: pointer;
       }
 
       .summary {
-        height: calc(100vh - 52px);
-        padding: 20px 0 24px;
+        height: calc(100vh - 128px);
+        padding: 24px 0 30px;
         align-items: center;
         justify-content: flex-start;
         overflow: hidden;
@@ -486,13 +529,13 @@
         overflow-x: auto;
         overflow-y: hidden;
         gap: 16px;
-        padding: 0 18px 14px;
+        padding: 0 34px 14px;
         scroll-snap-type: x mandatory;
         -webkit-overflow-scrolling: touch;
       }
 
       .project-card {
-        flex: 0 0 72vw;
+        flex: 0 0 76vw;
         scroll-snap-align: center;
       }
 
@@ -500,21 +543,41 @@
         display: none;
       }
 
-      .about,
-      .about-wrap,
       .viewer,
-      .document-wrap {
-        height: calc(100vh - 52px);
+      .document-wrap,
+      .about,
+      .about-wrap {
+        height: calc(100vh - 128px);
       }
 
-      #about-image,
+      .viewer {
+        align-items: flex-start;
+      }
+
+      .document-wrap {
+        align-items: flex-start;
+        justify-content: center;
+        padding: 38px 36px 34px;
+      }
+
       #page-image {
-        max-width: 100vw;
-        max-height: calc(100vh - 52px);
+        width: calc(100vw - 72px);
+        max-width: calc(100vw - 72px);
+        max-height: calc(100vh - 210px);
+        height: auto;
+        object-fit: contain;
+      }
+
+      #about-image {
+        width: calc(100vw - 72px);
+        max-width: calc(100vw - 72px);
+        max-height: calc(100vh - 210px);
+        height: auto;
+        object-fit: contain;
       }
 
       .nav-side {
-        top: calc(52px + (100vh - 52px) / 2);
+        top: calc(128px + (100vh - 128px) / 2);
         opacity: 0.20;
       }
 
@@ -522,12 +585,18 @@
         display: none;
       }
 
-      .nav-prev {
-        left: 4px;
+      .drawer {
+        width: 82vw;
+        padding: 30px 28px;
       }
 
-      .nav-next {
-        right: 4px;
+      .drawer-nav {
+        display: block;
+        margin-bottom: 28px;
+      }
+
+      .drawer h2 {
+        font-size: 20px;
       }
     }
   </style>
@@ -541,12 +610,17 @@
 
   <section id="site" class="hidden">
     <header class="topbar">
-      <button id="brand" class="brand">GUILLAUME MORVAN</button>
+      <div class="brand-block">
+        <button id="brand" class="brand">GUILLAUME MORVAN</button>
+        <div id="mobile-current-title" class="mobile-current-title">Projets</div>
+      </div>
 
       <div class="topbar-right">
         <button id="projects-btn">Projets</button>
         <button id="about-btn">À propos</button>
       </div>
+
+      <button id="mobile-plus" class="mobile-plus" aria-label="Menu">+</button>
     </header>
 
     <main id="summary" class="summary">
@@ -574,8 +648,14 @@
 
   <aside id="drawer" class="drawer">
     <div class="drawer-header">
-      <h2>Projets</h2>
+      <h2>Menu</h2>
       <button id="close-drawer" class="close-drawer" aria-label="Fermer">×</button>
+    </div>
+
+    <div class="drawer-nav">
+      <button id="drawer-home">Accueil</button>
+      <button id="drawer-projects">Projets</button>
+      <button id="drawer-about">À propos</button>
     </div>
 
     <div id="project-list"></div>
@@ -583,17 +663,16 @@
 
   <script>
     const DESKTOP_BREAKPOINT = 700;
-
     const VIGNETTE_FOLDER = "Vignettes/";
 
     const DESKTOP_ABOUT_FOLDER = "apropos/";
     const MOBILE_ABOUT_FOLDER = "apropos-mobile/";
-
     const DESKTOP_ABOUT_TOTAL = 2;
     const MOBILE_ABOUT_TOTAL = 4;
 
     const DESKTOP_PROJECTS = [
       {
+        slug: "melle",
         title: "Melle",
         fullTitle: "Station ferroviaire Melle",
         type: "Projet urbain et bâtiment mixte",
@@ -604,6 +683,7 @@
         end: 8
       },
       {
+        slug: "saint-joseph",
         title: "Saint-Joseph",
         fullTitle: "Église Saint-Joseph",
         type: "Réhabilitation patrimoniale",
@@ -614,6 +694,7 @@
         end: 17
       },
       {
+        slug: "ferme-nord",
         title: "Ferme Nord",
         fullTitle: "Ferme Nord",
         type: "Réhabilitation et extension",
@@ -624,6 +705,7 @@
         end: 33
       },
       {
+        slug: "tank",
         title: "TANK",
         fullTitle: "TANK Architectes",
         type: "Expérience en agence",
@@ -634,6 +716,7 @@
         end: 39
       },
       {
+        slug: "edwood",
         title: "Edwood",
         fullTitle: "Edwood",
         type: "Construction bois",
@@ -647,6 +730,7 @@
 
     const MOBILE_PROJECTS = [
       {
+        slug: "melle",
         title: "Melle",
         fullTitle: "Station ferroviaire Melle",
         type: "Projet urbain et bâtiment mixte",
@@ -654,9 +738,10 @@
         thumb: "melle.jpg",
         folder: "pages-mobile/",
         start: 1,
-        end: 15
+        end: 14
       },
       {
+        slug: "saint-joseph",
         title: "Saint-Joseph",
         fullTitle: "Église Saint-Joseph",
         type: "Réhabilitation patrimoniale",
@@ -667,6 +752,7 @@
         end: 17
       },
       {
+        slug: "ferme-nord",
         title: "Ferme Nord",
         fullTitle: "Ferme Nord",
         type: "Réhabilitation et extension",
@@ -677,6 +763,7 @@
         end: 33
       },
       {
+        slug: "tank",
         title: "TANK",
         fullTitle: "TANK Architectes",
         type: "Expérience en agence",
@@ -687,6 +774,7 @@
         end: 39
       },
       {
+        slug: "edwood",
         title: "Edwood",
         fullTitle: "Edwood",
         type: "Construction bois",
@@ -702,7 +790,6 @@
     let currentProject = null;
     let currentAboutPage = 1;
     let lastWheelTime = 0;
-
     let touchStartX = 0;
     let touchStartY = 0;
 
@@ -714,6 +801,7 @@
 
     const pageImage = document.getElementById("page-image");
     const aboutImage = document.getElementById("about-image");
+    const mobileCurrentTitle = document.getElementById("mobile-current-title");
 
     const prevSide = document.getElementById("prev-side");
     const nextSide = document.getElementById("next-side");
@@ -754,29 +842,21 @@
       return encodeURI(`${VIGNETTE_FOLDER}${filename}`);
     }
 
-    function preloadImage(num) {
-      if (!currentProject) return;
-      if (num < currentProject.start || num > currentProject.end) return;
-
-      const img = new Image();
-      img.src = getImageSrc(currentProject, num);
-    }
-
-    function preloadAboutPage(num) {
-      if (num < 1 || num > getAboutTotal()) return;
-
-      const img = new Image();
-      img.src = getAboutSrc(num);
-    }
-
-    function updateUrl(num) {
-      const url = new URL(window.location);
-      url.searchParams.set("page", num);
-      window.history.replaceState({}, "", url);
+    function setMobileTitle(text) {
+      mobileCurrentTitle.textContent = text;
     }
 
     function clearUrl() {
       history.replaceState({}, "", window.location.pathname);
+    }
+
+    function updateUrl(num) {
+      const url = new URL(window.location);
+      if (currentProject) {
+        url.searchParams.set("project", currentProject.slug);
+      }
+      url.searchParams.set("page", num);
+      window.history.replaceState({}, "", url);
     }
 
     function updateNavState() {
@@ -808,6 +888,7 @@
       summary.classList.remove("hidden");
       currentProject = null;
       currentImage = null;
+      setMobileTitle("Projets");
       closeProjects();
       clearUrl();
     }
@@ -819,6 +900,7 @@
       about.classList.remove("hidden");
       currentProject = null;
       currentImage = null;
+      setMobileTitle("À propos");
       closeProjects();
       clearUrl();
       goToAboutPage(1);
@@ -826,18 +908,16 @@
 
     function showViewer(project, targetPage) {
       currentProject = project;
-
+      setMobileTitle(project.fullTitle);
       home.classList.add("hidden");
       site.classList.remove("hidden");
       hideAllMainViews();
       viewer.classList.remove("hidden");
-
       goToPage(targetPage || project.start, false);
     }
 
     function goToAboutPage(num) {
       if (num < 1 || num > getAboutTotal()) return;
-
       currentAboutPage = num;
       aboutImage.classList.add("loading");
 
@@ -845,8 +925,6 @@
 
       aboutImage.onload = function() {
         aboutImage.classList.remove("loading");
-        preloadAboutPage(currentAboutPage + 1);
-        preloadAboutPage(currentAboutPage - 1);
       };
 
       aboutImage.onerror = function() {
@@ -856,27 +934,23 @@
 
       aboutImage.src = src;
       aboutImage.alt = "À propos — Guillaume Morvan — page " + currentAboutPage;
-
       updateAboutNavState();
     }
 
     function previousAboutPage() {
       if (about.classList.contains("hidden")) return;
       if (currentAboutPage <= 1) return;
-
       goToAboutPage(currentAboutPage - 1);
     }
 
     function nextAboutPage() {
       if (about.classList.contains("hidden")) return;
       if (currentAboutPage >= getAboutTotal()) return;
-
       goToAboutPage(currentAboutPage + 1);
     }
 
     function goToPage(num, closeDrawer = true) {
       const target = parseInt(num, 10);
-
       if (!currentProject) return;
       if (!target || target < currentProject.start || target > currentProject.end) return;
 
@@ -887,8 +961,6 @@
 
       pageImage.onload = function() {
         pageImage.classList.remove("loading");
-        preloadImage(currentImage + 1);
-        preloadImage(currentImage - 1);
       };
 
       pageImage.onerror = function() {
@@ -907,7 +979,6 @@
       if (viewer.classList.contains("hidden")) return;
       if (!currentProject) return;
       if (currentImage <= currentProject.start) return;
-
       goToPage(currentImage - 1, false);
     }
 
@@ -915,7 +986,6 @@
       if (viewer.classList.contains("hidden")) return;
       if (!currentProject) return;
       if (currentImage >= currentProject.end) return;
-
       goToPage(currentImage + 1, false);
     }
 
@@ -935,7 +1005,6 @@
       getProjects().forEach(function(project, index) {
         const button = document.createElement("button");
         button.className = "project-card";
-
         button.innerHTML = `
           <img class="thumb" src="${getVignetteSrc(project.thumb)}" alt="${project.fullTitle}" />
           <span class="card-text">
@@ -944,11 +1013,9 @@
             <span class="card-line">${project.line}</span>
           </span>
         `;
-
         button.addEventListener("click", function() {
           showViewer(project, project.start);
         });
-
         projectGrid.appendChild(button);
       });
     }
@@ -959,68 +1026,27 @@
       getProjects().forEach(function(project, index) {
         const button = document.createElement("button");
         button.className = "project-item";
-
         const pageLabel = project.folder === "pages-mobile/" ? "Pages mobile" : "Pages";
-
         button.innerHTML = `
           <span class="project-title">${String(index + 1).padStart(2, "0")} — ${project.fullTitle}</span>
           <span class="project-subtitle">${project.line}</span>
           <span class="project-page">${pageLabel} ${project.start} à ${project.end}</span>
         `;
-
         button.addEventListener("click", function() {
           showViewer(project, project.start);
           closeProjects();
         });
-
         projectList.appendChild(button);
       });
     }
 
-    function rebuildResponsiveContent() {
-      buildProjectCards();
-      buildProjectList();
-
-      if (!about.classList.contains("hidden")) {
-        if (currentAboutPage > getAboutTotal()) {
-          currentAboutPage = getAboutTotal();
-        }
-        goToAboutPage(currentAboutPage);
-      }
-
-      if (!viewer.classList.contains("hidden") && currentProject) {
-        const currentProjectTitle = currentProject.title;
-        const matchingProject = getProjects().find(function(project) {
-          return project.title === currentProjectTitle;
-        });
-
-        if (matchingProject) {
-          currentProject = matchingProject;
-
-          if (currentImage < currentProject.start) currentImage = currentProject.start;
-          if (currentImage > currentProject.end) currentImage = currentProject.end;
-
-          goToPage(currentImage, false);
-        } else {
-          showSummary();
-        }
-      }
-    }
-
     function handleWheel(e, previousFunction, nextFunction) {
       e.preventDefault();
-
       const now = Date.now();
-
       if (now - lastWheelTime < 420) return;
       if (Math.abs(e.deltaY) < 20) return;
-
-      if (e.deltaY > 0) {
-        nextFunction();
-      } else {
-        previousFunction();
-      }
-
+      if (e.deltaY > 0) nextFunction();
+      else previousFunction();
       lastWheelTime = now;
     }
 
@@ -1032,64 +1058,60 @@
     function handleProjectTouchEnd(e) {
       const touchEndX = e.changedTouches[0].screenX;
       const touchEndY = e.changedTouches[0].screenY;
-
       const deltaX = touchEndX - touchStartX;
       const deltaY = touchEndY - touchStartY;
 
       if (isMobile()) {
         if (Math.abs(deltaY) < 45) return;
         if (Math.abs(deltaY) < Math.abs(deltaX)) return;
-
-        if (deltaY < 0) {
-          nextPage();
-        } else {
-          previousPage();
-        }
-
+        if (deltaY < 0) nextPage();
+        else previousPage();
         return;
       }
 
       if (Math.abs(deltaX) < 45) return;
       if (Math.abs(deltaX) < Math.abs(deltaY)) return;
-
-      if (deltaX < 0) {
-        nextPage();
-      } else {
-        previousPage();
-      }
+      if (deltaX < 0) nextPage();
+      else previousPage();
     }
 
     function handleAboutTouchEnd(e) {
       const touchEndX = e.changedTouches[0].screenX;
       const touchEndY = e.changedTouches[0].screenY;
-
       const deltaX = touchEndX - touchStartX;
       const deltaY = touchEndY - touchStartY;
 
       if (Math.abs(deltaX) < 45) return;
       if (Math.abs(deltaX) < Math.abs(deltaY)) return;
-
-      if (deltaX < 0) {
-        nextAboutPage();
-      } else {
-        previousAboutPage();
-      }
+      if (deltaX < 0) nextAboutPage();
+      else previousAboutPage();
     }
 
     home.addEventListener("click", showSummary);
     document.getElementById("home-name").addEventListener("click", showSummary);
-
     document.getElementById("brand").addEventListener("click", showSummary);
     document.getElementById("about-btn").addEventListener("click", showAbout);
+    document.getElementById("mobile-plus").addEventListener("click", openProjects);
 
     document.getElementById("projects-btn").addEventListener("click", function() {
-      if (site.classList.contains("hidden")) {
-        showSummary();
-      } else if (!viewer.classList.contains("hidden")) {
-        openProjects();
-      } else {
-        showSummary();
-      }
+      if (site.classList.contains("hidden")) showSummary();
+      else if (!viewer.classList.contains("hidden")) openProjects();
+      else showSummary();
+    });
+
+    document.getElementById("drawer-home").addEventListener("click", function() {
+      showSummary();
+      closeProjects();
+    });
+
+    document.getElementById("drawer-projects").addEventListener("click", function() {
+      showSummary();
+      closeProjects();
+    });
+
+    document.getElementById("drawer-about").addEventListener("click", function() {
+      showAbout();
+      closeProjects();
     });
 
     document.getElementById("close-drawer").addEventListener("click", closeProjects);
@@ -1097,7 +1119,6 @@
 
     prevSide.addEventListener("click", previousPage);
     nextSide.addEventListener("click", nextPage);
-
     aboutPrev.addEventListener("click", previousAboutPage);
     aboutNext.addEventListener("click", nextAboutPage);
 
@@ -1141,7 +1162,10 @@
 
     window.addEventListener("resize", function() {
       clearTimeout(window.responsiveTimer);
-      window.responsiveTimer = setTimeout(rebuildResponsiveContent, 250);
+      window.responsiveTimer = setTimeout(function() {
+        buildProjectCards();
+        buildProjectList();
+      }, 250);
     });
 
     buildProjectCards();
@@ -1150,9 +1174,21 @@
 
     const params = new URLSearchParams(window.location.search);
     const directPage = parseInt(params.get("page"), 10);
-    const directProject = getProjects().find(function(project) {
-      return directPage >= project.start && directPage <= project.end;
-    });
+    const directProjectSlug = params.get("project");
+
+    let directProject = null;
+
+    if (directProjectSlug) {
+      directProject = getProjects().find(function(project) {
+        return project.slug === directProjectSlug;
+      });
+    }
+
+    if (!directProject) {
+      directProject = getProjects().find(function(project) {
+        return directPage >= project.start && directPage <= project.end;
+      });
+    }
 
     if (directProject) {
       showViewer(directProject, directPage);
