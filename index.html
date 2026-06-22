@@ -6,9 +6,7 @@
   <title>Guillaume Morvan — Portfolio</title>
 
   <style>
-    * {
-      box-sizing: border-box;
-    }
+    * { box-sizing: border-box; }
 
     html,
     body {
@@ -21,9 +19,7 @@
       overflow: hidden;
     }
 
-    .hidden {
-      display: none !important;
-    }
+    .hidden { display: none !important; }
 
     .home {
       position: fixed;
@@ -57,10 +53,6 @@
       letter-spacing: 0.02em;
       text-transform: uppercase;
       cursor: pointer;
-    }
-
-    .home-name:hover {
-      opacity: 0.6;
     }
 
     #site {
@@ -102,12 +94,8 @@
       color: #111;
     }
 
-    #brand.brand:hover {
-      opacity: 0.6;
-    }
-
+    .mobile-header-row,
     .mobile-project-line,
-    .mobile-project-actions,
     .mobile-menu-button,
     .mobile-info-header-button {
       display: none;
@@ -129,15 +117,9 @@
       font: inherit;
       font-size: 12px;
       font-weight: 400;
-      letter-spacing: -0.01em;
       color: #111;
       text-decoration: none;
       cursor: pointer;
-    }
-
-    .topbar button:not(.brand):hover,
-    .topbar a:hover {
-      opacity: 0.6;
     }
 
     .summary {
@@ -169,16 +151,6 @@
       min-width: 0;
     }
 
-    .project-card:hover .thumb {
-      filter: brightness(0.84);
-    }
-
-    .project-card:hover .card-title,
-    .project-card:hover .card-type,
-    .project-card:hover .card-line {
-      opacity: 0.62;
-    }
-
     .thumb {
       width: 100%;
       aspect-ratio: 3 / 4;
@@ -186,7 +158,6 @@
       object-fit: cover;
       object-position: center;
       background: #f0f0f0;
-      transition: filter 0.2s ease;
     }
 
     .card-text {
@@ -201,7 +172,6 @@
       letter-spacing: 0.02em;
       text-transform: uppercase;
       margin-bottom: 6px;
-      transition: opacity 0.2s ease;
     }
 
     .card-type {
@@ -210,7 +180,6 @@
       line-height: 1.3;
       color: #555;
       margin-bottom: 5px;
-      transition: opacity 0.2s ease;
     }
 
     .card-line {
@@ -218,7 +187,6 @@
       font-size: 11px;
       line-height: 1.35;
       color: #222;
-      transition: opacity 0.2s ease;
     }
 
     .about {
@@ -250,16 +218,10 @@
       height: auto;
       display: block;
       object-fit: contain;
-      opacity: 1;
-      transition: opacity 0.12s ease;
       user-select: none;
       -webkit-user-drag: none;
       background: #ffffff;
       touch-action: pan-y;
-    }
-
-    #about-image.loading {
-      opacity: 0.35;
     }
 
     .viewer {
@@ -291,15 +253,9 @@
       height: auto;
       display: block;
       object-fit: contain;
-      opacity: 1;
-      transition: opacity 0.12s ease;
       user-select: none;
       -webkit-user-drag: none;
       touch-action: pan-y;
-    }
-
-    #page-image.loading {
-      opacity: 0.35;
     }
 
     .mobile-bottom-bar,
@@ -324,22 +280,13 @@
       cursor: pointer;
     }
 
-    .nav-side:hover {
-      opacity: 0.75;
-    }
-
     .nav-side:disabled {
       opacity: 0.04;
       cursor: default;
     }
 
-    .nav-prev {
-      left: 8px;
-    }
-
-    .nav-next {
-      right: 8px;
-    }
+    .nav-prev { left: 8px; }
+    .nav-next { right: 8px; }
 
     .drawer {
       position: fixed;
@@ -358,9 +305,7 @@
       overflow-y: auto;
     }
 
-    .drawer.open {
-      transform: translateX(0);
-    }
+    .drawer.open { transform: translateX(0); }
 
     .drawer-header {
       display: flex;
@@ -373,7 +318,6 @@
       margin: 0;
       font-size: 18px;
       font-weight: 700;
-      letter-spacing: -0.03em;
     }
 
     .close-drawer {
@@ -387,13 +331,7 @@
       cursor: pointer;
     }
 
-    .close-drawer:hover {
-      opacity: 1;
-    }
-
-    .drawer-nav {
-      display: none;
-    }
+    .drawer-nav { display: none; }
 
     .drawer-nav button {
       width: 100%;
@@ -416,10 +354,6 @@
       background: transparent;
       color: #111;
       cursor: pointer;
-    }
-
-    .project-item:hover {
-      opacity: 0.6;
     }
 
     .project-title {
@@ -474,92 +408,38 @@
         top: 22px;
         left: 20px;
         font-size: 25px;
-        letter-spacing: 0.02em;
       }
 
       .topbar {
-        height: 116px;
-        min-height: 116px;
-        padding: 22px 34px 14px;
-        align-items: flex-start;
+        height: 126px;
+        min-height: 126px;
+        padding: 28px 34px 14px;
+        display: block;
         border-bottom: none;
       }
 
       #site.menu-open .topbar {
-        height: 74px;
-        min-height: 74px;
-        padding: 22px 34px 14px;
+        height: 78px;
+        min-height: 78px;
+        padding: 28px 34px 14px;
       }
 
       .brand-block {
-        display: flex;
-        flex-direction: column;
-        align-items: flex-start;
-        gap: 22px;
+        display: block;
         width: 100%;
       }
 
-      #site.menu-open .brand-block {
-        gap: 0;
+      .mobile-header-row {
+        display: flex;
+        align-items: center;
+        justify-content: space-between;
+        width: 100%;
       }
 
       #brand.brand {
         font-size: 25px;
         line-height: 1;
-        letter-spacing: 0.02em;
-        color: #111;
-      }
-
-      .mobile-project-line {
-        display: flex;
-        align-items: center;
-        justify-content: space-between;
-        gap: 18px;
-        width: 100%;
-      }
-
-      #site.menu-open .mobile-project-line {
-        display: none;
-      }
-
-      #mobile-current-title {
-        display: block;
-        font-size: 20px;
-        line-height: 1.2;
-        font-weight: 400;
-        letter-spacing: -0.02em;
-        white-space: nowrap;
-        overflow: hidden;
-        text-overflow: ellipsis;
-      }
-
-      .mobile-project-actions {
-        display: flex;
-        align-items: center;
-        justify-content: flex-end;
-        gap: 24px;
-        flex-shrink: 0;
-      }
-
-      .mobile-info-header-button {
-        display: none;
-        border: none;
-        background: transparent;
-        padding: 0;
-        font: inherit;
-        font-size: 18px;
-        line-height: 1.2;
-        color: #111;
-        cursor: pointer;
-        white-space: nowrap;
-      }
-
-      .mobile-info-header-button.visible {
-        display: block;
-      }
-
-      .topbar-right {
-        display: none;
+        letter-spacing: 0.04em;
       }
 
       .mobile-menu-button {
@@ -577,7 +457,7 @@
 
       .mobile-menu-button span {
         display: block;
-        width: 26px;
+        width: 25px;
         height: 2px;
         background: #111;
         position: relative;
@@ -588,21 +468,64 @@
         content: "";
         position: absolute;
         left: 0;
-        width: 26px;
+        width: 25px;
         height: 2px;
         background: #111;
       }
 
-      .mobile-menu-button span::before {
-        top: -8px;
+      .mobile-menu-button span::before { top: -8px; }
+      .mobile-menu-button span::after { top: 8px; }
+
+      .mobile-project-line {
+        display: flex;
+        align-items: flex-start;
+        justify-content: space-between;
+        gap: 18px;
+        width: 100%;
+        margin-top: 32px;
       }
 
-      .mobile-menu-button span::after {
-        top: 8px;
+      #site.menu-open .mobile-project-line {
+        display: none;
+      }
+
+      #mobile-current-title {
+        display: block;
+        font-size: 18px;
+        line-height: 1.2;
+        font-weight: 400;
+        letter-spacing: -0.02em;
+        max-width: calc(100vw - 130px);
+        white-space: nowrap;
+        overflow: hidden;
+        text-overflow: ellipsis;
+      }
+
+      .mobile-info-header-button {
+        display: none;
+        border: none;
+        background: transparent;
+        padding: 0;
+        font: inherit;
+        font-size: 15px;
+        line-height: 1.2;
+        color: #111;
+        cursor: pointer;
+        white-space: nowrap;
+        text-align: right;
+        min-width: 32px;
+      }
+
+      .mobile-info-header-button.visible {
+        display: block;
+      }
+
+      .topbar-right {
+        display: none;
       }
 
       .summary {
-        height: calc(100vh - 116px);
+        height: calc(100vh - 126px);
         padding: 24px 0 30px;
         align-items: center;
         justify-content: flex-start;
@@ -630,16 +553,16 @@
       }
 
       .viewer {
-        height: calc(100vh - 116px);
+        height: calc(100vh - 126px);
         display: block;
         position: relative;
         padding: 0;
       }
 
       .document-wrap {
-        height: calc(100vh - 116px - 70px);
+        height: calc(100vh - 126px - 54px);
         width: 100vw;
-        padding: 0 4px;
+        padding: 10px 4px 16px;
         display: flex;
         align-items: center;
         justify-content: center;
@@ -661,40 +584,25 @@
         left: 0;
         bottom: 0;
         width: 100vw;
-        height: 70px;
+        height: 54px;
         padding: 0 34px;
         background: #ffffff;
         z-index: 14;
-        border-top: 1px solid rgba(17, 17, 17, 0.05);
-      }
-
-      .mobile-bottom-bar button {
-        border: none;
-        background: transparent;
-        padding: 0;
-        font: inherit;
-        color: #111;
-        cursor: pointer;
+        border-top: none;
       }
 
       #mobile-counter {
+        grid-column: 2;
         justify-self: center;
-        font-size: 20px;
+        font-size: 18px;
         color: #111;
-      }
-
-      #mobile-grid-button {
-        justify-self: end;
-        font-size: 28px;
-        line-height: 1;
-        color: rgba(17, 17, 17, 0.65);
       }
 
       .mobile-info-panel {
         position: fixed;
         left: 0;
         right: 0;
-        top: 116px;
+        top: 126px;
         z-index: 18;
         display: block;
         background: #ffffff;
@@ -703,7 +611,7 @@
         padding: 26px 34px 30px;
         transform: translateY(-110%);
         transition: transform 0.25s ease;
-        max-height: 56vh;
+        max-height: 58vh;
         overflow-y: auto;
       }
 
@@ -720,7 +628,7 @@
 
       .about,
       .about-wrap {
-        height: calc(100vh - 116px);
+        height: calc(100vh - 126px);
       }
 
       #about-image {
@@ -732,7 +640,7 @@
       }
 
       .nav-side {
-        top: calc(116px + (100vh - 116px) / 2);
+        top: calc(126px + (100vh - 126px) / 2);
         opacity: 0.20;
       }
 
@@ -741,43 +649,56 @@
       }
 
       .drawer {
-        top: 74px;
+        top: 78px;
         right: 0;
-        width: 100vw;
-        max-width: 100vw;
-        height: calc(100vh - 74px);
-        padding: 34px;
-        border-left: none;
-        box-shadow: none;
+        width: 36vw;
+        min-width: 138px;
+        max-width: 36vw;
+        height: calc(100vh - 78px);
+        padding: 24px 18px;
+        border-left: 1px solid rgba(17, 17, 17, 0.08);
+        box-shadow: -8px 0 24px rgba(0, 0, 0, 0.06);
         z-index: 20;
       }
 
-      .drawer-nav {
-        display: block;
-        margin-bottom: 0;
+      .drawer-header {
+        justify-content: flex-end;
+        margin-bottom: 18px;
       }
 
       .drawer h2 {
         display: none;
       }
 
-      .drawer-header {
-        justify-content: flex-end;
-        margin-bottom: 12px;
+      .close-drawer {
+        font-size: 26px;
+        opacity: 1;
       }
 
-      .close-drawer {
-        font-size: 28px;
-        opacity: 1;
+      .drawer-nav {
+        display: block;
+      }
+
+      .drawer-nav button {
+        font-size: 17px;
+        line-height: 1.2;
+        padding: 18px 0;
       }
 
       .drawer #project-list {
         display: none;
       }
 
-      .drawer-nav button {
-        font-size: 24px;
-        padding: 22px 0;
+      #site.menu-open .summary {
+        height: calc(100vh - 78px);
+      }
+
+      #site.menu-open .viewer {
+        height: calc(100vh - 78px);
+      }
+
+      #site.menu-open .document-wrap {
+        height: calc(100vh - 78px - 54px);
       }
     }
   </style>
@@ -792,17 +713,16 @@
   <section id="site" class="hidden">
     <header class="topbar">
       <div class="brand-block">
-        <button id="brand" class="brand">GUILLAUME MORVAN</button>
+        <div class="mobile-header-row">
+          <button id="brand" class="brand">GUILLAUME MORVAN</button>
+          <button id="mobile-menu-button" class="mobile-menu-button" aria-label="Menu">
+            <span></span>
+          </button>
+        </div>
 
         <div class="mobile-project-line">
           <div id="mobile-current-title">Projets</div>
-
-          <div class="mobile-project-actions">
-            <button id="mobile-info-header-button" class="mobile-info-header-button">Info</button>
-            <button id="mobile-menu-button" class="mobile-menu-button" aria-label="Menu">
-              <span></span>
-            </button>
-          </div>
+          <button id="mobile-info-header-button" class="mobile-info-header-button">Info</button>
         </div>
       </div>
 
@@ -832,9 +752,7 @@
       </div>
 
       <div id="mobile-bottom-bar" class="mobile-bottom-bar">
-        <div></div>
         <div id="mobile-counter">1/1</div>
-        <button id="mobile-grid-button">▦</button>
       </div>
 
       <div id="mobile-info-panel" class="mobile-info-panel">
@@ -1016,21 +934,16 @@
     const summary = document.getElementById("summary");
     const about = document.getElementById("about");
     const viewer = document.getElementById("viewer");
-
     const pageImage = document.getElementById("page-image");
     const aboutImage = document.getElementById("about-image");
-
     const prevSide = document.getElementById("prev-side");
     const nextSide = document.getElementById("next-side");
-
     const aboutPrev = document.getElementById("about-prev");
     const aboutNext = document.getElementById("about-next");
-
     const drawer = document.getElementById("drawer");
     const overlay = document.getElementById("overlay");
     const projectList = document.getElementById("project-list");
     const projectGrid = document.getElementById("project-grid");
-
     const mobileCurrentTitle = document.getElementById("mobile-current-title");
     const mobileInfoHeaderButton = document.getElementById("mobile-info-header-button");
     const mobileCounter = document.getElementById("mobile-counter");
@@ -1071,29 +984,21 @@
 
     function updateUrl(num) {
       const url = new URL(window.location);
-      if (currentProject) {
-        url.searchParams.set("project", currentProject.slug);
-      }
+      if (currentProject) url.searchParams.set("project", currentProject.slug);
       url.searchParams.set("page", num);
       window.history.replaceState({}, "", url);
     }
 
     function setHeaderState(title, showInfo) {
       mobileCurrentTitle.textContent = title;
-
-      if (showInfo) {
-        mobileInfoHeaderButton.classList.add("visible");
-      } else {
-        mobileInfoHeaderButton.classList.remove("visible");
-      }
+      if (showInfo) mobileInfoHeaderButton.classList.add("visible");
+      else mobileInfoHeaderButton.classList.remove("visible");
     }
 
     function updateMobileProjectUi() {
       if (!currentProject || currentImage === null) return;
-
       const total = currentProject.end - currentProject.start + 1;
       const index = currentImage - currentProject.start + 1;
-
       mobileCounter.textContent = `${index}/${total}`;
       mobileInfoText.textContent = currentProject.projectInfo || currentProject.line || "";
     }
@@ -1104,7 +1009,6 @@
         nextSide.disabled = true;
         return;
       }
-
       prevSide.disabled = currentImage <= currentProject.start;
       nextSide.disabled = currentImage >= currentProject.end;
     }
@@ -1159,20 +1063,7 @@
     function goToAboutPage(num) {
       if (num < 1 || num > getAboutTotal()) return;
       currentAboutPage = num;
-      aboutImage.classList.add("loading");
-
-      const src = getAboutSrc(currentAboutPage);
-
-      aboutImage.onload = function() {
-        aboutImage.classList.remove("loading");
-      };
-
-      aboutImage.onerror = function() {
-        aboutImage.classList.remove("loading");
-        aboutImage.alt = "Image introuvable : " + src;
-      };
-
-      aboutImage.src = src;
+      aboutImage.src = getAboutSrc(currentAboutPage);
       aboutImage.alt = "À propos — Guillaume Morvan — page " + currentAboutPage;
       updateAboutNavState();
     }
@@ -1196,20 +1087,8 @@
 
       currentImage = target;
       closeInfoPanel();
-      pageImage.classList.add("loading");
 
-      const src = getImageSrc(currentProject, currentImage);
-
-      pageImage.onload = function() {
-        pageImage.classList.remove("loading");
-      };
-
-      pageImage.onerror = function() {
-        pageImage.classList.remove("loading");
-        pageImage.alt = "Image introuvable : " + src;
-      };
-
-      pageImage.src = src;
+      pageImage.src = getImageSrc(currentProject, currentImage);
       updateUrl(currentImage);
       updateNavState();
       updateMobileProjectUi();
@@ -1235,10 +1114,7 @@
       closeInfoPanel();
       drawer.classList.add("open");
       overlay.classList.add("open");
-
-      if (isMobile()) {
-        site.classList.add("menu-open");
-      }
+      if (isMobile()) site.classList.add("menu-open");
     }
 
     function closeProjects() {
@@ -1258,16 +1134,12 @@
     }
 
     function toggleInfoPanel() {
-      if (mobileInfoPanel.classList.contains("open")) {
-        closeInfoPanel();
-      } else {
-        openInfoPanel();
-      }
+      if (mobileInfoPanel.classList.contains("open")) closeInfoPanel();
+      else openInfoPanel();
     }
 
     function buildProjectCards() {
       projectGrid.innerHTML = "";
-
       getProjects().forEach(function(project, index) {
         const button = document.createElement("button");
         button.className = "project-card";
@@ -1288,7 +1160,6 @@
 
     function buildProjectList() {
       projectList.innerHTML = "";
-
       getProjects().forEach(function(project, index) {
         const button = document.createElement("button");
         button.className = "project-item";
@@ -1382,8 +1253,6 @@
       closeProjects();
       closeInfoPanel();
     });
-
-    document.getElementById("mobile-grid-button").addEventListener("click", showSummary);
 
     prevSide.addEventListener("click", previousPage);
     nextSide.addEventListener("click", nextPage);
