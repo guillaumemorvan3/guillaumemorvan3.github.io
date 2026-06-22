@@ -25,8 +25,6 @@
       display: none !important;
     }
 
-    /* ACCUEIL */
-
     .home {
       position: fixed;
       inset: 0;
@@ -64,8 +62,6 @@
     .home-name:hover {
       opacity: 0.6;
     }
-
-    /* STRUCTURE */
 
     #site {
       width: 100vw;
@@ -128,8 +124,6 @@
     .topbar a:hover {
       opacity: 0.6;
     }
-
-    /* PAGE PROJETS */
 
     .summary {
       width: 100vw;
@@ -212,8 +206,6 @@
       transition: opacity 0.2s ease;
     }
 
-    /* À PROPOS */
-
     .about {
       width: 100vw;
       height: calc(100vh - 44px);
@@ -254,8 +246,6 @@
     #about-image.loading {
       opacity: 0.35;
     }
-
-    /* VIEWER PROJETS */
 
     .viewer {
       width: 100vw;
@@ -330,8 +320,6 @@
     .nav-next {
       right: 8px;
     }
-
-    /* MENU PROJETS */
 
     .drawer {
       position: fixed;
@@ -434,8 +422,6 @@
       pointer-events: auto;
     }
 
-    /* TABLETTE */
-
     @media (max-width: 1100px) {
       .summary {
         align-items: flex-start;
@@ -446,8 +432,6 @@
         grid-template-columns: repeat(3, minmax(0, 1fr));
       }
     }
-
-    /* MOBILE */
 
     @media (max-width: 700px) {
       .home-name {
@@ -601,6 +585,7 @@
         type: "Projet urbain et bâtiment mixte",
         line: "Évolutivité et appropriation des espaces.",
         thumb: "melle.jpg",
+        folder: "pages/",
         start: 4,
         end: 8
       },
@@ -610,6 +595,7 @@
         type: "Réhabilitation patrimoniale",
         line: "Révéler les qualités cachées du patrimoine.",
         thumb: "saint-joseph.jpg",
+        folder: "pages/",
         start: 9,
         end: 17
       },
@@ -619,6 +605,7 @@
         type: "Réhabilitation et extension",
         line: "L’harmonieux contraste.",
         thumb: "ferme-nord.jpg",
+        folder: "pages/",
         start: 18,
         end: 33
       },
@@ -628,6 +615,7 @@
         type: "Expérience en agence",
         line: "L’architecte dans une pratique engagée pour la qualité.",
         thumb: "tank.jpg",
+        folder: "pages/",
         start: 34,
         end: 39
       },
@@ -637,6 +625,7 @@
         type: "Construction bois",
         line: "Le chantier comme école de la réalité constructive.",
         thumb: "edwood.jpg",
+        folder: "pages/",
         start: 40,
         end: 43
       }
@@ -649,8 +638,9 @@
         type: "Projet urbain et bâtiment mixte",
         line: "Évolutivité et appropriation des espaces.",
         thumb: "melle.jpg",
-        start: 4,
-        end: 8
+        folder: "pages-mobile/",
+        start: 1,
+        end: 15
       },
       {
         title: "Saint-Joseph",
@@ -658,6 +648,7 @@
         type: "Réhabilitation patrimoniale",
         line: "Révéler les qualités cachées du patrimoine.",
         thumb: "saint-joseph.jpg",
+        folder: "pages/",
         start: 9,
         end: 17
       },
@@ -667,6 +658,7 @@
         type: "Réhabilitation et extension",
         line: "L’harmonieux contraste.",
         thumb: "ferme-nord.jpg",
+        folder: "pages/",
         start: 18,
         end: 33
       },
@@ -676,6 +668,7 @@
         type: "Expérience en agence",
         line: "L’architecte dans une pratique engagée pour la qualité.",
         thumb: "tank.jpg",
+        folder: "pages/",
         start: 34,
         end: 39
       },
@@ -685,6 +678,7 @@
         type: "Construction bois",
         line: "Le chantier comme école de la réalité constructive.",
         thumb: "edwood.jpg",
+        folder: "pages/",
         start: 40,
         end: 43
       }
@@ -726,10 +720,6 @@
       return isMobile() ? MOBILE_PROJECTS : DESKTOP_PROJECTS;
     }
 
-    function getImageFolder() {
-      return isMobile() ? MOBILE_IMAGE_FOLDER : DESKTOP_IMAGE_FOLDER;
-    }
-
     function getAboutFolder() {
       return isMobile() ? MOBILE_ABOUT_FOLDER : DESKTOP_ABOUT_FOLDER;
     }
@@ -738,8 +728,8 @@
       return isMobile() ? MOBILE_ABOUT_TOTAL : DESKTOP_ABOUT_TOTAL;
     }
 
-    function getImageSrc(num) {
-      return encodeURI(`${getImageFolder()}page (${num}).jpg`);
+    function getImageSrc(project, num) {
+      return encodeURI(`${project.folder}page (${num}).jpg`);
     }
 
     function getAboutSrc(num) {
@@ -755,7 +745,7 @@
       if (num < currentProject.start || num > currentProject.end) return;
 
       const img = new Image();
-      img.src = getImageSrc(num);
+      img.src = getImageSrc(currentProject, num);
     }
 
     function preloadAboutPage(num) {
@@ -885,7 +875,7 @@
       currentImage = target;
       pageImage.classList.add("loading");
 
-      const src = getImageSrc(currentImage);
+      const src = getImageSrc(currentProject, currentImage);
 
       pageImage.onload = function() {
         pageImage.classList.remove("loading");
@@ -962,10 +952,12 @@
         const button = document.createElement("button");
         button.className = "project-item";
 
+        const pageLabel = project.folder === "pages-mobile/" ? "Pages mobile" : "Pages";
+
         button.innerHTML = `
           <span class="project-title">${String(index + 1).padStart(2, "0")} — ${project.fullTitle}</span>
           <span class="project-subtitle">${project.line}</span>
-          <span class="project-page">Pages ${project.start} à ${project.end}</span>
+          <span class="project-page">${pageLabel} ${project.start} à ${project.end}</span>
         `;
 
         button.addEventListener("click", function() {
@@ -988,11 +980,18 @@
         goToAboutPage(currentAboutPage);
       }
 
-      if (!viewer.classList.contains("hidden") && currentImage !== null) {
-        const project = findProjectByPage(currentImage);
+      if (!viewer.classList.contains("hidden") && currentProject) {
+        const currentProjectTitle = currentProject.title;
+        const matchingProject = getProjects().find(function(project) {
+          return project.title === currentProjectTitle;
+        });
 
-        if (project) {
-          currentProject = project;
+        if (matchingProject) {
+          currentProject = matchingProject;
+
+          if (currentImage < currentProject.start) currentImage = currentProject.start;
+          if (currentImage > currentProject.end) currentImage = currentProject.end;
+
           goToPage(currentImage, false);
         } else {
           showSummary();
