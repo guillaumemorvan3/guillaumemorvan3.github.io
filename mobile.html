@@ -18,17 +18,13 @@
       overflow: hidden;
     }
 
-    :root {
-      --app-height: 100vh;
-    }
-
     .hidden { display: none !important; }
 
     .home {
       position: fixed;
       inset: 0;
       width: 100vw;
-      height: calc(var(--app-height) * 100);
+      height: 100dvh;
       overflow: hidden;
       background: #111;
       cursor: pointer;
@@ -60,7 +56,7 @@
 
     #site {
       width: 100vw;
-      height: calc(var(--app-height) * 100);
+      height: 100dvh;
       background: #ffffff;
       overflow: hidden;
     }
@@ -133,7 +129,7 @@
 
     .summary {
       width: 100vw;
-      height: calc((var(--app-height) * 100) - 84px);
+      height: calc(100dvh - 84px);
       padding: 18px 0 30px;
       overflow: hidden;
       background: #ffffff;
@@ -206,17 +202,17 @@
 
     .viewer {
       width: 100vw;
-      height: calc((var(--app-height) * 100) - 84px);
-      display: grid;
-      grid-template-rows: minmax(0, 1fr) 52px;
+      height: calc(100dvh - 84px);
+      display: block;
+      position: relative;
       padding: 0;
       overflow: hidden;
       background: #ffffff;
     }
 
     .document-wrap {
-      min-height: 0;
       width: 100vw;
+      height: calc(100dvh - 84px - 52px);
       padding: 0 4px 0;
       display: flex;
       align-items: center;
@@ -232,13 +228,17 @@
       max-height: 100%;
       object-fit: contain;
       object-position: center;
+      display: block;
       user-select: none;
       -webkit-user-drag: none;
       touch-action: pan-y;
-      display: block;
     }
 
     .mobile-project-bottom {
+      position: fixed;
+      left: 0;
+      bottom: 0;
+      width: 100vw;
       height: 52px;
       padding: 0 34px;
       display: grid;
@@ -246,7 +246,7 @@
       align-items: center;
       gap: 18px;
       background: #ffffff;
-      z-index: 20;
+      z-index: 60;
     }
 
     #mobile-current-title {
@@ -305,7 +305,7 @@
       border-top: 1px solid rgba(17, 17, 17, 0.10);
       border-bottom: 1px solid rgba(17, 17, 17, 0.10);
       padding: 26px 34px 30px;
-      max-height: 58vh;
+      max-height: 58dvh;
       overflow-y: auto;
     }
 
@@ -318,7 +318,7 @@
 
     .about {
       width: 100vw;
-      height: calc((var(--app-height) * 100) - 84px);
+      height: calc(100dvh - 84px);
       display: flex;
       align-items: center;
       justify-content: center;
@@ -328,7 +328,7 @@
 
     .about-wrap {
       width: 100vw;
-      height: calc((var(--app-height) * 100) - 84px);
+      height: calc(100dvh - 84px);
       display: flex;
       align-items: center;
       justify-content: center;
@@ -354,7 +354,7 @@
       width: 33.333vw;
       min-width: 128px;
       max-width: 33.333vw;
-      height: calc(var(--app-height) * 100);
+      height: 100dvh;
       padding: 72px 16px 24px;
       border-left: 1px solid rgba(17, 17, 17, 0.10);
       box-shadow: -8px 0 24px rgba(0, 0, 0, 0.06);
@@ -445,7 +445,7 @@
     </main>
 
     <main id="viewer" class="viewer hidden">
-      <div class="document-wrap" id="document-wrap">
+      <div class="document-wrap">
         <img id="page-image" src="" alt="Portfolio Guillaume Morvan" />
       </div>
 
@@ -475,15 +475,7 @@
   </aside>
 
   <script>
-    function setAppHeight() {
-      document.documentElement.style.setProperty("--app-height", `${window.innerHeight * 0.01}px`);
-    }
-
-    setAppHeight();
-    window.addEventListener("resize", setAppHeight);
-    window.addEventListener("orientationchange", setAppHeight);
-
-    const ASSET_VERSION = "2026-06-23-8";
+    const ASSET_VERSION = "2026-06-23-10";
 
     const VIGNETTE_FOLDER = "Vignettes/";
     const ABOUT_FOLDER = "apropos-mobile/";
@@ -502,6 +494,58 @@
         filePrefix: "melle",
         start: 1,
         end: 9
+      },
+      {
+        slug: "saint-joseph",
+        title: "Saint-Joseph",
+        fullTitle: "Église Saint-Joseph",
+        type: "Réhabilitation patrimoniale",
+        line: "Révéler les qualités cachées du patrimoine.",
+        projectInfo: "Le projet interroge la capacité d’un édifice patrimonial à accueillir de nouveaux usages sans perdre sa présence ni sa mémoire.",
+        thumb: "saint-joseph.jpg",
+        folder: "pages/",
+        filePrefix: "page",
+        start: 9,
+        end: 17
+      },
+      {
+        slug: "ferme-nord",
+        title: "Ferme Nord",
+        fullTitle: "Ferme Nord",
+        type: "Réhabilitation et extension",
+        line: "L’harmonieux contraste.",
+        projectInfo: "La Ferme Nord met en tension patrimoine agricole, extension contemporaine et paysage dunaire.",
+        thumb: "ferme-nord.jpg",
+        folder: "pages/",
+        filePrefix: "page",
+        start: 18,
+        end: 33
+      },
+      {
+        slug: "tank",
+        title: "TANK",
+        fullTitle: "TANK Architectes",
+        type: "Expérience en agence",
+        line: "L’architecte dans une pratique engagée pour la qualité.",
+        projectInfo: "L’expérience chez TANK Architectes m’a permis d’approcher une pratique collective exigeante.",
+        thumb: "tank.jpg",
+        folder: "pages/",
+        filePrefix: "page",
+        start: 34,
+        end: 39
+      },
+      {
+        slug: "edwood",
+        title: "Edwood",
+        fullTitle: "Edwood",
+        type: "Construction bois",
+        line: "Le chantier comme école de la réalité constructive.",
+        projectInfo: "Chez Edwood, l’expérience en atelier et sur chantier m’a permis d’approfondir la réalité constructive du projet.",
+        thumb: "edwood.jpg",
+        folder: "pages/",
+        filePrefix: "page",
+        start: 40,
+        end: 43
       }
     ];
 
