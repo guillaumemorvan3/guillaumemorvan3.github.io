@@ -218,19 +218,6 @@
       touch-action: pan-y;
     }
 
-    .portfolio-download-zone {
-      position: absolute;
-      z-index: 25;
-      display: block;
-      background: transparent;
-      cursor: pointer;
-    }
-
-    .portfolio-download-zone:hover {
-      outline: 1px solid rgba(17, 17, 17, 0.18);
-      outline-offset: 2px;
-    }
-
     .nav-side {
       position: fixed;
       top: calc(44px + (100vh - 44px) / 2);
@@ -367,19 +354,10 @@
     </main>
 
     <main id="about" class="about hidden">
-      <div class="about-wrap" id="about-wrap">
+      <div class="about-wrap">
         <button id="about-prev" class="nav-side nav-prev">‹</button>
         <img id="about-image" src="" alt="À propos — Guillaume Morvan" />
         <button id="about-next" class="nav-side nav-next">›</button>
-
-        <a
-          id="portfolio-download-zone"
-          class="portfolio-download-zone hidden"
-          href="https://drive.google.com/uc?export=download&id=1RKjeYMM-iudjpduVnrbGJ2ElCqVxp70R"
-          target="_blank"
-          rel="noopener"
-          aria-label="Télécharger le portfolio PDF"
-        ></a>
       </div>
     </main>
 
@@ -403,18 +381,11 @@
   </aside>
 
   <script>
+    const ASSET_VERSION = "2026-06-23-4";
+
     const VIGNETTE_FOLDER = "Vignettes/";
     const ABOUT_FOLDER = "apropos/";
     const ABOUT_TOTAL = 2;
-
-    const DOWNLOAD_PAGE = 2;
-
-    const DOWNLOAD_ZONE = {
-      x: 0.63,
-      y: 0.68,
-      w: 0.22,
-      h: 0.08
-    };
 
     const PROJECTS = [
       {
@@ -493,23 +464,21 @@
     const viewer = document.getElementById("viewer");
     const pageImage = document.getElementById("page-image");
     const aboutImage = document.getElementById("about-image");
-    const aboutWrap = document.getElementById("about-wrap");
-    const downloadZone = document.getElementById("portfolio-download-zone");
     const drawer = document.getElementById("drawer");
     const overlay = document.getElementById("overlay");
     const projectGrid = document.getElementById("project-grid");
     const projectList = document.getElementById("project-list");
 
     function getImageSrc(project, num) {
-      return encodeURI(`${project.folder}${project.filePrefix} (${num}).jpg`);
+      return encodeURI(`${project.folder}${project.filePrefix} (${num}).jpg`) + `?v=${ASSET_VERSION}`;
     }
 
     function getAboutSrc(num) {
-      return encodeURI(`${ABOUT_FOLDER}page (${num}).jpg`);
+      return encodeURI(`${ABOUT_FOLDER}page (${num}).jpg`) + `?v=${ASSET_VERSION}`;
     }
 
     function getVignetteSrc(filename) {
-      return encodeURI(`${VIGNETTE_FOLDER}${filename}`);
+      return encodeURI(`${VIGNETTE_FOLDER}${filename}`) + `?v=${ASSET_VERSION}`;
     }
 
     function clearUrl() {
@@ -527,7 +496,6 @@
       summary.classList.add("hidden");
       about.classList.add("hidden");
       viewer.classList.add("hidden");
-      hideDownloadZone();
     }
 
     function showSummary() {
@@ -590,7 +558,6 @@
       currentAboutPage = num;
       aboutImage.src = getAboutSrc(currentAboutPage);
       updateAboutNavState();
-      updateDownloadZone();
     }
 
     function previousAboutPage() {
@@ -609,37 +576,6 @@
     function updateAboutNavState() {
       document.getElementById("about-prev").disabled = currentAboutPage <= 1;
       document.getElementById("about-next").disabled = currentAboutPage >= ABOUT_TOTAL;
-    }
-
-    function hideDownloadZone() {
-      downloadZone.classList.add("hidden");
-    }
-
-    function updateDownloadZone() {
-      if (about.classList.contains("hidden") || currentAboutPage !== DOWNLOAD_PAGE) {
-        hideDownloadZone();
-        return;
-      }
-
-      downloadZone.classList.remove("hidden");
-      positionDownloadZone();
-    }
-
-    function positionDownloadZone() {
-      if (downloadZone.classList.contains("hidden")) return;
-
-      const imageRect = aboutImage.getBoundingClientRect();
-      const wrapRect = aboutWrap.getBoundingClientRect();
-
-      const left = imageRect.left - wrapRect.left + imageRect.width * DOWNLOAD_ZONE.x;
-      const top = imageRect.top - wrapRect.top + imageRect.height * DOWNLOAD_ZONE.y;
-      const width = imageRect.width * DOWNLOAD_ZONE.w;
-      const height = imageRect.height * DOWNLOAD_ZONE.h;
-
-      downloadZone.style.left = `${left}px`;
-      downloadZone.style.top = `${top}px`;
-      downloadZone.style.width = `${width}px`;
-      downloadZone.style.height = `${height}px`;
     }
 
     function openDrawer() {
@@ -742,9 +678,6 @@
 
     aboutImage.addEventListener("touchstart", handleTouchStart, { passive: true });
     aboutImage.addEventListener("touchend", handleAboutTouchEnd, { passive: true });
-
-    aboutImage.addEventListener("load", positionDownloadZone);
-    window.addEventListener("resize", positionDownloadZone);
 
     document.addEventListener("keydown", e => {
       if (e.key === "Escape") closeDrawer();
