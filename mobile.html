@@ -211,9 +211,9 @@
     }
 
     .document-wrap {
-      height: calc(100vh - 84px - 50px - 46px);
+      height: calc(100vh - 84px - 50px);
       width: 100vw;
-      padding: 0 4px 2px;
+      padding: 0 4px 4px;
       display: flex;
       align-items: center;
       justify-content: center;
@@ -235,60 +235,51 @@
     .mobile-project-bottom {
       height: 50px;
       padding: 0 34px;
-      display: flex;
+      display: grid;
+      grid-template-columns: minmax(0, 1fr) auto minmax(0, 1fr);
       align-items: center;
-      justify-content: space-between;
       gap: 18px;
       background: #ffffff;
     }
 
     #mobile-current-title {
-      display: block;
-      font-size: 16px;
+      grid-column: 1;
+      justify-self: start;
+      font-size: 15px;
       line-height: 1.15;
       font-weight: 400;
       letter-spacing: -0.02em;
-      max-width: calc(100vw - 132px);
+      color: rgba(17, 17, 17, 0.72);
       white-space: nowrap;
       overflow: hidden;
       text-overflow: ellipsis;
-      color: #111;
-    }
-
-    .mobile-info-button {
-      width: 44px;
-      border: none;
-      background: transparent;
-      padding: 0;
-      font: inherit;
-      font-size: 14px;
-      line-height: 1.2;
-      color: #111;
-      cursor: pointer;
-      white-space: nowrap;
-      text-align: center;
-    }
-
-    .mobile-bottom-bar {
-      display: grid;
-      grid-template-columns: 1fr auto 1fr;
-      align-items: center;
-      position: fixed;
-      left: 0;
-      bottom: 0;
-      width: 100vw;
-      height: 46px;
-      padding: 0 34px;
-      background: #ffffff;
-      z-index: 14;
-      border-top: none;
+      max-width: 100%;
     }
 
     #mobile-counter {
       grid-column: 2;
       justify-self: center;
-      font-size: 18px;
-      color: #111;
+      font-size: 15px;
+      line-height: 1.15;
+      font-weight: 400;
+      color: rgba(17, 17, 17, 0.72);
+      white-space: nowrap;
+    }
+
+    .mobile-info-button {
+      grid-column: 3;
+      justify-self: end;
+      border: none;
+      background: transparent;
+      padding: 0;
+      font: inherit;
+      font-size: 15px;
+      line-height: 1.15;
+      font-weight: 400;
+      color: rgba(17, 17, 17, 0.72);
+      cursor: pointer;
+      white-space: nowrap;
+      text-align: right;
     }
 
     .mobile-info-panel {
@@ -300,7 +291,7 @@
       position: fixed;
       left: 0;
       right: 0;
-      bottom: 96px;
+      bottom: 50px;
       z-index: 80;
       background: #ffffff;
       border-top: 1px solid rgba(17, 17, 17, 0.10);
@@ -452,11 +443,8 @@
 
       <div class="mobile-project-bottom">
         <div id="mobile-current-title">Projet</div>
-        <button id="mobile-info-button" class="mobile-info-button">Info</button>
-      </div>
-
-      <div id="mobile-bottom-bar" class="mobile-bottom-bar">
         <div id="mobile-counter">1/1</div>
+        <button id="mobile-info-button" class="mobile-info-button">Info</button>
       </div>
 
       <div id="mobile-info-panel" class="mobile-info-panel">
@@ -479,7 +467,7 @@
   </aside>
 
   <script>
-    const ASSET_VERSION = "2026-06-23-5";
+    const ASSET_VERSION = "2026-06-23-6";
 
     const VIGNETTE_FOLDER = "Vignettes/";
     const ABOUT_FOLDER = "apropos-mobile/";
