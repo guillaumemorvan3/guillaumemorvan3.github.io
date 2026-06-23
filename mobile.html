@@ -231,7 +231,7 @@
       display: block;
       user-select: none;
       -webkit-user-drag: none;
-      touch-action: pan-y;
+      touch-action: pan-x;
     }
 
     .mobile-project-bottom {
@@ -344,7 +344,7 @@
       user-select: none;
       -webkit-user-drag: none;
       background: #ffffff;
-      touch-action: pan-y;
+      touch-action: pan-x;
     }
 
     .drawer {
@@ -475,7 +475,7 @@
   </aside>
 
   <script>
-    const ASSET_VERSION = "2026-06-23-10";
+    const ASSET_VERSION = "2026-06-23-11";
 
     const VIGNETTE_FOLDER = "Vignettes/";
     const ABOUT_FOLDER = "apropos-mobile/";
@@ -485,6 +485,7 @@
       {
         slug: "melle",
         title: "Melle",
+        displayTitle: "Melle",
         fullTitle: "Station ferroviaire Melle",
         type: "Projet urbain et bâtiment mixte",
         line: "Évolutivité et appropriation des espaces.",
@@ -498,6 +499,7 @@
       {
         slug: "saint-joseph",
         title: "Saint-Joseph",
+        displayTitle: "Saint-Joseph",
         fullTitle: "Église Saint-Joseph",
         type: "Réhabilitation patrimoniale",
         line: "Révéler les qualités cachées du patrimoine.",
@@ -511,6 +513,7 @@
       {
         slug: "ferme-nord",
         title: "Ferme Nord",
+        displayTitle: "Ferme Nord",
         fullTitle: "Ferme Nord",
         type: "Réhabilitation et extension",
         line: "L’harmonieux contraste.",
@@ -524,6 +527,7 @@
       {
         slug: "tank",
         title: "TANK",
+        displayTitle: "TANK",
         fullTitle: "TANK Architectes",
         type: "Expérience en agence",
         line: "L’architecte dans une pratique engagée pour la qualité.",
@@ -537,6 +541,7 @@
       {
         slug: "edwood",
         title: "Edwood",
+        displayTitle: "Edwood",
         fullTitle: "Edwood",
         type: "Construction bois",
         line: "Le chantier comme école de la réalité constructive.",
@@ -630,7 +635,7 @@
       site.classList.remove("hidden");
       hideAllMainViews();
       viewer.classList.remove("hidden");
-      mobileCurrentTitle.textContent = project.fullTitle;
+      mobileCurrentTitle.textContent = project.displayTitle || project.title;
       goToPage(targetPage || project.start);
     }
 
@@ -732,10 +737,10 @@
       const dx = e.changedTouches[0].screenX - touchStartX;
       const dy = e.changedTouches[0].screenY - touchStartY;
 
-      if (Math.abs(dy) < 45) return;
-      if (Math.abs(dy) < Math.abs(dx)) return;
+      if (Math.abs(dx) < 45) return;
+      if (Math.abs(dx) < Math.abs(dy)) return;
 
-      if (dy < 0) nextPage();
+      if (dx < 0) nextPage();
       else previousPage();
     }
 
