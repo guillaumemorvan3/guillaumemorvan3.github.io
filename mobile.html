@@ -18,13 +18,17 @@
       overflow: hidden;
     }
 
+    :root {
+      --app-height: 100vh;
+    }
+
     .hidden { display: none !important; }
 
     .home {
       position: fixed;
       inset: 0;
       width: 100vw;
-      height: 100vh;
+      height: calc(var(--app-height) * 100);
       overflow: hidden;
       background: #111;
       cursor: pointer;
@@ -56,7 +60,7 @@
 
     #site {
       width: 100vw;
-      height: 100vh;
+      height: calc(var(--app-height) * 100);
       background: #ffffff;
       overflow: hidden;
     }
@@ -129,7 +133,7 @@
 
     .summary {
       width: 100vw;
-      height: calc(100vh - 84px);
+      height: calc((var(--app-height) * 100) - 84px);
       padding: 18px 0 30px;
       overflow: hidden;
       background: #ffffff;
@@ -202,44 +206,47 @@
 
     .viewer {
       width: 100vw;
-      height: calc(100vh - 84px);
-      display: block;
-      position: relative;
+      height: calc((var(--app-height) * 100) - 84px);
+      display: grid;
+      grid-template-rows: minmax(0, 1fr) 52px;
       padding: 0;
       overflow: hidden;
       background: #ffffff;
     }
 
     .document-wrap {
-      height: calc(100vh - 84px - 50px);
+      min-height: 0;
       width: 100vw;
-      padding: 0 4px 4px;
+      padding: 0 4px 0;
       display: flex;
       align-items: center;
       justify-content: center;
       overflow: hidden;
+      background: #ffffff;
     }
 
     #page-image {
       width: 100%;
       height: 100%;
       max-width: 100vw;
-      max-height: none;
+      max-height: 100%;
       object-fit: contain;
       object-position: center;
       user-select: none;
       -webkit-user-drag: none;
       touch-action: pan-y;
+      display: block;
     }
 
     .mobile-project-bottom {
-      height: 50px;
+      height: 52px;
       padding: 0 34px;
       display: grid;
       grid-template-columns: minmax(0, 1fr) auto minmax(0, 1fr);
       align-items: center;
       gap: 18px;
       background: #ffffff;
+      z-index: 20;
     }
 
     #mobile-current-title {
@@ -269,6 +276,7 @@
     .mobile-info-button {
       grid-column: 3;
       justify-self: end;
+      width: 44px;
       border: none;
       background: transparent;
       padding: 0;
@@ -279,7 +287,7 @@
       color: rgba(17, 17, 17, 0.72);
       cursor: pointer;
       white-space: nowrap;
-      text-align: right;
+      text-align: center;
     }
 
     .mobile-info-panel {
@@ -291,7 +299,7 @@
       position: fixed;
       left: 0;
       right: 0;
-      bottom: 50px;
+      bottom: 52px;
       z-index: 80;
       background: #ffffff;
       border-top: 1px solid rgba(17, 17, 17, 0.10);
@@ -310,7 +318,7 @@
 
     .about {
       width: 100vw;
-      height: calc(100vh - 84px);
+      height: calc((var(--app-height) * 100) - 84px);
       display: flex;
       align-items: center;
       justify-content: center;
@@ -320,7 +328,7 @@
 
     .about-wrap {
       width: 100vw;
-      height: calc(100vh - 84px);
+      height: calc((var(--app-height) * 100) - 84px);
       display: flex;
       align-items: center;
       justify-content: center;
@@ -346,7 +354,7 @@
       width: 33.333vw;
       min-width: 128px;
       max-width: 33.333vw;
-      height: 100vh;
+      height: calc(var(--app-height) * 100);
       padding: 72px 16px 24px;
       border-left: 1px solid rgba(17, 17, 17, 0.10);
       box-shadow: -8px 0 24px rgba(0, 0, 0, 0.06);
@@ -437,7 +445,7 @@
     </main>
 
     <main id="viewer" class="viewer hidden">
-      <div class="document-wrap">
+      <div class="document-wrap" id="document-wrap">
         <img id="page-image" src="" alt="Portfolio Guillaume Morvan" />
       </div>
 
@@ -467,7 +475,15 @@
   </aside>
 
   <script>
-    const ASSET_VERSION = "2026-06-23-6";
+    function setAppHeight() {
+      document.documentElement.style.setProperty("--app-height", `${window.innerHeight * 0.01}px`);
+    }
+
+    setAppHeight();
+    window.addEventListener("resize", setAppHeight);
+    window.addEventListener("orientationchange", setAppHeight);
+
+    const ASSET_VERSION = "2026-06-23-8";
 
     const VIGNETTE_FOLDER = "Vignettes/";
     const ABOUT_FOLDER = "apropos-mobile/";
@@ -486,58 +502,6 @@
         filePrefix: "melle",
         start: 1,
         end: 9
-      },
-      {
-        slug: "saint-joseph",
-        title: "Saint-Joseph",
-        fullTitle: "Église Saint-Joseph",
-        type: "Réhabilitation patrimoniale",
-        line: "Révéler les qualités cachées du patrimoine.",
-        projectInfo: "Le projet interroge la capacité d’un édifice patrimonial à accueillir de nouveaux usages sans perdre sa présence ni sa mémoire.",
-        thumb: "saint-joseph.jpg",
-        folder: "pages/",
-        filePrefix: "page",
-        start: 9,
-        end: 17
-      },
-      {
-        slug: "ferme-nord",
-        title: "Ferme Nord",
-        fullTitle: "Ferme Nord",
-        type: "Réhabilitation et extension",
-        line: "L’harmonieux contraste.",
-        projectInfo: "La Ferme Nord met en tension patrimoine agricole, extension contemporaine et paysage dunaire.",
-        thumb: "ferme-nord.jpg",
-        folder: "pages/",
-        filePrefix: "page",
-        start: 18,
-        end: 33
-      },
-      {
-        slug: "tank",
-        title: "TANK",
-        fullTitle: "TANK Architectes",
-        type: "Expérience en agence",
-        line: "L’architecte dans une pratique engagée pour la qualité.",
-        projectInfo: "L’expérience chez TANK Architectes m’a permis d’approcher une pratique collective exigeante.",
-        thumb: "tank.jpg",
-        folder: "pages/",
-        filePrefix: "page",
-        start: 34,
-        end: 39
-      },
-      {
-        slug: "edwood",
-        title: "Edwood",
-        fullTitle: "Edwood",
-        type: "Construction bois",
-        line: "Le chantier comme école de la réalité constructive.",
-        projectInfo: "Chez Edwood, l’expérience en atelier et sur chantier m’a permis d’approfondir la réalité constructive du projet.",
-        thumb: "edwood.jpg",
-        folder: "pages/",
-        filePrefix: "page",
-        start: 40,
-        end: 43
       }
     ];
 
@@ -698,6 +662,7 @@
 
     function buildProjectCards() {
       projectGrid.innerHTML = "";
+
       PROJECTS.forEach((project, index) => {
         const button = document.createElement("button");
         button.className = "project-card";
@@ -722,7 +687,10 @@
     function handleProjectTouchEnd(e) {
       const dx = e.changedTouches[0].screenX - touchStartX;
       const dy = e.changedTouches[0].screenY - touchStartY;
-      if (Math.abs(dy) < 45 || Math.abs(dy) < Math.abs(dx)) return;
+
+      if (Math.abs(dy) < 45) return;
+      if (Math.abs(dy) < Math.abs(dx)) return;
+
       if (dy < 0) nextPage();
       else previousPage();
     }
@@ -730,7 +698,10 @@
     function handleAboutTouchEnd(e) {
       const dx = e.changedTouches[0].screenX - touchStartX;
       const dy = e.changedTouches[0].screenY - touchStartY;
-      if (Math.abs(dx) < 45 || Math.abs(dx) < Math.abs(dy)) return;
+
+      if (Math.abs(dx) < 45) return;
+      if (Math.abs(dx) < Math.abs(dy)) return;
+
       if (dx < 0) nextAboutPage();
       else previousAboutPage();
     }
