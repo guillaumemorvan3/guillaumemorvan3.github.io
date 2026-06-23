@@ -218,6 +218,19 @@
       touch-action: pan-y;
     }
 
+    .portfolio-download-zone {
+      position: absolute;
+      z-index: 25;
+      display: block;
+      background: transparent;
+      cursor: pointer;
+    }
+
+    .portfolio-download-zone:hover {
+      outline: 1px solid rgba(17, 17, 17, 0.18);
+      outline-offset: 2px;
+    }
+
     .nav-side {
       position: fixed;
       top: calc(44px + (100vh - 44px) / 2);
@@ -354,10 +367,19 @@
     </main>
 
     <main id="about" class="about hidden">
-      <div class="about-wrap">
+      <div class="about-wrap" id="about-wrap">
         <button id="about-prev" class="nav-side nav-prev">‹</button>
         <img id="about-image" src="" alt="À propos — Guillaume Morvan" />
         <button id="about-next" class="nav-side nav-next">›</button>
+
+        <a
+          id="portfolio-download-zone"
+          class="portfolio-download-zone hidden"
+          href="https://drive.google.com/uc?export=download&id=1RKjeYMM-iudjpduVnrbGJ2ElCqVxp70R"
+          target="_blank"
+          rel="noopener"
+          aria-label="Télécharger le portfolio PDF"
+        ></a>
       </div>
     </main>
 
@@ -385,12 +407,76 @@
     const ABOUT_FOLDER = "apropos/";
     const ABOUT_TOTAL = 2;
 
+    const DOWNLOAD_PAGE = 2;
+
+    const DOWNLOAD_ZONE = {
+      x: 0.63,
+      y: 0.68,
+      w: 0.22,
+      h: 0.08
+    };
+
     const PROJECTS = [
-      { slug: "melle", title: "Melle", fullTitle: "Station ferroviaire Melle", type: "Projet urbain et bâtiment mixte", line: "Évolutivité et appropriation des espaces.", thumb: "melle.jpg", folder: "pages/", filePrefix: "page", start: 4, end: 8 },
-      { slug: "saint-joseph", title: "Saint-Joseph", fullTitle: "Église Saint-Joseph", type: "Réhabilitation patrimoniale", line: "Révéler les qualités cachées du patrimoine.", thumb: "saint-joseph.jpg", folder: "pages/", filePrefix: "page", start: 9, end: 17 },
-      { slug: "ferme-nord", title: "Ferme Nord", fullTitle: "Ferme Nord", type: "Réhabilitation et extension", line: "L’harmonieux contraste.", thumb: "ferme-nord.jpg", folder: "pages/", filePrefix: "page", start: 18, end: 33 },
-      { slug: "tank", title: "TANK", fullTitle: "TANK Architectes", type: "Expérience en agence", line: "L’architecte dans une pratique engagée pour la qualité.", thumb: "tank.jpg", folder: "pages/", filePrefix: "page", start: 34, end: 39 },
-      { slug: "edwood", title: "Edwood", fullTitle: "Edwood", type: "Construction bois", line: "Le chantier comme école de la réalité constructive.", thumb: "edwood.jpg", folder: "pages/", filePrefix: "page", start: 40, end: 43 }
+      {
+        slug: "melle",
+        title: "Melle",
+        fullTitle: "Station ferroviaire Melle",
+        type: "Projet urbain et bâtiment mixte",
+        line: "Évolutivité et appropriation des espaces.",
+        thumb: "melle.jpg",
+        folder: "pages/",
+        filePrefix: "page",
+        start: 4,
+        end: 8
+      },
+      {
+        slug: "saint-joseph",
+        title: "Saint-Joseph",
+        fullTitle: "Église Saint-Joseph",
+        type: "Réhabilitation patrimoniale",
+        line: "Révéler les qualités cachées du patrimoine.",
+        thumb: "saint-joseph.jpg",
+        folder: "pages/",
+        filePrefix: "page",
+        start: 9,
+        end: 17
+      },
+      {
+        slug: "ferme-nord",
+        title: "Ferme Nord",
+        fullTitle: "Ferme Nord",
+        type: "Réhabilitation et extension",
+        line: "L’harmonieux contraste.",
+        thumb: "ferme-nord.jpg",
+        folder: "pages/",
+        filePrefix: "page",
+        start: 18,
+        end: 33
+      },
+      {
+        slug: "tank",
+        title: "TANK",
+        fullTitle: "TANK Architectes",
+        type: "Expérience en agence",
+        line: "L’architecte dans une pratique engagée pour la qualité.",
+        thumb: "tank.jpg",
+        folder: "pages/",
+        filePrefix: "page",
+        start: 34,
+        end: 39
+      },
+      {
+        slug: "edwood",
+        title: "Edwood",
+        fullTitle: "Edwood",
+        type: "Construction bois",
+        line: "Le chantier comme école de la réalité constructive.",
+        thumb: "edwood.jpg",
+        folder: "pages/",
+        filePrefix: "page",
+        start: 40,
+        end: 43
+      }
     ];
 
     let currentProject = null;
@@ -407,6 +493,8 @@
     const viewer = document.getElementById("viewer");
     const pageImage = document.getElementById("page-image");
     const aboutImage = document.getElementById("about-image");
+    const aboutWrap = document.getElementById("about-wrap");
+    const downloadZone = document.getElementById("portfolio-download-zone");
     const drawer = document.getElementById("drawer");
     const overlay = document.getElementById("overlay");
     const projectGrid = document.getElementById("project-grid");
@@ -439,6 +527,7 @@
       summary.classList.add("hidden");
       about.classList.add("hidden");
       viewer.classList.add("hidden");
+      hideDownloadZone();
     }
 
     function showSummary() {
@@ -501,6 +590,7 @@
       currentAboutPage = num;
       aboutImage.src = getAboutSrc(currentAboutPage);
       updateAboutNavState();
+      updateDownloadZone();
     }
 
     function previousAboutPage() {
@@ -519,6 +609,37 @@
     function updateAboutNavState() {
       document.getElementById("about-prev").disabled = currentAboutPage <= 1;
       document.getElementById("about-next").disabled = currentAboutPage >= ABOUT_TOTAL;
+    }
+
+    function hideDownloadZone() {
+      downloadZone.classList.add("hidden");
+    }
+
+    function updateDownloadZone() {
+      if (about.classList.contains("hidden") || currentAboutPage !== DOWNLOAD_PAGE) {
+        hideDownloadZone();
+        return;
+      }
+
+      downloadZone.classList.remove("hidden");
+      positionDownloadZone();
+    }
+
+    function positionDownloadZone() {
+      if (downloadZone.classList.contains("hidden")) return;
+
+      const imageRect = aboutImage.getBoundingClientRect();
+      const wrapRect = aboutWrap.getBoundingClientRect();
+
+      const left = imageRect.left - wrapRect.left + imageRect.width * DOWNLOAD_ZONE.x;
+      const top = imageRect.top - wrapRect.top + imageRect.height * DOWNLOAD_ZONE.y;
+      const width = imageRect.width * DOWNLOAD_ZONE.w;
+      const height = imageRect.height * DOWNLOAD_ZONE.h;
+
+      downloadZone.style.left = `${left}px`;
+      downloadZone.style.top = `${top}px`;
+      downloadZone.style.width = `${width}px`;
+      downloadZone.style.height = `${height}px`;
     }
 
     function openDrawer() {
@@ -599,6 +720,7 @@
     document.getElementById("home-name").addEventListener("click", showSummary);
     document.getElementById("brand").addEventListener("click", showSummary);
     document.getElementById("about-btn").addEventListener("click", showAbout);
+
     document.getElementById("projects-btn").addEventListener("click", () => {
       if (!viewer.classList.contains("hidden")) openDrawer();
       else showSummary();
@@ -617,15 +739,21 @@
 
     pageImage.addEventListener("touchstart", handleTouchStart, { passive: true });
     pageImage.addEventListener("touchend", handleProjectTouchEnd, { passive: true });
+
     aboutImage.addEventListener("touchstart", handleTouchStart, { passive: true });
     aboutImage.addEventListener("touchend", handleAboutTouchEnd, { passive: true });
 
+    aboutImage.addEventListener("load", positionDownloadZone);
+    window.addEventListener("resize", positionDownloadZone);
+
     document.addEventListener("keydown", e => {
       if (e.key === "Escape") closeDrawer();
+
       if (e.key === "ArrowLeft") {
         if (!viewer.classList.contains("hidden")) previousPage();
         if (!about.classList.contains("hidden")) previousAboutPage();
       }
+
       if (e.key === "ArrowRight") {
         if (!viewer.classList.contains("hidden")) nextPage();
         if (!about.classList.contains("hidden")) nextAboutPage();
