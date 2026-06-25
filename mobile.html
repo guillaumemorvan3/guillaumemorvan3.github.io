@@ -6,9 +6,12 @@
   <title>Guillaume Morvan — Portfolio</title>
 
   <style>
-    * { box-sizing: border-box; }
+    * {
+      box-sizing: border-box;
+    }
 
-    html, body {
+    html,
+    body {
       margin: 0;
       width: 100%;
       height: 100%;
@@ -19,7 +22,11 @@
       overscroll-behavior: none;
     }
 
-    .hidden { display: none !important; }
+    .hidden {
+      display: none !important;
+    }
+
+    /* ACCUEIL INTRO */
 
     .home {
       position: fixed;
@@ -55,6 +62,8 @@
       cursor: pointer;
     }
 
+    /* SITE */
+
     #site {
       width: 100vw;
       height: 100dvh;
@@ -66,8 +75,6 @@
       height: 84px;
       min-height: 84px;
       padding: 34px 34px 14px;
-      display: block;
-      border-bottom: none;
       background: #ffffff;
       position: relative;
       z-index: 30;
@@ -125,8 +132,15 @@
       background: #111;
     }
 
-    .mobile-menu-button span::before { top: -9px; }
-    .mobile-menu-button span::after { top: 9px; }
+    .mobile-menu-button span::before {
+      top: -9px;
+    }
+
+    .mobile-menu-button span::after {
+      top: 9px;
+    }
+
+    /* INDEX PROJETS */
 
     .summary {
       width: 100vw;
@@ -151,7 +165,9 @@
       touch-action: pan-x;
     }
 
-    .project-grid::-webkit-scrollbar { display: none; }
+    .project-grid::-webkit-scrollbar {
+      display: none;
+    }
 
     .project-card {
       flex: 0 0 78vw;
@@ -202,13 +218,15 @@
       color: #222;
     }
 
+    /* VIEWER PROJET */
+
     .viewer {
       width: 100vw;
       height: calc(100dvh - 84px);
       display: grid;
       grid-template-rows: minmax(0, 1fr) 34px 52px;
-      overflow: hidden;
       background: #ffffff;
+      overflow: hidden;
     }
 
     .document-wrap {
@@ -244,7 +262,7 @@
       display: flex;
       align-items: center;
       justify-content: center;
-      gap: 20px;
+      gap: 22px;
       background: #ffffff;
       color: rgba(17, 17, 17, 0.55);
       font-size: 15px;
@@ -253,13 +271,15 @@
     }
 
     .swipe-arrow {
-      font-size: 18px;
+      font-size: 21px;
       line-height: 1;
-      color: rgba(17, 17, 17, 0.42);
+      color: rgba(17, 17, 17, 0.45);
+      transform: translateY(-1px);
     }
 
     #mobile-counter {
       font-size: 15px;
+      line-height: 1;
       color: rgba(17, 17, 17, 0.62);
       white-space: nowrap;
     }
@@ -309,7 +329,6 @@
     .mobile-info-button {
       grid-column: 3;
       justify-self: end;
-      width: 44px;
       border: none;
       background: transparent;
       padding: 0;
@@ -351,6 +370,8 @@
       white-space: pre-line;
     }
 
+    /* À PROPOS */
+
     .about {
       width: 100vw;
       height: calc(100dvh - 84px);
@@ -383,6 +404,8 @@
       pointer-events: none;
     }
 
+    /* MENU */
+
     .drawer {
       position: fixed;
       top: 0;
@@ -402,7 +425,9 @@
       touch-action: pan-y;
     }
 
-    .drawer.open { transform: translateX(0); }
+    .drawer.open {
+      transform: translateX(0);
+    }
 
     .drawer-header {
       display: flex;
@@ -465,6 +490,7 @@
     <header class="topbar">
       <div class="mobile-header-row">
         <button id="brand">GUILLAUME MORVAN</button>
+
         <button id="mobile-menu-button" class="mobile-menu-button" aria-label="Menu">
           <span></span>
         </button>
@@ -518,7 +544,7 @@
   </aside>
 
   <script>
-    const ASSET_VERSION = "2026-06-25-1";
+    const ASSET_VERSION = "2026-06-25-2";
 
     const VIGNETTE_FOLDER = "Vignettes/";
     const ABOUT_FOLDER = "apropos-mobile/";
@@ -653,7 +679,11 @@
 
     function updateUrl(num) {
       const url = new URL(window.location);
-      if (currentProject) url.searchParams.set("project", currentProject.slug);
+
+      if (currentProject) {
+        url.searchParams.set("project", currentProject.slug);
+      }
+
       url.searchParams.set("page", num);
       history.replaceState({}, "", url);
     }
@@ -701,6 +731,7 @@
 
     function goToPage(num) {
       const target = parseInt(num, 10);
+
       if (!currentProject || !target) return;
       if (target < currentProject.start || target > currentProject.end) return;
 
@@ -773,16 +804,21 @@
 
     function goToAboutPage(num) {
       if (num < 1 || num > ABOUT_TOTAL) return;
+
       currentAboutPage = num;
       aboutImage.src = getAboutSrc(currentAboutPage);
     }
 
     function previousAboutPage() {
-      if (currentAboutPage > 1) goToAboutPage(currentAboutPage - 1);
+      if (currentAboutPage > 1) {
+        goToAboutPage(currentAboutPage - 1);
+      }
     }
 
     function nextAboutPage() {
-      if (currentAboutPage < ABOUT_TOTAL) goToAboutPage(currentAboutPage + 1);
+      if (currentAboutPage < ABOUT_TOTAL) {
+        goToAboutPage(currentAboutPage + 1);
+      }
     }
 
     function openDrawer() {
@@ -798,6 +834,7 @@
 
     function openInfoPanel() {
       if (viewer.classList.contains("hidden")) return;
+
       closeDrawer();
       mobileInfoPanel.classList.add("open");
     }
@@ -807,8 +844,11 @@
     }
 
     function toggleInfoPanel() {
-      if (mobileInfoPanel.classList.contains("open")) closeInfoPanel();
-      else openInfoPanel();
+      if (mobileInfoPanel.classList.contains("open")) {
+        closeInfoPanel();
+      } else {
+        openInfoPanel();
+      }
     }
 
     function buildProjectCards() {
@@ -817,6 +857,7 @@
       PROJECTS.forEach((project, index) => {
         const button = document.createElement("button");
         button.className = "project-card";
+
         button.innerHTML = `
           <img class="thumb" src="${getVignetteSrc(project.thumb)}" alt="${project.fullTitle}" />
           <span class="card-text">
@@ -825,6 +866,7 @@
             <span class="card-line">${project.line}</span>
           </span>
         `;
+
         button.addEventListener("click", () => showViewer(project, project.start));
         projectGrid.appendChild(button);
       });
@@ -838,10 +880,13 @@
 
     function endProjectGesture(x, y) {
       if (!gestureActive) return;
+
       gestureActive = false;
 
       const now = Date.now();
+
       if (now - lastGestureTime < 220) return;
+
       lastGestureTime = now;
 
       const dx = x - gestureStartX;
@@ -855,19 +900,27 @@
       closeInfoPanel();
 
       if (absX > absY * DIRECTION_RATIO) {
-        if (dx < 0) nextPage();
-        else previousPage();
+        if (dx < 0) {
+          nextPage();
+        } else {
+          previousPage();
+        }
+
         return;
       }
 
       if (absY > absX * DIRECTION_RATIO) {
-        if (dy < 0) nextProject();
-        else previousProject();
+        if (dy < 0) {
+          nextProject();
+        } else {
+          previousProject();
+        }
       }
     }
 
     function endAboutGesture(x, y) {
       if (!gestureActive) return;
+
       gestureActive = false;
 
       const dx = x - gestureStartX;
@@ -879,8 +932,11 @@
       if (absX < SWIPE_MIN) return;
       if (absX < absY * DIRECTION_RATIO) return;
 
-      if (dx < 0) nextAboutPage();
-      else previousAboutPage();
+      if (dx < 0) {
+        nextAboutPage();
+      } else {
+        previousAboutPage();
+      }
     }
 
     function onProjectPointerDown(e) {
@@ -914,6 +970,7 @@
     home.addEventListener("click", showSummary);
     document.getElementById("home-name").addEventListener("click", showSummary);
     document.getElementById("brand").addEventListener("click", showSummary);
+
     document.getElementById("mobile-menu-button").addEventListener("click", openDrawer);
     document.getElementById("close-drawer").addEventListener("click", closeDrawer);
     document.getElementById("drawer-home").addEventListener("click", showSummary);
