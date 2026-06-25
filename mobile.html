@@ -70,7 +70,7 @@
       padding: 34px 34px 14px;
       background: #ffffff;
       position: relative;
-      z-index: 30;
+      z-index: 100;
     }
 
     .mobile-header-row {
@@ -382,7 +382,8 @@
       align-items: center;
       gap: 18px;
       background: #ffffff;
-      z-index: 60;
+      z-index: 90;
+      position: relative;
     }
 
     .mobile-index-button,
@@ -435,24 +436,30 @@
       position: fixed;
       left: 0;
       right: 0;
+      top: 84px;
       bottom: 52px;
       z-index: 80;
       background: #ffffff;
       border-top: 1px solid rgba(17, 17, 17, 0.10);
       border-bottom: 1px solid rgba(17, 17, 17, 0.10);
-      padding: 26px 34px 30px;
-      max-height: 58dvh;
+      padding: 34px 34px 34px;
       overflow-y: auto;
       touch-action: pan-y;
     }
 
     .info-text p {
-      margin: 0 0 14px 0;
+      margin: 0 0 16px 0;
       font-size: 15px;
-      line-height: 1.45;
+      line-height: 1.48;
       color: #111;
-      text-align: left;
-      text-indent: 1.4em;
+      text-align: justify;
+      text-align-last: left;
+      text-indent: 1.6em;
+      hyphens: auto;
+    }
+
+    .info-text p:first-child {
+      text-indent: 1.6em;
     }
 
     .info-text p:last-child {
@@ -461,7 +468,7 @@
 
     .index-list button {
       width: 100%;
-      padding: 14px 0;
+      padding: 16px 0;
       border: none;
       border-bottom: 1px solid rgba(17, 17, 17, 0.12);
       background: transparent;
@@ -480,7 +487,7 @@
 
     .index-title {
       display: block;
-      font-size: 17px;
+      font-size: 18px;
       line-height: 1.2;
       font-weight: 500;
       color: #111;
@@ -537,7 +544,7 @@
       box-shadow: -8px 0 24px rgba(0, 0, 0, 0.06);
       transform: translateX(100%);
       transition: transform 0.25s ease;
-      z-index: 90;
+      z-index: 120;
       background: #ffffff;
       overflow-y: auto;
       touch-action: pan-y;
@@ -580,7 +587,7 @@
       background: transparent;
       opacity: 0;
       pointer-events: none;
-      z-index: 45;
+      z-index: 110;
     }
 
     .overlay.open {
@@ -660,7 +667,7 @@
   </aside>
 
   <script>
-    const ASSET_VERSION = "2026-06-25-9";
+    const ASSET_VERSION = "2026-06-25-10";
 
     const VIGNETTE_FOLDER = "Vignettes/";
     const ABOUT_FOLDER = "apropos-mobile/";
