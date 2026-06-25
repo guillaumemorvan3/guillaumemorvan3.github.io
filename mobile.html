@@ -6,9 +6,7 @@
   <title>Guillaume Morvan — Portfolio</title>
 
   <style>
-    * {
-      box-sizing: border-box;
-    }
+    * { box-sizing: border-box; }
 
     html,
     body {
@@ -22,11 +20,7 @@
       overscroll-behavior: none;
     }
 
-    .hidden {
-      display: none !important;
-    }
-
-    /* ACCUEIL INTRO */
+    .hidden { display: none !important; }
 
     .home {
       position: fixed;
@@ -61,8 +55,6 @@
       text-transform: uppercase;
       cursor: pointer;
     }
-
-    /* SITE */
 
     #site {
       width: 100vw;
@@ -132,15 +124,8 @@
       background: #111;
     }
 
-    .mobile-menu-button span::before {
-      top: -9px;
-    }
-
-    .mobile-menu-button span::after {
-      top: 9px;
-    }
-
-    /* INDEX PROJETS */
+    .mobile-menu-button span::before { top: -9px; }
+    .mobile-menu-button span::after { top: 9px; }
 
     .summary {
       width: 100vw;
@@ -165,9 +150,7 @@
       touch-action: pan-x;
     }
 
-    .project-grid::-webkit-scrollbar {
-      display: none;
-    }
+    .project-grid::-webkit-scrollbar { display: none; }
 
     .project-card {
       flex: 0 0 78vw;
@@ -218,13 +201,11 @@
       color: #222;
     }
 
-    /* VIEWER PROJET */
-
     .viewer {
       width: 100vw;
       height: calc(100dvh - 84px);
       display: grid;
-      grid-template-rows: minmax(0, 1fr) 34px 52px;
+      grid-template-rows: minmax(0, 1fr) 30px 52px;
       background: #ffffff;
       overflow: hidden;
     }
@@ -257,24 +238,26 @@
     }
 
     .mobile-swipe-indicator {
-      height: 34px;
+      height: 30px;
       padding: 0 34px;
       display: flex;
-      align-items: center;
+      align-items: flex-start;
       justify-content: center;
-      gap: 22px;
+      gap: 76px;
+      padding-top: 0;
       background: #ffffff;
       color: rgba(17, 17, 17, 0.55);
       font-size: 15px;
       line-height: 1;
       font-weight: 400;
+      transform: translateY(-8px);
     }
 
     .swipe-arrow {
-      font-size: 21px;
+      font-size: 23px;
       line-height: 1;
-      color: rgba(17, 17, 17, 0.45);
-      transform: translateY(-1px);
+      color: rgba(17, 17, 17, 0.42);
+      transform: translateY(-4px);
     }
 
     #mobile-counter {
@@ -370,8 +353,6 @@
       white-space: pre-line;
     }
 
-    /* À PROPOS */
-
     .about {
       width: 100vw;
       height: calc(100dvh - 84px);
@@ -404,8 +385,6 @@
       pointer-events: none;
     }
 
-    /* MENU */
-
     .drawer {
       position: fixed;
       top: 0;
@@ -425,9 +404,15 @@
       touch-action: pan-y;
     }
 
-    .drawer.open {
-      transform: translateX(0);
+    .drawer.index-open {
+      width: 72vw;
+      min-width: 72vw;
+      max-width: 72vw;
+      padding-left: 24px;
+      padding-right: 24px;
     }
+
+    .drawer.open { transform: translateX(0); }
 
     .drawer-header {
       display: flex;
@@ -446,9 +431,9 @@
       cursor: pointer;
     }
 
-    .drawer-nav {
-      display: block;
-    }
+    .drawer-nav { display: block; }
+
+    .drawer-nav.hidden { display: none !important; }
 
     .drawer-nav button {
       width: 100%;
@@ -461,6 +446,45 @@
       line-height: 1.2;
       color: #111;
       cursor: pointer;
+    }
+
+    .drawer-project-list { display: none; }
+
+    .drawer-project-list.open { display: block; }
+
+    .drawer-project-item {
+      width: 100%;
+      padding: 16px 0;
+      border: none;
+      border-bottom: 1px solid rgba(17, 17, 17, 0.12);
+      background: transparent;
+      text-align: left;
+      cursor: pointer;
+      color: #111;
+    }
+
+    .drawer-project-number {
+      display: block;
+      font-size: 11px;
+      line-height: 1.2;
+      color: rgba(17, 17, 17, 0.45);
+      margin-bottom: 5px;
+    }
+
+    .drawer-project-title {
+      display: block;
+      font-size: 18px;
+      line-height: 1.2;
+      font-weight: 400;
+      color: #111;
+    }
+
+    .drawer-project-subtitle {
+      display: block;
+      font-size: 12px;
+      line-height: 1.35;
+      margin-top: 6px;
+      color: rgba(17, 17, 17, 0.55);
     }
 
     .overlay {
@@ -537,14 +561,16 @@
       <button id="close-drawer" class="close-drawer" aria-label="Fermer">×</button>
     </div>
 
-    <div class="drawer-nav">
+    <div id="drawer-nav" class="drawer-nav">
       <button id="drawer-home">Accueil</button>
       <button id="drawer-about">À propos</button>
     </div>
+
+    <div id="drawer-project-list" class="drawer-project-list"></div>
   </aside>
 
   <script>
-    const ASSET_VERSION = "2026-06-25-2";
+    const ASSET_VERSION = "2026-06-25-4";
 
     const VIGNETTE_FOLDER = "Vignettes/";
     const ABOUT_FOLDER = "apropos-mobile/";
@@ -582,7 +608,7 @@
         folder: "pages-mobile/saint-joseph/",
         filePrefix: "page",
         start: 1,
-        end: 1
+        end: 15
       },
       {
         slug: "ferme-nord",
@@ -647,6 +673,8 @@
     const aboutWrap = document.getElementById("about-wrap");
     const aboutImage = document.getElementById("about-image");
     const drawer = document.getElementById("drawer");
+    const drawerNav = document.getElementById("drawer-nav");
+    const drawerProjectList = document.getElementById("drawer-project-list");
     const overlay = document.getElementById("overlay");
     const projectGrid = document.getElementById("project-grid");
     const mobileCurrentTitle = document.getElementById("mobile-current-title");
@@ -737,7 +765,9 @@
 
       currentImage = target;
       closeInfoPanel();
+
       pageImage.src = getImageSrc(currentProject, currentImage);
+
       updateUrl(currentImage);
       updateMobileProjectUi();
     }
@@ -821,8 +851,24 @@
       }
     }
 
-    function openDrawer() {
+    function openMenuDrawer() {
       closeInfoPanel();
+
+      drawer.classList.remove("index-open");
+      drawerNav.classList.remove("hidden");
+      drawerProjectList.classList.remove("open");
+
+      drawer.classList.add("open");
+      overlay.classList.add("open");
+    }
+
+    function openIndexDrawer() {
+      closeInfoPanel();
+
+      drawer.classList.add("index-open");
+      drawerNav.classList.add("hidden");
+      drawerProjectList.classList.add("open");
+
       drawer.classList.add("open");
       overlay.classList.add("open");
     }
@@ -869,6 +915,28 @@
 
         button.addEventListener("click", () => showViewer(project, project.start));
         projectGrid.appendChild(button);
+      });
+    }
+
+    function buildProjectIndex() {
+      drawerProjectList.innerHTML = "";
+
+      PROJECTS.forEach((project, index) => {
+        const button = document.createElement("button");
+        button.className = "drawer-project-item";
+
+        button.innerHTML = `
+          <span class="drawer-project-number">${String(index + 1).padStart(2, "0")}</span>
+          <span class="drawer-project-title">${project.displayTitle || project.title}</span>
+          <span class="drawer-project-subtitle">${project.type}</span>
+        `;
+
+        button.addEventListener("click", () => {
+          closeDrawer();
+          showViewer(project, project.start);
+        });
+
+        drawerProjectList.appendChild(button);
       });
     }
 
@@ -971,7 +1039,7 @@
     document.getElementById("home-name").addEventListener("click", showSummary);
     document.getElementById("brand").addEventListener("click", showSummary);
 
-    document.getElementById("mobile-menu-button").addEventListener("click", openDrawer);
+    document.getElementById("mobile-menu-button").addEventListener("click", openMenuDrawer);
     document.getElementById("close-drawer").addEventListener("click", closeDrawer);
     document.getElementById("drawer-home").addEventListener("click", showSummary);
     document.getElementById("drawer-about").addEventListener("click", showAbout);
@@ -981,7 +1049,7 @@
       closeInfoPanel();
     });
 
-    mobileIndexButton.addEventListener("click", showSummary);
+    mobileIndexButton.addEventListener("click", openIndexDrawer);
     mobileInfoButton.addEventListener("click", toggleInfoPanel);
 
     documentWrap.addEventListener("pointerdown", onProjectPointerDown);
@@ -995,6 +1063,7 @@
     aboutWrap.addEventListener("touchmove", preventGestureScroll, { passive: false });
 
     buildProjectCards();
+    buildProjectIndex();
 
     const params = new URLSearchParams(window.location.search);
     const directPage = parseInt(params.get("page"), 10);
