@@ -205,16 +205,15 @@
     .viewer {
       width: 100vw;
       height: calc(100dvh - 84px);
-      display: block;
-      position: relative;
-      padding: 0;
+      display: grid;
+      grid-template-rows: minmax(0, 1fr) 34px 52px;
       overflow: hidden;
       background: #ffffff;
     }
 
     .document-wrap {
+      min-height: 0;
       width: 100vw;
-      height: calc(100dvh - 84px - 52px);
       padding: 0 4px;
       display: flex;
       align-items: center;
@@ -239,11 +238,33 @@
       pointer-events: none;
     }
 
+    .mobile-swipe-indicator {
+      height: 34px;
+      padding: 0 34px;
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      gap: 20px;
+      background: #ffffff;
+      color: rgba(17, 17, 17, 0.55);
+      font-size: 15px;
+      line-height: 1;
+      font-weight: 400;
+    }
+
+    .swipe-arrow {
+      font-size: 18px;
+      line-height: 1;
+      color: rgba(17, 17, 17, 0.42);
+    }
+
+    #mobile-counter {
+      font-size: 15px;
+      color: rgba(17, 17, 17, 0.62);
+      white-space: nowrap;
+    }
+
     .mobile-project-bottom {
-      position: fixed;
-      left: 0;
-      bottom: 0;
-      width: 100vw;
       height: 52px;
       padding: 0 34px;
       display: grid;
@@ -254,9 +275,25 @@
       z-index: 60;
     }
 
-    #mobile-current-title {
+    .mobile-index-button {
       grid-column: 1;
       justify-self: start;
+      border: none;
+      background: transparent;
+      padding: 0;
+      font: inherit;
+      font-size: 15px;
+      line-height: 1.15;
+      font-weight: 400;
+      color: rgba(17, 17, 17, 0.72);
+      cursor: pointer;
+      white-space: nowrap;
+      text-align: left;
+    }
+
+    #mobile-current-title {
+      grid-column: 2;
+      justify-self: center;
       font-size: 15px;
       line-height: 1.15;
       font-weight: 400;
@@ -265,17 +302,8 @@
       white-space: nowrap;
       overflow: hidden;
       text-overflow: ellipsis;
-      max-width: 100%;
-    }
-
-    #mobile-counter {
-      grid-column: 2;
-      justify-self: center;
-      font-size: 15px;
-      line-height: 1.15;
-      font-weight: 400;
-      color: rgba(17, 17, 17, 0.72);
-      white-space: nowrap;
+      max-width: 42vw;
+      text-align: center;
     }
 
     .mobile-info-button {
@@ -292,7 +320,7 @@
       color: rgba(17, 17, 17, 0.72);
       cursor: pointer;
       white-space: nowrap;
-      text-align: center;
+      text-align: right;
     }
 
     .mobile-info-panel {
@@ -458,9 +486,15 @@
         <img id="page-image" src="" alt="Portfolio Guillaume Morvan" />
       </div>
 
+      <div class="mobile-swipe-indicator">
+        <span class="swipe-arrow">‹</span>
+        <span id="mobile-counter">1/1</span>
+        <span class="swipe-arrow">›</span>
+      </div>
+
       <div class="mobile-project-bottom">
+        <button id="mobile-index-button" class="mobile-index-button">Index</button>
         <div id="mobile-current-title">Projet</div>
-        <div id="mobile-counter">1/1</div>
         <button id="mobile-info-button" class="mobile-info-button">Info</button>
       </div>
 
@@ -484,7 +518,7 @@
   </aside>
 
   <script>
-    const ASSET_VERSION = "2026-06-23-15";
+    const ASSET_VERSION = "2026-06-25-1";
 
     const VIGNETTE_FOLDER = "Vignettes/";
     const ABOUT_FOLDER = "apropos-mobile/";
@@ -522,7 +556,7 @@
         folder: "pages-mobile/saint-joseph/",
         filePrefix: "page",
         start: 1,
-        end: 15
+        end: 1
       },
       {
         slug: "ferme-nord",
@@ -590,6 +624,7 @@
     const overlay = document.getElementById("overlay");
     const projectGrid = document.getElementById("project-grid");
     const mobileCurrentTitle = document.getElementById("mobile-current-title");
+    const mobileIndexButton = document.getElementById("mobile-index-button");
     const mobileInfoButton = document.getElementById("mobile-info-button");
     const mobileCounter = document.getElementById("mobile-counter");
     const mobileInfoPanel = document.getElementById("mobile-info-panel");
@@ -889,6 +924,7 @@
       closeInfoPanel();
     });
 
+    mobileIndexButton.addEventListener("click", showSummary);
     mobileInfoButton.addEventListener("click", toggleInfoPanel);
 
     documentWrap.addEventListener("pointerdown", onProjectPointerDown);
