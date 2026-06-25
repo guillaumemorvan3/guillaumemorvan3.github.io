@@ -42,16 +42,17 @@
 
     .home-name {
       position: absolute;
-      top: 22px;
-      left: 20px;
+      top: 34px;
+      left: 34px;
       z-index: 2;
       border: none;
       background: transparent;
       padding: 0;
       color: #ffffff;
       font-size: 25px;
+      line-height: 1;
       font-weight: 400;
-      letter-spacing: 0.02em;
+      letter-spacing: 0.04em;
       text-transform: uppercase;
       cursor: pointer;
     }
@@ -256,78 +257,78 @@
 
     .image-stage.animate-next-page .previous-image {
       display: block;
-      animation: outLeft 280ms ease forwards;
+      animation: outLeft 260ms ease forwards;
     }
 
     .image-stage.animate-next-page .current-image {
-      animation: inRight 280ms ease forwards;
+      animation: inRight 260ms ease forwards;
     }
 
     .image-stage.animate-prev-page .previous-image {
       display: block;
-      animation: outRight 280ms ease forwards;
+      animation: outRight 260ms ease forwards;
     }
 
     .image-stage.animate-prev-page .current-image {
-      animation: inLeft 280ms ease forwards;
+      animation: inLeft 260ms ease forwards;
     }
 
     .image-stage.animate-next-project .previous-image {
       display: block;
-      animation: outUp 300ms ease forwards;
+      animation: outUp 280ms ease forwards;
     }
 
     .image-stage.animate-next-project .current-image {
-      animation: inBottom 300ms ease forwards;
+      animation: inBottom 280ms ease forwards;
     }
 
     .image-stage.animate-prev-project .previous-image {
       display: block;
-      animation: outDown 300ms ease forwards;
+      animation: outDown 280ms ease forwards;
     }
 
     .image-stage.animate-prev-project .current-image {
-      animation: inTop 300ms ease forwards;
+      animation: inTop 280ms ease forwards;
     }
 
     @keyframes inRight {
-      from { transform: translateX(100%); opacity: 0.98; }
+      from { transform: translateX(100%); opacity: 1; }
       to { transform: translateX(0); opacity: 1; }
     }
 
     @keyframes outLeft {
       from { transform: translateX(0); opacity: 1; }
-      to { transform: translateX(-100%); opacity: 0.98; }
+      to { transform: translateX(-100%); opacity: 1; }
     }
 
     @keyframes inLeft {
-      from { transform: translateX(-100%); opacity: 0.98; }
+      from { transform: translateX(-100%); opacity: 1; }
       to { transform: translateX(0); opacity: 1; }
     }
 
     @keyframes outRight {
       from { transform: translateX(0); opacity: 1; }
-      to { transform: translateX(100%); opacity: 0.98; }
+      to { transform: translateX(100%); opacity: 1; }
     }
 
     @keyframes inBottom {
-      from { transform: translateY(100%); opacity: 0.98; }
+      from { transform: translateY(100%); opacity: 1; }
       to { transform: translateY(0); opacity: 1; }
     }
 
     @keyframes outUp {
       from { transform: translateY(0); opacity: 1; }
-      to { transform: translateY(-100%); opacity: 0.98; }
+      to { transform: translateY(-100%); opacity: 1; }
     }
 
     @keyframes inTop {
-      from { transform: translateY(-100%); opacity: 0.98; }
+      from { transform: translateY(-100%); opacity: 1; }
       to { transform: translateY(0); opacity: 1; }
     }
 
     @keyframes outDown {
       from { transform: translateY(0); opacity: 1; }
-      to { transform: translateY(100%); opacity: 0.98; }
+      to { transform: translateY(100%); opacity: 1; }
     }
 
     .mobile-swipe-indicator {
@@ -425,11 +426,11 @@
       text-align: center;
     }
 
-    .mobile-info-panel {
+    .bottom-panel {
       display: none;
     }
 
-    .mobile-info-panel.open {
+    .bottom-panel.open {
       display: block;
       position: fixed;
       left: 0;
@@ -438,19 +439,59 @@
       z-index: 80;
       background: #ffffff;
       border-top: 1px solid rgba(17, 17, 17, 0.10);
-      border-bottom: 1px solid rgba(17, 17, 0, 0.10);
+      border-bottom: 1px solid rgba(17, 17, 17, 0.10);
       padding: 26px 34px 30px;
       max-height: 58dvh;
       overflow-y: auto;
       touch-action: pan-y;
     }
 
-    .mobile-info-panel p {
-      margin: 0;
+    .info-text p {
+      margin: 0 0 14px 0;
       font-size: 15px;
       line-height: 1.45;
       color: #111;
-      white-space: pre-line;
+      text-align: left;
+      text-indent: 1.4em;
+    }
+
+    .info-text p:last-child {
+      margin-bottom: 0;
+    }
+
+    .index-list button {
+      width: 100%;
+      padding: 14px 0;
+      border: none;
+      border-bottom: 1px solid rgba(17, 17, 17, 0.12);
+      background: transparent;
+      text-align: left;
+      color: #111;
+      cursor: pointer;
+    }
+
+    .index-number {
+      display: block;
+      font-size: 11px;
+      line-height: 1.2;
+      color: rgba(17, 17, 17, 0.45);
+      margin-bottom: 4px;
+    }
+
+    .index-title {
+      display: block;
+      font-size: 17px;
+      line-height: 1.2;
+      font-weight: 500;
+      color: #111;
+    }
+
+    .index-subtitle {
+      display: block;
+      font-size: 12px;
+      line-height: 1.35;
+      margin-top: 5px;
+      color: rgba(17, 17, 17, 0.55);
     }
 
     .about {
@@ -502,14 +543,6 @@
       touch-action: pan-y;
     }
 
-    .drawer.index-open {
-      width: 72vw;
-      min-width: 72vw;
-      max-width: 72vw;
-      padding-left: 24px;
-      padding-right: 24px;
-    }
-
     .drawer.open { transform: translateX(0); }
 
     .drawer-header {
@@ -528,9 +561,6 @@
       cursor: pointer;
     }
 
-    .drawer-nav { display: block; }
-    .drawer-nav.hidden { display: none !important; }
-
     .drawer-nav button {
       width: 100%;
       padding: 18px 0;
@@ -542,44 +572,6 @@
       line-height: 1.2;
       color: #111;
       cursor: pointer;
-    }
-
-    .drawer-project-list { display: none; }
-    .drawer-project-list.open { display: block; }
-
-    .drawer-project-item {
-      width: 100%;
-      padding: 16px 0;
-      border: none;
-      border-bottom: 1px solid rgba(17, 17, 17, 0.12);
-      background: transparent;
-      text-align: left;
-      cursor: pointer;
-      color: #111;
-    }
-
-    .drawer-project-number {
-      display: block;
-      font-size: 11px;
-      line-height: 1.2;
-      color: rgba(17, 17, 17, 0.45);
-      margin-bottom: 5px;
-    }
-
-    .drawer-project-title {
-      display: block;
-      font-size: 18px;
-      line-height: 1.2;
-      font-weight: 400;
-      color: #111;
-    }
-
-    .drawer-project-subtitle {
-      display: block;
-      font-size: 12px;
-      line-height: 1.35;
-      margin-top: 6px;
-      color: rgba(17, 17, 17, 0.55);
     }
 
     .overlay {
@@ -644,8 +636,12 @@
         <button id="mobile-info-button" class="mobile-info-button">Info</button>
       </div>
 
-      <div id="mobile-info-panel" class="mobile-info-panel">
-        <p id="mobile-info-text"></p>
+      <div id="mobile-info-panel" class="bottom-panel">
+        <div id="mobile-info-text" class="info-text"></div>
+      </div>
+
+      <div id="mobile-index-panel" class="bottom-panel">
+        <div id="mobile-index-list" class="index-list"></div>
       </div>
     </main>
   </section>
@@ -661,12 +657,10 @@
       <button id="drawer-home">Accueil</button>
       <button id="drawer-about">À propos</button>
     </div>
-
-    <div id="drawer-project-list" class="drawer-project-list"></div>
   </aside>
 
   <script>
-    const ASSET_VERSION = "2026-06-25-8";
+    const ASSET_VERSION = "2026-06-25-9";
 
     const VIGNETTE_FOLDER = "Vignettes/";
     const ABOUT_FOLDER = "apropos-mobile/";
@@ -760,6 +754,9 @@
     let gestureActive = false;
     let lastGestureTime = 0;
     let animationTimer = null;
+    let transitionToken = 0;
+
+    const imageCache = new Map();
 
     const home = document.getElementById("home");
     const site = document.getElementById("site");
@@ -775,8 +772,6 @@
     const aboutWrap = document.getElementById("about-wrap");
     const aboutImage = document.getElementById("about-image");
     const drawer = document.getElementById("drawer");
-    const drawerNav = document.getElementById("drawer-nav");
-    const drawerProjectList = document.getElementById("drawer-project-list");
     const overlay = document.getElementById("overlay");
     const projectGrid = document.getElementById("project-grid");
     const mobileCurrentTitle = document.getElementById("mobile-current-title");
@@ -785,6 +780,8 @@
     const mobileCounter = document.getElementById("mobile-counter");
     const mobileInfoPanel = document.getElementById("mobile-info-panel");
     const mobileInfoText = document.getElementById("mobile-info-text");
+    const mobileIndexPanel = document.getElementById("mobile-index-panel");
+    const mobileIndexList = document.getElementById("mobile-index-list");
 
     function getImageSrc(project, num) {
       return encodeURI(`${project.folder}${project.filePrefix} (${num}).jpg`) + `?v=${ASSET_VERSION}`;
@@ -801,6 +798,38 @@
     function getInfoSrc(project) {
       if (!project.infoFile) return "";
       return encodeURI(project.infoFile) + `?v=${ASSET_VERSION}`;
+    }
+
+    function preloadImage(src) {
+      if (imageCache.has(src)) return imageCache.get(src);
+
+      const promise = new Promise(resolve => {
+        const img = new Image();
+        img.decoding = "async";
+        img.onload = () => resolve(src);
+        img.onerror = () => resolve(src);
+        img.src = src;
+      });
+
+      imageCache.set(src, promise);
+      return promise;
+    }
+
+    function preloadAround(project, num) {
+      if (!project || !num) return;
+
+      [num - 1, num + 1].forEach(page => {
+        if (page >= project.start && page <= project.end) {
+          preloadImage(getImageSrc(project, page));
+        }
+      });
+
+      const projectIndex = PROJECTS.findIndex(item => item.slug === project.slug);
+      const previousProject = PROJECTS[projectIndex - 1];
+      const nextProject = PROJECTS[projectIndex + 1];
+
+      if (previousProject) preloadImage(getImageSrc(previousProject, previousProject.start));
+      if (nextProject) preloadImage(getImageSrc(nextProject, nextProject.start));
     }
 
     function clearUrl() {
@@ -823,6 +852,7 @@
       about.classList.add("hidden");
       viewer.classList.add("hidden");
       closeInfoPanel();
+      closeIndexPanel();
     }
 
     function showSummary() {
@@ -859,7 +889,8 @@
       goToPage(targetPage || project.start, direction);
     }
 
-    function setImageWithTransition(src, direction) {
+    async function setImageWithTransition(src, direction) {
+      const token = ++transitionToken;
       const currentSrc = pageImage.getAttribute("src") || "";
 
       imageStage.classList.remove(
@@ -877,8 +908,12 @@
       if (!currentSrc || direction === "none" || currentSrc === src) {
         previousImage.style.display = "none";
         pageImage.src = src;
+        preloadImage(src);
         return;
       }
+
+      await preloadImage(src);
+      if (token !== transitionToken) return;
 
       previousImage.src = currentSrc;
       previousImage.style.display = "block";
@@ -891,7 +926,7 @@
         imageStage.classList.remove(direction);
         previousImage.style.display = "none";
         previousImage.removeAttribute("src");
-      }, 320);
+      }, 300);
     }
 
     function goToPage(num, direction = "none") {
@@ -902,9 +937,11 @@
 
       currentImage = target;
       closeInfoPanel();
+      closeIndexPanel();
 
       const targetSrc = getImageSrc(currentProject, currentImage);
       setImageWithTransition(targetSrc, direction);
+      preloadAround(currentProject, currentImage);
 
       updateUrl(currentImage);
       updateMobileProjectUi();
@@ -953,8 +990,26 @@
       nextPageButton.disabled = currentImage >= currentProject.end;
     }
 
+    function renderInfoText(text) {
+      const cleanText = (text || "").trim();
+
+      if (!cleanText) {
+        mobileInfoText.innerHTML = "";
+        return;
+      }
+
+      const paragraphs = cleanText
+        .split(/\n\s*\n/g)
+        .map(paragraph => paragraph.replace(/\n/g, " ").trim())
+        .filter(Boolean);
+
+      mobileInfoText.innerHTML = paragraphs
+        .map(paragraph => `<p>${escapeHtml(paragraph)}</p>`)
+        .join("");
+    }
+
     async function loadProjectInfo(project) {
-      mobileInfoText.textContent = project.fallbackInfo || project.line || "";
+      renderInfoText(project.fallbackInfo || project.line || "");
 
       if (!project.infoFile) return;
 
@@ -963,14 +1018,21 @@
         if (!response.ok) return;
 
         const text = await response.text();
-        const cleanText = text.trim();
-
-        if (cleanText.length > 0) {
-          mobileInfoText.textContent = cleanText;
+        if (text.trim().length > 0) {
+          renderInfoText(text);
         }
       } catch (error) {
-        mobileInfoText.textContent = project.fallbackInfo || project.line || "";
+        renderInfoText(project.fallbackInfo || project.line || "");
       }
+    }
+
+    function escapeHtml(value) {
+      return String(value)
+        .replaceAll("&", "&amp;")
+        .replaceAll("<", "&lt;")
+        .replaceAll(">", "&gt;")
+        .replaceAll('"', "&quot;")
+        .replaceAll("'", "&#039;");
     }
 
     function goToAboutPage(num) {
@@ -989,40 +1051,14 @@
 
     function openMenuDrawer() {
       closeInfoPanel();
-
-      drawer.classList.remove("index-open");
-      drawerNav.classList.remove("hidden");
-      drawerProjectList.classList.remove("open");
-
+      closeIndexPanel();
       drawer.classList.add("open");
       overlay.classList.add("open");
     }
 
     function toggleMenuDrawer() {
-      if (drawer.classList.contains("open") && !drawer.classList.contains("index-open")) {
-        closeDrawer();
-      } else {
-        openMenuDrawer();
-      }
-    }
-
-    function openIndexDrawer() {
-      closeInfoPanel();
-
-      drawer.classList.add("index-open");
-      drawerNav.classList.add("hidden");
-      drawerProjectList.classList.add("open");
-
-      drawer.classList.add("open");
-      overlay.classList.add("open");
-    }
-
-    function toggleIndexDrawer() {
-      if (drawer.classList.contains("open") && drawer.classList.contains("index-open")) {
-        closeDrawer();
-      } else {
-        openIndexDrawer();
-      }
+      if (drawer.classList.contains("open")) closeDrawer();
+      else openMenuDrawer();
     }
 
     function closeDrawer() {
@@ -1032,8 +1068,8 @@
 
     function openInfoPanel() {
       if (viewer.classList.contains("hidden")) return;
-
       closeDrawer();
+      closeIndexPanel();
       mobileInfoPanel.classList.add("open");
     }
 
@@ -1042,11 +1078,24 @@
     }
 
     function toggleInfoPanel() {
-      if (mobileInfoPanel.classList.contains("open")) {
-        closeInfoPanel();
-      } else {
-        openInfoPanel();
-      }
+      if (mobileInfoPanel.classList.contains("open")) closeInfoPanel();
+      else openInfoPanel();
+    }
+
+    function openIndexPanel() {
+      if (viewer.classList.contains("hidden")) return;
+      closeDrawer();
+      closeInfoPanel();
+      mobileIndexPanel.classList.add("open");
+    }
+
+    function closeIndexPanel() {
+      mobileIndexPanel.classList.remove("open");
+    }
+
+    function toggleIndexPanel() {
+      if (mobileIndexPanel.classList.contains("open")) closeIndexPanel();
+      else openIndexPanel();
     }
 
     function buildProjectCards() {
@@ -1071,24 +1120,23 @@
     }
 
     function buildProjectIndex() {
-      drawerProjectList.innerHTML = "";
+      mobileIndexList.innerHTML = "";
 
       PROJECTS.forEach((project, index) => {
         const button = document.createElement("button");
-        button.className = "drawer-project-item";
 
         button.innerHTML = `
-          <span class="drawer-project-number">${String(index + 1).padStart(2, "0")}</span>
-          <span class="drawer-project-title">${project.displayTitle || project.title}</span>
-          <span class="drawer-project-subtitle">${project.type}</span>
+          <span class="index-number">${String(index + 1).padStart(2, "0")}</span>
+          <span class="index-title">${project.displayTitle || project.title}</span>
+          <span class="index-subtitle">${project.type}</span>
         `;
 
         button.addEventListener("click", () => {
-          closeDrawer();
+          closeIndexPanel();
           showViewer(project, project.start, "none");
         });
 
-        drawerProjectList.appendChild(button);
+        mobileIndexList.appendChild(button);
       });
     }
 
@@ -1116,6 +1164,7 @@
       if (absX < SWIPE_MIN && absY < SWIPE_MIN) return;
 
       closeInfoPanel();
+      closeIndexPanel();
 
       if (absX > absY * DIRECTION_RATIO) {
         if (dx < 0) nextPage();
@@ -1147,30 +1196,6 @@
       else previousAboutPage();
     }
 
-    function onProjectPointerDown(e) {
-      startGesture(e.clientX, e.clientY);
-    }
-
-    function onProjectPointerUp(e) {
-      endProjectGesture(e.clientX, e.clientY);
-    }
-
-    function onProjectPointerCancel() {
-      gestureActive = false;
-    }
-
-    function onAboutPointerDown(e) {
-      startGesture(e.clientX, e.clientY);
-    }
-
-    function onAboutPointerUp(e) {
-      endAboutGesture(e.clientX, e.clientY);
-    }
-
-    function onAboutPointerCancel() {
-      gestureActive = false;
-    }
-
     function preventGestureScroll(e) {
       e.preventDefault();
     }
@@ -1184,25 +1209,22 @@
     document.getElementById("drawer-home").addEventListener("click", showSummary);
     document.getElementById("drawer-about").addEventListener("click", showAbout);
 
-    overlay.addEventListener("click", () => {
-      closeDrawer();
-      closeInfoPanel();
-    });
+    overlay.addEventListener("click", closeDrawer);
 
-    mobileIndexButton.addEventListener("click", toggleIndexDrawer);
+    mobileIndexButton.addEventListener("click", toggleIndexPanel);
     mobileInfoButton.addEventListener("click", toggleInfoPanel);
 
     prevPageButton.addEventListener("click", previousPage);
     nextPageButton.addEventListener("click", nextPage);
 
-    documentWrap.addEventListener("pointerdown", onProjectPointerDown);
-    documentWrap.addEventListener("pointerup", onProjectPointerUp);
-    documentWrap.addEventListener("pointercancel", onProjectPointerCancel);
+    documentWrap.addEventListener("pointerdown", e => startGesture(e.clientX, e.clientY));
+    documentWrap.addEventListener("pointerup", e => endProjectGesture(e.clientX, e.clientY));
+    documentWrap.addEventListener("pointercancel", () => { gestureActive = false; });
     documentWrap.addEventListener("touchmove", preventGestureScroll, { passive: false });
 
-    aboutWrap.addEventListener("pointerdown", onAboutPointerDown);
-    aboutWrap.addEventListener("pointerup", onAboutPointerUp);
-    aboutWrap.addEventListener("pointercancel", onAboutPointerCancel);
+    aboutWrap.addEventListener("pointerdown", e => startGesture(e.clientX, e.clientY));
+    aboutWrap.addEventListener("pointerup", e => endAboutGesture(e.clientX, e.clientY));
+    aboutWrap.addEventListener("pointercancel", () => { gestureActive = false; });
     aboutWrap.addEventListener("touchmove", preventGestureScroll, { passive: false });
 
     buildProjectCards();
