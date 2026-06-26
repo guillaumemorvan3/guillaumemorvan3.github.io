@@ -5,704 +5,1585 @@
   <meta name="viewport" content="width=device-width, initial-scale=1.0" />
   <title>Guillaume Morvan — Portfolio</title>
 
-  <!-- TYPOGRAPHIES -->
   <link rel="preconnect" href="https://fonts.googleapis.com">
   <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
-  <link href="https://fonts.googleapis.com/css2?family=Cormorant+Garamond:wght@400;500&family=Poppins:wght@300;400;500&display=swap" rel="stylesheet">
+  <link href="https://fonts.googleapis.com/css2?family=Poppins:wght@400;500;600&display=swap" rel="stylesheet">
 
   <style>
     :root {
-      --text: #111;
-      --muted: rgba(0, 0, 0, 0.62);
-      --light: rgba(0, 0, 0, 0.38);
-      --bg: #f7f5f0;
-      --white: #ffffff;
+      --cover-focus-x: 54%;
+      --cover-focus-y: 47%;
+      --cover-zoom: 1.05;
+
+      --font-main: "Poppins", Arial, Helvetica, sans-serif;
+
+      --weight-regular: 400;
+      --weight-medium: 500;
+      --weight-semibold: 600;
+
+      --text-black: #111;
+      --text-soft: rgba(17, 17, 17, 0.72);
+      --text-light: rgba(17, 17, 17, 0.54);
     }
 
-    * {
-      margin: 0;
-      padding: 0;
-      box-sizing: border-box;
-    }
+    * { box-sizing: border-box; }
 
-    html {
-      scroll-behavior: smooth;
-    }
-
+    html,
     body {
-      font-family: "Poppins", Arial, sans-serif;
-      background: var(--bg);
-      color: var(--text);
-      font-weight: 300;
-    }
-
-    img {
-      display: block;
+      margin: 0;
       width: 100%;
-      height: auto;
+      height: 100%;
+      font-family: var(--font-main);
+      background: #ffffff;
+      color: var(--text-black);
+      overflow: hidden;
+      overscroll-behavior: none;
+      font-weight: var(--weight-regular);
     }
 
-    a {
-      color: inherit;
-      text-decoration: none;
-    }
+    .hidden { display: none !important; }
 
-    /* -------------------- NAVIGATION -------------------- */
-
-    .site-nav {
+    .home {
       position: fixed;
-      top: 28px;
-      right: 34px;
-      z-index: 100;
-      display: flex;
-      gap: 28px;
-      align-items: center;
-      mix-blend-mode: difference;
-      color: white;
-    }
-
-    .site-nav a {
-      font-family: "Poppins", Arial, sans-serif;
-      font-size: 12px;
-      font-weight: 400;
-      letter-spacing: 0.10em;
-      text-transform: uppercase;
-    }
-
-    .site-nav a:hover {
-      opacity: 0.55;
-    }
-
-    /* -------------------- COUVERTURE -------------------- */
-
-    .cover {
-      min-height: 100vh;
-      position: relative;
+      inset: 0;
+      width: 100vw;
+      height: 100dvh;
       overflow: hidden;
       background: #111;
-      display: flex;
-      align-items: center;
-      justify-content: center;
+      cursor: pointer;
     }
 
-    .cover img {
-      position: absolute;
+    .home-image {
       width: 100%;
       height: 100%;
       object-fit: cover;
-      inset: 0;
-      opacity: 0.92;
+      object-position: var(--cover-focus-x) var(--cover-focus-y);
+      transform: scale(var(--cover-zoom));
+      transform-origin: var(--cover-focus-x) var(--cover-focus-y);
+      display: block;
+      will-change: transform;
     }
 
-    .cover-title {
-      position: relative;
-      z-index: 2;
-      width: 100%;
-      padding: 0 7vw;
-      display: flex;
-      justify-content: flex-start;
-      align-items: center;
-    }
-
-    .cover-title h1 {
-      font-family: "Cormorant Garamond", Georgia, serif;
-      font-size: clamp(42px, 7vw, 96px);
-      font-weight: 400;
-      line-height: 0.95;
-      letter-spacing: 0.02em;
-      color: white;
-    }
-
-    .cover-subtitle {
+    .home-name {
       position: absolute;
-      left: 7vw;
-      bottom: 7vh;
+      top: 34px;
+      left: 34px;
       z-index: 2;
-      font-family: "Poppins", Arial, sans-serif;
-      font-size: 11px;
-      font-weight: 400;
-      letter-spacing: 0.12em;
+      border: none;
+      background: transparent;
+      padding: 0;
+      color: #ffffff;
+      font-family: var(--font-main);
+      font-size: 25px;
+      line-height: 1;
+      font-weight: var(--weight-medium);
+      letter-spacing: 0.025em;
       text-transform: uppercase;
-      color: rgba(255, 255, 255, 0.78);
+      cursor: default;
     }
 
-    /* -------------------- INDEX -------------------- */
-
-    .index-section {
-      min-height: 100vh;
-      padding: 120px 7vw;
-      background: var(--bg);
+    #site {
+      width: 100vw;
+      height: 100dvh;
+      background: #ffffff;
+      overflow: hidden;
     }
 
-    .section-label {
-      font-family: "Poppins", Arial, sans-serif;
-      font-size: 12px;
-      font-weight: 400;
-      letter-spacing: 0.10em;
-      text-transform: uppercase;
-      margin-bottom: 72px;
+    .topbar {
+      height: 84px;
+      min-height: 84px;
+      padding: 34px 34px 14px;
+      background: #ffffff;
+      position: relative;
+      z-index: 100;
     }
 
-    .index-list {
+    .mobile-header-row {
       display: flex;
-      flex-direction: column;
-      gap: 28px;
-      max-width: 980px;
+      align-items: center;
+      justify-content: space-between;
+      width: 100%;
     }
 
-    .index-item {
-      display: grid;
-      grid-template-columns: 80px 1fr auto;
-      gap: 32px;
-      align-items: baseline;
-      border-bottom: 1px solid rgba(0, 0, 0, 0.12);
-      padding-bottom: 22px;
+    #brand {
+      border: none;
+      background: transparent;
+      padding: 0;
+      font-family: var(--font-main);
+      font-size: 25px;
+      line-height: 1;
+      font-weight: var(--weight-medium);
+      letter-spacing: 0.025em;
+      text-transform: uppercase;
+      cursor: default;
+      white-space: nowrap;
+      color: var(--text-black);
+      pointer-events: none;
     }
 
-    .index-number,
-    .index-meta {
-      font-family: "Poppins", Arial, sans-serif;
+    .mobile-menu-button {
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      width: 44px;
+      height: 34px;
+      border: none;
+      background: transparent;
+      padding: 0;
+      cursor: pointer;
+    }
+
+    .mobile-menu-button span {
+      display: block;
+      width: 31px;
+      height: 2px;
+      background: #111;
+      position: relative;
+    }
+
+    .mobile-menu-button span::before,
+    .mobile-menu-button span::after {
+      content: "";
+      position: absolute;
+      left: 0;
+      width: 31px;
+      height: 2px;
+      background: #111;
+    }
+
+    .mobile-menu-button span::before { top: -9px; }
+    .mobile-menu-button span::after { top: 9px; }
+
+    .summary {
+      width: 100vw;
+      height: calc(100dvh - 84px);
+      padding: 18px 0 30px;
+      overflow: hidden;
+      background: #ffffff;
+      display: flex;
+      align-items: center;
+      justify-content: flex-start;
+    }
+
+    .project-grid {
+      display: flex;
+      width: 100vw;
+      overflow-x: auto;
+      overflow-y: hidden;
+      gap: 16px;
+      padding: 0 34px 14px;
+      scroll-snap-type: x mandatory;
+      -webkit-overflow-scrolling: touch;
+      touch-action: pan-x;
+    }
+
+    .project-grid::-webkit-scrollbar { display: none; }
+
+    .project-card {
+      flex: 0 0 78vw;
+      scroll-snap-align: center;
+      border: none;
+      background: transparent;
+      padding: 0;
+      text-align: left;
+      cursor: pointer;
+      color: #111;
+      font-family: var(--font-main);
+    }
+
+    .thumb {
+      width: 100%;
+      aspect-ratio: 3 / 4;
+      display: block;
+      object-fit: cover;
+      object-position: center;
+      background: #f0f0f0;
+    }
+
+    .card-text {
+      padding-top: 12px;
+      display: block;
+    }
+
+    .card-title {
+      display: block;
+      font-size: 12px;
+      font-weight: var(--weight-semibold);
+      letter-spacing: 0.01em;
+      text-transform: uppercase;
+      margin-bottom: 6px;
+    }
+
+    .card-type {
+      display: block;
       font-size: 11px;
-      font-weight: 400;
-      letter-spacing: 0.10em;
-      text-transform: uppercase;
-      color: var(--muted);
+      line-height: 1.4;
+      font-weight: var(--weight-regular);
+      color: #555;
+      margin-bottom: 5px;
     }
 
-    .index-title {
-      font-family: "Poppins", Arial, sans-serif;
-      font-size: clamp(24px, 3vw, 44px);
-      font-weight: 300;
-      letter-spacing: 0.02em;
-    }
-
-    .index-item:hover .index-title {
-      opacity: 0.55;
-    }
-
-    /* -------------------- PROJETS -------------------- */
-
-    .project {
-      background: var(--white);
-      padding: 120px 0 0;
-    }
-
-    .project-header {
-      padding: 0 7vw 96px;
-      display: grid;
-      grid-template-columns: 1fr 1.25fr;
-      gap: 8vw;
-      align-items: start;
-    }
-
-    .project-kicker {
-      font-family: "Poppins", Arial, sans-serif;
+    .card-line {
+      display: block;
       font-size: 11px;
-      font-weight: 400;
-      line-height: 1.8;
-      letter-spacing: 0.10em;
-      text-transform: uppercase;
-      color: var(--muted);
-      margin-bottom: 28px;
+      line-height: 1.4;
+      font-weight: var(--weight-regular);
+      color: #222;
     }
 
-    .project-title {
-      font-family: "Poppins", Arial, sans-serif;
-      font-size: clamp(34px, 5vw, 72px);
-      font-weight: 300;
-      line-height: 1.05;
-      letter-spacing: 0.02em;
-      text-transform: uppercase;
+    .viewer {
+      width: 100vw;
+      height: calc(100dvh - 84px);
+      display: grid;
+      grid-template-rows: minmax(0, 1fr) 24px 52px;
+      background: #ffffff;
+      overflow: hidden;
     }
 
-    .project-text {
+    .document-wrap {
+      min-height: 0;
+      width: 100vw;
+      padding: 0;
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      overflow: hidden;
+      background: #ffffff;
+      touch-action: none;
+      user-select: none;
+      -webkit-user-select: none;
+    }
+
+    .image-stage {
+      position: relative;
+      width: 100vw;
+      height: 100%;
+      overflow: hidden;
+      background: #ffffff;
+    }
+
+    .page-image-layer {
+      position: absolute;
+      inset: 0;
+      width: 100vw;
+      height: 100%;
+      object-fit: contain;
+      object-position: center;
+      display: block;
+      user-select: none;
+      -webkit-user-drag: none;
+      pointer-events: none;
+      background: #ffffff;
+    }
+
+    .previous-image {
+      display: none;
+      z-index: 1;
+    }
+
+    .current-image {
+      z-index: 2;
+    }
+
+    .image-stage.animate-next-page .previous-image {
+      display: block;
+      animation: outLeft 260ms ease forwards;
+    }
+
+    .image-stage.animate-next-page .current-image {
+      animation: inRight 260ms ease forwards;
+    }
+
+    .image-stage.animate-prev-page .previous-image {
+      display: block;
+      animation: outRight 260ms ease forwards;
+    }
+
+    .image-stage.animate-prev-page .current-image {
+      animation: inLeft 260ms ease forwards;
+    }
+
+    .image-stage.animate-next-project .previous-image {
+      display: block;
+      animation: outUp 280ms ease forwards;
+    }
+
+    .image-stage.animate-next-project .current-image {
+      animation: inBottom 280ms ease forwards;
+    }
+
+    .image-stage.animate-prev-project .previous-image {
+      display: block;
+      animation: outDown 280ms ease forwards;
+    }
+
+    .image-stage.animate-prev-project .current-image {
+      animation: inTop 280ms ease forwards;
+    }
+
+    @keyframes inRight {
+      from { transform: translateX(100%); opacity: 1; }
+      to { transform: translateX(0); opacity: 1; }
+    }
+
+    @keyframes outLeft {
+      from { transform: translateX(0); opacity: 1; }
+      to { transform: translateX(-100%); opacity: 1; }
+    }
+
+    @keyframes inLeft {
+      from { transform: translateX(-100%); opacity: 1; }
+      to { transform: translateX(0); opacity: 1; }
+    }
+
+    @keyframes outRight {
+      from { transform: translateX(0); opacity: 1; }
+      to { transform: translateX(100%); opacity: 1; }
+    }
+
+    @keyframes inBottom {
+      from { transform: translateY(100%); opacity: 1; }
+      to { transform: translateY(0); opacity: 1; }
+    }
+
+    @keyframes outUp {
+      from { transform: translateY(0); opacity: 1; }
+      to { transform: translateY(-100%); opacity: 1; }
+    }
+
+    @keyframes inTop {
+      from { transform: translateY(-100%); opacity: 1; }
+      to { transform: translateY(0); opacity: 1; }
+    }
+
+    @keyframes outDown {
+      from { transform: translateY(0); opacity: 1; }
+      to { transform: translateY(100%); opacity: 1; }
+    }
+
+    .mobile-swipe-indicator {
+      height: 24px;
+      padding: 0 34px;
+      display: flex;
+      align-items: flex-start;
+      justify-content: center;
+      gap: 116px;
+      background: #ffffff;
+      transform: translateY(-16px);
+      z-index: 65;
+    }
+
+    .swipe-arrow-button {
+      border: none;
+      background: transparent;
+      padding: 0;
+      margin: 0;
+      font-family: var(--font-main);
+      font-size: 25px;
+      line-height: 1;
+      color: rgba(17, 17, 17, 0.48);
+      transform: translateY(-5px);
+      cursor: pointer;
+      width: 34px;
+      height: 30px;
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      touch-action: manipulation;
+    }
+
+    .swipe-arrow-button:disabled {
+      opacity: 0.18;
+      cursor: default;
+    }
+
+    #mobile-counter {
+      font-family: var(--font-main);
       font-size: 14px;
-      line-height: 1.9;
-      color: rgba(0, 0, 0, 0.76);
-      max-width: 680px;
+      line-height: 1;
+      font-weight: var(--weight-medium);
+      color: var(--text-light);
+      white-space: nowrap;
     }
 
-    .project-text p + p {
-      margin-top: 22px;
-    }
-
-    /* -------------------- IMAGES ET LÉGENDES -------------------- */
-
-    .image-block {
-      margin: 0;
-      padding: 0 7vw 96px;
-    }
-
-    .image-block.full {
-      padding-left: 0;
-      padding-right: 0;
-    }
-
-    .image-grid {
+    .mobile-project-bottom {
+      height: 52px;
+      padding: 0 34px;
       display: grid;
-      grid-template-columns: repeat(2, 1fr);
-      gap: 32px;
-      padding: 0 7vw 96px;
+      grid-template-columns: minmax(0, 1fr) auto minmax(0, 1fr);
+      align-items: center;
+      gap: 18px;
+      background: #ffffff;
+      z-index: 90;
+      position: relative;
     }
 
-    .image-grid.three {
-      grid-template-columns: repeat(3, 1fr);
+    .mobile-index-button,
+    .mobile-info-button {
+      border: none;
+      background: transparent;
+      padding: 0;
+      font-family: var(--font-main);
+      font-size: 14px;
+      line-height: 1.15;
+      font-weight: var(--weight-medium);
+      letter-spacing: -0.01em;
+      color: var(--text-soft);
+      cursor: pointer;
+      white-space: nowrap;
     }
 
-    figure {
-      margin: 0;
+    .mobile-index-button {
+      grid-column: 1;
+      justify-self: start;
+      text-align: left;
     }
 
-    figcaption,
-    .image-title,
-    .image-caption,
-    .project-caption {
-      font-family: "Poppins", Arial, sans-serif;
-      font-size: 9px;
-      font-weight: 400;
-      line-height: 1.45;
-      letter-spacing: 0.10em;
-      text-transform: uppercase;
-      color: rgba(0, 0, 0, 0.58);
-      margin-top: 8px;
+    .mobile-info-button {
+      grid-column: 3;
+      justify-self: end;
+      text-align: right;
     }
 
-    .full figcaption {
-      padding-left: 7vw;
-      padding-right: 7vw;
+    #mobile-current-title {
+      grid-column: 2;
+      justify-self: center;
+      font-family: var(--font-main);
+      font-size: 15px;
+      line-height: 1.15;
+      font-weight: var(--weight-semibold);
+      letter-spacing: -0.015em;
+      color: rgba(17, 17, 17, 0.9);
+      white-space: nowrap;
+      overflow: hidden;
+      text-overflow: ellipsis;
+      max-width: 42vw;
+      text-align: center;
+      cursor: pointer;
     }
 
-    /* -------------------- INFO / PARCOURS -------------------- */
+    .bottom-panel {
+      display: none;
+    }
 
-    .info-section {
-      min-height: 100vh;
-      padding: 120px 7vw;
-      background: var(--bg);
-      display: grid;
-      grid-template-columns: 1fr 1.25fr;
-      gap: 8vw;
+    .bottom-panel.open {
+      display: block;
+      position: fixed;
+      left: 0;
+      right: 0;
+      top: 84px;
+      bottom: 52px;
+      z-index: 80;
+      background: #ffffff;
+      border-top: 1px solid rgba(17, 17, 17, 0.10);
+      border-bottom: 1px solid rgba(17, 17, 17, 0.10);
+      padding: 34px 34px 34px;
+      overflow-y: auto;
+      touch-action: pan-y;
     }
 
     .info-title {
-      font-family: "Cormorant Garamond", Georgia, serif;
-      font-size: clamp(42px, 6vw, 86px);
-      font-weight: 400;
-      line-height: 0.95;
+      margin: 0 0 24px 0;
+      font-family: var(--font-main);
+      font-size: 20px;
+      line-height: 1.18;
+      font-weight: var(--weight-semibold);
+      letter-spacing: -0.025em;
+      color: var(--text-black);
+      text-align: left;
     }
 
-    .info-text {
+    .info-meta {
+      margin: 0 0 30px 0;
+      padding: 0;
+      list-style: none;
+      text-align: left;
+    }
+
+    .info-meta li {
+      margin: 0 0 7px 0;
+      padding: 0;
+      font-family: var(--font-main);
       font-size: 14px;
-      line-height: 1.9;
-      color: rgba(0, 0, 0, 0.76);
-      max-width: 680px;
+      line-height: 1.38;
+      font-weight: var(--weight-semibold);
+      letter-spacing: -0.01em;
+      color: var(--text-black);
+      text-align: left;
+      text-indent: 0;
     }
 
-    .info-text p + p {
-      margin-top: 22px;
+    .info-section-title {
+      margin: 28px 0 10px 0;
+      padding: 0;
+      font-family: var(--font-main);
+      font-size: 14px;
+      line-height: 1.35;
+      font-weight: var(--weight-semibold);
+      letter-spacing: -0.01em;
+      color: var(--text-black);
+      text-align: left;
+      text-indent: 0;
     }
 
-    .contact-list {
-      margin-top: 42px;
-      display: flex;
-      flex-direction: column;
-      gap: 10px;
+    .info-section-title:first-child {
+      margin-top: 0;
+    }
+
+    .info-body {
+      text-align: justify;
+      text-align-last: left;
+      hyphens: auto;
+    }
+
+    .info-body p {
+      margin: 0 0 16px 0;
+      font-family: var(--font-main);
+      font-size: 14px;
+      line-height: 1.6;
+      font-weight: var(--weight-regular);
+      letter-spacing: -0.005em;
+      color: var(--text-black);
+      text-align: justify;
+      text-align-last: left;
+      text-indent: 1.4em;
+      hyphens: auto;
+    }
+
+    .info-body p:last-child {
+      margin-bottom: 0;
+    }
+
+    .index-list button {
+      width: 100%;
+      padding: 16px 0;
+      border: none;
+      border-bottom: 1px solid rgba(17, 17, 17, 0.12);
+      background: transparent;
+      text-align: left;
+      color: #111;
+      cursor: pointer;
+      font-family: var(--font-main);
+    }
+
+    .index-number {
+      display: block;
+      font-size: 11px;
+      line-height: 1.2;
+      font-weight: var(--weight-medium);
+      color: rgba(17, 17, 17, 0.42);
+      margin-bottom: 4px;
+    }
+
+    .index-title {
+      display: block;
+      font-size: 17px;
+      line-height: 1.2;
+      font-weight: var(--weight-semibold);
+      letter-spacing: -0.02em;
+      color: var(--text-black);
+    }
+
+    .index-subtitle {
+      display: block;
       font-size: 12px;
-      letter-spacing: 0.04em;
+      line-height: 1.4;
+      font-weight: var(--weight-regular);
+      margin-top: 5px;
+      color: rgba(17, 17, 17, 0.56);
     }
 
-    /* -------------------- RESPONSIVE -------------------- */
+    .about {
+      width: 100vw;
+      height: calc(100dvh - 84px);
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      overflow: hidden;
+      background: #ffffff;
+    }
 
-    @media (max-width: 900px) {
-      .site-nav {
-        top: 22px;
-        right: 22px;
-        gap: 18px;
-      }
+    .about-wrap {
+      width: 100vw;
+      height: calc(100dvh - 84px);
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      overflow: hidden;
+      touch-action: none;
+      position: relative;
+      background: #ffffff;
+    }
 
-      .project-header,
-      .info-section {
-        grid-template-columns: 1fr;
-        gap: 42px;
-      }
+    .about-image-layer {
+      position: absolute;
+      inset: 0;
+      width: 100vw;
+      height: 100%;
+      object-fit: contain;
+      object-position: center;
+      user-select: none;
+      -webkit-user-drag: none;
+      background: #ffffff;
+      pointer-events: none;
+    }
 
-      .index-item {
-        grid-template-columns: 1fr;
-        gap: 8px;
-      }
+    .about-previous-image {
+      display: none;
+      z-index: 1;
+    }
 
-      .image-grid,
-      .image-grid.three {
-        grid-template-columns: 1fr;
-      }
+    .about-current-image {
+      z-index: 2;
+    }
 
-      .project,
-      .index-section,
-      .info-section {
-        padding-top: 96px;
-      }
+    .about-wrap.animate-about-next .about-previous-image {
+      display: block;
+      animation: outUp 280ms ease forwards;
+    }
+
+    .about-wrap.animate-about-next .about-current-image {
+      animation: inBottom 280ms ease forwards;
+    }
+
+    .about-wrap.animate-about-prev .about-previous-image {
+      display: block;
+      animation: outDown 280ms ease forwards;
+    }
+
+    .about-wrap.animate-about-prev .about-current-image {
+      animation: inTop 280ms ease forwards;
+    }
+
+    .drawer {
+      position: fixed;
+      top: 0;
+      right: 0;
+      width: 33.333vw;
+      min-width: 128px;
+      max-width: 33.333vw;
+      height: 100dvh;
+      padding: 72px 16px 24px;
+      border-left: 1px solid rgba(17, 17, 17, 0.10);
+      box-shadow: -8px 0 24px rgba(0, 0, 0, 0.06);
+      transform: translateX(100%);
+      transition: transform 0.25s ease;
+      z-index: 120;
+      background: #ffffff;
+      overflow-y: auto;
+      touch-action: pan-y;
+    }
+
+    .drawer.open { transform: translateX(0); }
+
+    .drawer-header {
+      display: flex;
+      justify-content: flex-end;
+      margin-bottom: 28px;
+    }
+
+    .close-drawer {
+      width: 34px;
+      height: 34px;
+      padding: 0;
+      border: none;
+      background: transparent;
+      font-family: var(--font-main);
+      font-size: 28px;
+      cursor: pointer;
+    }
+
+    .drawer-nav button {
+      width: 100%;
+      padding: 18px 0;
+      border: none;
+      border-bottom: 1px solid rgba(17, 17, 17, 0.12);
+      background: transparent;
+      text-align: left;
+      font-family: var(--font-main);
+      font-size: 15px;
+      line-height: 1.25;
+      font-weight: var(--weight-medium);
+      letter-spacing: -0.01em;
+      color: #111;
+      cursor: pointer;
+    }
+
+    .overlay {
+      position: fixed;
+      inset: 0;
+      background: transparent;
+      opacity: 0;
+      pointer-events: none;
+      z-index: 110;
+    }
+
+    .overlay.open {
+      opacity: 1;
+      pointer-events: auto;
     }
   </style>
 </head>
 
 <body>
-
-  <!-- NAVIGATION -->
-  <nav class="site-nav">
-    <a href="#index">Index</a>
-    <a href="#info">Info</a>
-  </nav>
-
-  <!-- COUVERTURE -->
-  <header class="cover" id="accueil">
-    <img src="images/cover.jpg" alt="Couverture du portfolio de Guillaume Morvan">
-    <div class="cover-title">
-      <h1>Guillaume<br>Morvan</h1>
-    </div>
-    <div class="cover-subtitle">
-      Architecture Portfolio — 2019 / 2026
-    </div>
-  </header>
-
-  <!-- INDEX -->
-  <section class="index-section" id="index">
-    <div class="section-label">Index</div>
-
-    <div class="index-list">
-      <a class="index-item" href="#melle">
-        <div class="index-number">01</div>
-        <div class="index-title">Station ferroviaire de Ledeberg</div>
-        <div class="index-meta">Gand — 2020</div>
-      </a>
-
-      <a class="index-item" href="#saint-joseph">
-        <div class="index-number">02</div>
-        <div class="index-title">Église Saint-Joseph</div>
-        <div class="index-meta">Jette — 2020</div>
-      </a>
-
-      <a class="index-item" href="#ferme-nord">
-        <div class="index-number">03</div>
-        <div class="index-title">Ferme Nord</div>
-        <div class="index-meta">Zuydcoote — 2023</div>
-      </a>
-
-      <a class="index-item" href="#tank">
-        <div class="index-number">04</div>
-        <div class="index-title">TANK Architectes</div>
-        <div class="index-meta">Lille — 2024</div>
-      </a>
-
-      <a class="index-item" href="#edwood">
-        <div class="index-number">05</div>
-        <div class="index-title">Edwood</div>
-        <div class="index-meta">Lille — 2024</div>
-      </a>
-    </div>
+  <section id="home" class="home">
+    <img src="cover.jpg" alt="Guillaume Morvan — Portfolio" class="home-image" />
+    <button id="home-name" class="home-name">GUILLAUME MORVAN</button>
   </section>
 
-  <!-- PROJET 01 -->
-  <section class="project" id="melle">
-    <div class="project-header">
-      <div>
-        <div class="project-kicker">
-          2020 — Master 1 / Semestre 7<br>
-          Atelier Generous Gesture — KU Leuven Gand<br>
-          Bram Aerts, Jan Baes, Matteo Paracchini<br>
-          En collaboration avec Hana Hazmi
+  <section id="site" class="hidden">
+    <header class="topbar">
+      <div class="mobile-header-row">
+        <button id="brand">GUILLAUME MORVAN</button>
+        <button id="mobile-menu-button" class="mobile-menu-button" aria-label="Menu">
+          <span></span>
+        </button>
+      </div>
+    </header>
+
+    <main id="summary" class="summary">
+      <div id="project-grid" class="project-grid"></div>
+    </main>
+
+    <main id="about" class="about hidden">
+      <div id="about-wrap" class="about-wrap">
+        <img id="about-previous-image" class="about-image-layer about-previous-image" src="" alt="" />
+        <img id="about-image" class="about-image-layer about-current-image" src="" alt="À propos — Guillaume Morvan" />
+      </div>
+    </main>
+
+    <main id="viewer" class="viewer hidden">
+      <div id="document-wrap" class="document-wrap">
+        <div id="image-stage" class="image-stage">
+          <img id="previous-image" class="page-image-layer previous-image" src="" alt="" />
+          <img id="page-image" class="page-image-layer current-image" src="" alt="Portfolio Guillaume Morvan" />
         </div>
-        <h2 class="project-title">Station ferroviaire de Ledeberg</h2>
       </div>
 
-      <div class="project-text">
-        <p>
-          Situé sur le site ferroviaire de Ledeberg, au sud de Gand, ce projet interroge la juste relation entre vie privée et vie publique dans un programme urbain mixte. L’atelier s’est d’abord construit autour d’un plan d’aménagement collectif, avant de se poursuivre en binôme par le développement d’un bâtiment associant habitat, travail, commerces et espaces partagés.
-        </p>
-        <p>
-          Avec Hana Hazmi, nous avons choisi d’approfondir deux qualités essentielles face aux enjeux contemporains : la capacité d’évolution du logement privé et la création de lieux de rencontre entre habitants, travailleurs et visiteurs. Le projet propose ainsi une architecture ouverte à l’appropriation, où les espaces communs deviennent des supports d’usages multiples.
-        </p>
-        <p>
-          La ventilation naturelle, les plantations en pleine terre et la couverture modulable de l’espace partagé participent au confort thermique de l’ensemble bâti.
-        </p>
+      <div class="mobile-swipe-indicator">
+        <button id="prev-page-button" class="swipe-arrow-button" aria-label="Page précédente">‹</button>
+        <span id="mobile-counter">1/1</span>
+        <button id="next-page-button" class="swipe-arrow-button" aria-label="Page suivante">›</button>
       </div>
-    </div>
 
-    <figure class="image-block full">
-      <img src="images/melle/maquette-site.jpg" alt="Maquette de site du projet de Ledeberg">
-      <figcaption>Maquette de site</figcaption>
-    </figure>
+      <div class="mobile-project-bottom">
+        <button id="mobile-index-button" class="mobile-index-button">Index</button>
+        <div id="mobile-current-title">Projet</div>
+        <button id="mobile-info-button" class="mobile-info-button">Info</button>
+      </div>
 
-    <div class="image-grid">
-      <figure>
-        <img src="images/melle/concept.jpg" alt="Concept du projet de Ledeberg">
-        <figcaption>Concept</figcaption>
-      </figure>
+      <div id="mobile-info-panel" class="bottom-panel">
+        <div id="mobile-info-text" class="info-text"></div>
+      </div>
 
-      <figure>
-        <img src="images/melle/coupe.jpg" alt="Coupe du projet de Ledeberg">
-        <figcaption>Coupe</figcaption>
-      </figure>
-    </div>
-
-    <figure class="image-block">
-      <img src="images/melle/plan-rdc.jpg" alt="Plan du rez-de-chaussée du projet de Ledeberg">
-      <figcaption>Plan du rez-de-chaussée</figcaption>
-    </figure>
-
-    <div class="image-grid">
-      <figure>
-        <img src="images/melle/perspective-01.jpg" alt="Perspective à partir de la maquette">
-        <figcaption>Perspective à partir de la maquette 1/20</figcaption>
-      </figure>
-
-      <figure>
-        <img src="images/melle/perspective-02.jpg" alt="Perspective intérieure du projet">
-        <figcaption>Perspective à partir de la maquette 1/20</figcaption>
-      </figure>
-    </div>
+      <div id="mobile-index-panel" class="bottom-panel">
+        <div id="mobile-index-list" class="index-list"></div>
+      </div>
+    </main>
   </section>
 
-  <!-- PROJET 02 -->
-  <section class="project" id="saint-joseph">
-    <div class="project-header">
-      <div>
-        <div class="project-kicker">
-          2020 — Master 1 / Semestre 8<br>
-          Atelier OMG Van Gen Los — KU Leuven Gand
-        </div>
-        <h2 class="project-title">Église Saint-Joseph</h2>
-      </div>
+  <div id="overlay" class="overlay"></div>
 
-      <div class="project-text">
-        <p>
-          L’église Saint-Joseph, conçue par Marc Dessauvage en 1964 à Jette, dans la périphérie nord de Bruxelles, est un édifice introverti dont le plan carré, la légère topographie intérieure et les ouvertures zénithales constituent les principales qualités. L’enjeu du projet était de révéler ces potentiels cachés en transformant l’ancienne église en centre communautaire.
-        </p>
-        <p>
-          Situé entre résidences, commerces, bois de Dieleghem et patrimoine local, le projet cherche à ouvrir l’édifice sur son environnement afin d’en faire un lieu de convergences, de passages et de rencontres. La réhabilitation conserve l’essentiel de l’existant — sa structure, sa topographie intérieure et son caractère monolithique — tout en retravaillant son enveloppe par l’ajout d’espaces tampons.
-        </p>
-        <p>
-          Anciennement reléguée aux services, la façade sud devient le cœur du projet. Elle accueille un passage verdoyant entre jardin partagé et serre bioclimatique, tout en ouvrant une perspective vers l’ancienne abbaye de Dieleghem. Le pisé est choisi pour créer un contraste harmonieux avec la brique existante.
-        </p>
-      </div>
+  <aside id="drawer" class="drawer">
+    <div class="drawer-header">
+      <button id="close-drawer" class="close-drawer" aria-label="Fermer">×</button>
     </div>
 
-    <figure class="image-block full">
-      <img src="images/saint-joseph/existant.jpg" alt="Église Saint-Joseph existante">
-      <figcaption>Église Saint-Joseph — état existant</figcaption>
-    </figure>
-
-    <div class="image-grid">
-      <figure>
-        <img src="images/saint-joseph/plan-coupe-existant.jpg" alt="Plan et coupe de l’existant">
-        <figcaption>Plan et coupe de l’existant</figcaption>
-      </figure>
-
-      <figure>
-        <img src="images/saint-joseph/projection-2040.jpg" alt="Projection urbaine 2040">
-        <figcaption>Projection 2040</figcaption>
-      </figure>
+    <div id="drawer-nav" class="drawer-nav">
+      <button id="drawer-home">Accueil</button>
+      <button id="drawer-about">À propos</button>
     </div>
+  </aside>
 
-    <figure class="image-block">
-      <img src="images/saint-joseph/plan-rdc.jpg" alt="Plan du rez-de-chaussée de l’église Saint-Joseph">
-      <figcaption>Plan du rez-de-chaussée</figcaption>
-    </figure>
+  <script>
+    const ASSET_VERSION = "2026-06-26-9";
 
-    <div class="image-grid">
-      <figure>
-        <img src="images/saint-joseph/coupe-aa.jpg" alt="Coupe AA’">
-        <figcaption>Coupe AA’</figcaption>
-      </figure>
+    const VIGNETTE_FOLDER = "Vignettes/";
+    const ABOUT_FOLDER = "apropos-mobile/";
+    const ABOUT_TOTAL = 5;
 
-      <figure>
-        <img src="images/saint-joseph/serre-bioclimatique.jpg" alt="Serre bioclimatique">
-        <figcaption>Serre bioclimatique</figcaption>
-      </figure>
-    </div>
-  </section>
+    const SWIPE_MIN = 45;
+    const DIRECTION_RATIO = 1.15;
 
-  <!-- PROJET 03 -->
-  <section class="project" id="ferme-nord">
-    <div class="project-header">
-      <div>
-        <div class="project-kicker">
-          2023 — Master 2 / Semestre 10<br>
-          PFE — Atelier G. Maury, H. Hart, N. Dünnebacke<br>
-          Histoire, théories et projet
-        </div>
-        <h2 class="project-title">Ferme Nord</h2>
-      </div>
+    const PROJECTS = [
+      {
+        slug: "melle",
+        title: "Melle",
+        displayTitle: "Melle",
+        fullTitle: "Station ferroviaire Melle",
+        type: "Projet urbain et bâtiment mixte",
+        line: "Évolutivité et appropriation des espaces.",
+        infoTitle: "Évolutivité et appropriation de l’espace commun",
+        infoFile: "pages-mobile/melle/info.txt",
+        fallbackInfo: "Le projet investit le parc ferroviaire de Ledeberg, au sud de Gand, dans un tissu pavillonnaire dense.",
+        thumb: "melle.jpg",
+        folder: "pages-mobile/melle/",
+        filePrefix: "page",
+        start: 1,
+        end: 9
+      },
+      {
+        slug: "saint-joseph",
+        title: "Saint-Joseph",
+        displayTitle: "Saint-Joseph",
+        fullTitle: "Église Saint-Joseph",
+        type: "Réhabilitation patrimoniale",
+        line: "Révéler les qualités cachées du patrimoine.",
+        infoTitle: "Révéler les qualités cachées du patrimoine",
+        infoFile: "pages-mobile/saint-joseph/info.txt",
+        fallbackInfo: "Le projet interroge la capacité d’un édifice patrimonial à accueillir de nouveaux usages sans perdre sa présence ni sa mémoire.",
+        thumb: "saint-joseph.jpg",
+        folder: "pages-mobile/saint-joseph/",
+        filePrefix: "page",
+        start: 1,
+        end: 15
+      },
+      {
+        slug: "ferme-nord",
+        title: "Ferme Nord",
+        displayTitle: "Ferme Nord",
+        fullTitle: "Ferme Nord",
+        type: "Réhabilitation et extension",
+        line: "L’harmonieux contraste.",
+        infoTitle: "L’harmonieux contraste",
+        infoFile: "pages-mobile/ferme-nord/info.txt",
+        fallbackInfo: "La Ferme Nord met en tension patrimoine agricole, extension contemporaine et paysage dunaire.",
+        thumb: "ferme-nord.jpg",
+        folder: "pages-mobile/ferme-nord/",
+        filePrefix: "page",
+        start: 1,
+        end: 29
+      },
+      {
+        slug: "tank",
+        title: "TANK",
+        displayTitle: "TANK",
+        fullTitle: "TANK Architectes",
+        type: "Expérience en agence",
+        line: "L’architecte dans une pratique engagée pour la qualité.",
+        infoTitle: "L’architecte engagé dans la qualité",
+        infoFile: "pages-mobile/tank/info.txt",
+        fallbackInfo: "L’expérience chez TANK Architectes m’a permis d’approcher une pratique collective exigeante.",
+        thumb: "tank.jpg",
+        folder: "pages-mobile/tank/",
+        filePrefix: "page",
+        start: 1,
+        end: 13
+      },
+      {
+        slug: "edwood",
+        title: "Edwood",
+        displayTitle: "Edwood",
+        fullTitle: "Edwood",
+        type: "Construction bois",
+        line: "Le chantier comme école de la réalité constructive.",
+        infoTitle: "Le chantier comme école de la réalité constructive",
+        infoFile: "pages-mobile/edwood/info.txt",
+        fallbackInfo: "Chez Edwood, l’expérience en atelier et sur chantier m’a permis d’approfondir la réalité constructive du projet.",
+        thumb: "edwood.jpg",
+        folder: "pages-mobile/edwood/",
+        filePrefix: "page",
+        start: 1,
+        end: 7
+      }
+    ];
 
-      <div class="project-text">
-        <p>
-          Construite entre 1906 et 1910 par Alexandre Maistrasse et Marcel Berger, la Ferme Nord est une ancienne ferme modèle commanditée par Georges Vancauvenbergh pour nourrir les résidents du sanatorium de Zuydcoote. Implantée au cœur des dunes de Flandre maritime, elle se situe dans un paysage naturel protégé, marqué à la fois par la biodiversité des milieux dunaires et par les vestiges de l’opération Dynamo.
-        </p>
-        <p>
-          Le projet s’inscrit dans le cadre du Grand Site des Dunes de Flandre. Il propose de réhabiliter la Ferme Nord en distinguant une partie nord dédiée aux acteurs environnementaux et une partie sud ouverte à de nouveaux usages culturels : espace d’exposition, salle de conférence, cafétéria et salon de thé.
-        </p>
-        <p>
-          La réponse architecturale s’appuie sur une posture à la fois simple et attentive : composer avec les tracés de l’existant tout en affirmant des interventions contemporaines. L’extension principale se glisse entre les anciennes porcheries avec une structure en peuplier légèrement en retrait des murs existants. Sa toiture papillon dialogue avec les formes de la ferme tout en assumant une expression contemporaine.
-        </p>
-      </div>
-    </div>
+    let currentProject = null;
+    let currentImage = null;
+    let currentAboutPage = 1;
 
-    <figure class="image-block full">
-      <img src="images/ferme-nord/plan-origine.jpg" alt="Plan d’origine du sanatorium et de la Ferme Nord">
-      <figcaption>Plan d’origine du sanatorium et de la Ferme Nord</figcaption>
-    </figure>
+    let gestureStartX = 0;
+    let gestureStartY = 0;
+    let gestureActive = false;
+    let lastGestureTime = 0;
+    let animationTimer = null;
+    let aboutAnimationTimer = null;
+    let transitionToken = 0;
+    let aboutTransitionToken = 0;
 
-    <div class="image-grid">
-      <figure>
-        <img src="images/ferme-nord/maquette-site.jpg" alt="Maquette de site de la Ferme Nord">
-        <figcaption>Maquette de site</figcaption>
-      </figure>
+    const imageCache = new Map();
 
-      <figure>
-        <img src="images/ferme-nord/concept.jpg" alt="Concept de la Ferme Nord">
-        <figcaption>Concept</figcaption>
-      </figure>
-    </div>
+    const home = document.getElementById("home");
+    const site = document.getElementById("site");
+    const summary = document.getElementById("summary");
+    const about = document.getElementById("about");
+    const viewer = document.getElementById("viewer");
 
-    <figure class="image-block">
-      <img src="images/ferme-nord/plan-masse.jpg" alt="Plan masse de la Ferme Nord">
-      <figcaption>Plan masse</figcaption>
-    </figure>
+    const documentWrap = document.getElementById("document-wrap");
+    const imageStage = document.getElementById("image-stage");
+    const previousImage = document.getElementById("previous-image");
+    const pageImage = document.getElementById("page-image");
 
-    <div class="image-grid">
-      <figure>
-        <img src="images/ferme-nord/extension.jpg" alt="Extension entre les anciennes porcheries">
-        <figcaption>Extension entre les anciennes porcheries</figcaption>
-      </figure>
+    const aboutWrap = document.getElementById("about-wrap");
+    const aboutPreviousImage = document.getElementById("about-previous-image");
+    const aboutImage = document.getElementById("about-image");
 
-      <figure>
-        <img src="images/ferme-nord/salon-the.jpg" alt="Salon de thé">
-        <figcaption>Salon de thé</figcaption>
-      </figure>
-    </div>
-  </section>
+    const prevPageButton = document.getElementById("prev-page-button");
+    const nextPageButton = document.getElementById("next-page-button");
 
-  <!-- PROJET 04 -->
-  <section class="project" id="tank">
-    <div class="project-header">
-      <div>
-        <div class="project-kicker">
-          2024 — Master 2 / Semestre 10<br>
-          Stage de fin d’études<br>
-          Lydéric Veauvy et Olivier Camus — Lille
-        </div>
-        <h2 class="project-title">TANK Architectes</h2>
-      </div>
+    const drawer = document.getElementById("drawer");
+    const overlay = document.getElementById("overlay");
+    const projectGrid = document.getElementById("project-grid");
 
-      <div class="project-text">
-        <p>
-          TANK Architectes développe une architecture à la fois ambitieuse et empreinte de simplicité, radicale dans ses intentions mais attentive aux détails, aux matières et à leur mise en œuvre. L’agence accorde une importance particulière à la qualité constructive, depuis la conception jusqu’au chantier, dans une recherche de sincérité où les matériaux bruts participent pleinement à l’atmosphère des projets.
-        </p>
-        <p>
-          Durant mon stage, j’ai participé à plusieurs concours, notamment la salle de sport de Raimbeaucourt, remportée par l’agence. J’y ai contribué par l’analyse du site et des documents de consultation, la réalisation d’une maquette conceptuelle, du plan masse et de schémas d’intention.
-        </p>
-        <p>
-          J’ai aussi participé aux OPR du bâtiment de recherche Landy 2 du CNAM. Cette étape m’a permis d’approcher concrètement la phase de réception, moment décisif où l’intention dessinée se confronte à la réalité construite. Le détail ne se limite pas au dessin : il se vérifie, se négocie et s’ajuste dans la matière.
-        </p>
-        <p>
-          Enfin, j’ai entièrement réalisé la maquette d’exposition de l’équipement scolaire Degroote à Téteghem. Fabriquée au 1/200e en contreplaqué découpé au laser, elle exigeait une grande précision d’assemblage et de finition.
-        </p>
-      </div>
-    </div>
+    const mobileCurrentTitle = document.getElementById("mobile-current-title");
+    const mobileIndexButton = document.getElementById("mobile-index-button");
+    const mobileInfoButton = document.getElementById("mobile-info-button");
+    const mobileCounter = document.getElementById("mobile-counter");
+    const mobileInfoPanel = document.getElementById("mobile-info-panel");
+    const mobileInfoText = document.getElementById("mobile-info-text");
+    const mobileIndexPanel = document.getElementById("mobile-index-panel");
+    const mobileIndexList = document.getElementById("mobile-index-list");
 
-    <div class="image-grid">
-      <figure>
-        <img src="images/tank/raimbeaucourt-maquette.jpg" alt="Maquette conceptuelle de la salle de sport de Raimbeaucourt">
-        <figcaption>Maquette conceptuelle de la salle de sport de Raimbeaucourt</figcaption>
-      </figure>
+    function getImageSrc(project, num) {
+      return encodeURI(`${project.folder}${project.filePrefix} (${num}).jpg`) + `?v=${ASSET_VERSION}`;
+    }
 
-      <figure>
-        <img src="images/tank/raimbeaucourt-schema.jpg" alt="Schéma de synthèse du parti de Raimbeaucourt">
-        <figcaption>Schéma de synthèse du parti architectural</figcaption>
-      </figure>
-    </div>
+    function getAboutSrc(num) {
+      return encodeURI(`${ABOUT_FOLDER}page (${num}).jpg`) + `?v=${ASSET_VERSION}`;
+    }
 
-    <div class="image-grid">
-      <figure>
-        <img src="images/tank/college-maquette.jpg" alt="Maquette du collège de Saint-Ouen-l’Aumône">
-        <figcaption>Maquette 1/500 du collège de Saint-Ouen-l’Aumône</figcaption>
-      </figure>
+    function getVignetteSrc(filename) {
+      return encodeURI(`${VIGNETTE_FOLDER}${filename}`) + `?v=${ASSET_VERSION}`;
+    }
 
-      <figure>
-        <img src="images/tank/cnam-opr.jpg" alt="OPR du bâtiment Landy 2 du CNAM">
-        <figcaption>OPR du bâtiment de recherche Landy 2 du CNAM</figcaption>
-      </figure>
-    </div>
+    function getInfoSrc(project) {
+      if (!project.infoFile) return "";
+      return encodeURI(project.infoFile) + `?v=${ASSET_VERSION}`;
+    }
 
-    <figure class="image-block">
-      <img src="images/tank/teteghem-maquette.jpg" alt="Maquette de l’équipement scolaire Degroote à Téteghem">
-      <figcaption>Maquette d’exposition de l’équipement scolaire Degroote à Téteghem</figcaption>
-    </figure>
-  </section>
+    function preloadImage(src) {
+      if (imageCache.has(src)) return imageCache.get(src);
 
-  <!-- PROJET 05 -->
-  <section class="project" id="edwood">
-    <div class="project-header">
-      <div>
-        <div class="project-kicker">
-          2024 — Contrat à durée indéterminée<br>
-          Compagnon constructeur bois<br>
-          Edwood — Lille
-        </div>
-        <h2 class="project-title">Le chantier bois</h2>
-      </div>
+      const promise = new Promise(resolve => {
+        const img = new Image();
+        img.decoding = "async";
+        img.onload = () => resolve(src);
+        img.onerror = () => resolve(src);
+        img.src = src;
+      });
 
-      <div class="project-text">
-        <p>
-          Fondé en 2005 par Édouard Bisbrouck, puis rejoint par son frère Antoine, Edwood est un atelier de construction bois inscrit dans l’héritage du compagnonnage. Sincérité constructive, transmission et goût du travail bien fait y structurent une pratique attentive à la qualité des ouvrages et à la précision de leur mise en œuvre.
-        </p>
-        <p>
-          Cette expérience m’a permis de passer du dessin à la réalité concrète du chantier. J’ai participé à plusieurs opérations en structure bois, notamment une extension conçue par Plato, une construction neuve de TANK Architectes et un projet mené par Archi 5 et Face B.
-        </p>
-        <p>
-          Ces chantiers m’ont confronté à la fabrication et à la pose de murs à ossature bois, de solivages en épicéa, de structures mixtes bois-béton, de murs rideaux, d’étanchéité, de lattage et de bardage. Au contact des compagnons, j’ai mieux compris les contraintes de la matière, l’importance de l’anticipation, la précision des assemblages et la réalité des ajustements sur site.
-        </p>
-      </div>
-    </div>
+      imageCache.set(src, promise);
+      return promise;
+    }
 
-    <div class="image-grid three">
-      <figure>
-        <img src="images/edwood/plato.jpg" alt="Extension conçue par Plato">
-        <figcaption>Plato — Extension — Structure mixte bois-béton</figcaption>
-      </figure>
+    function preloadAround(project, num) {
+      if (!project || !num) return;
 
-      <figure>
-        <img src="images/edwood/tank.jpg" alt="Construction neuve conçue par TANK Architectes">
-        <figcaption>TANK Architectes — Construction neuve — MOB et bardage</figcaption>
-      </figure>
+      [num - 1, num + 1].forEach(page => {
+        if (page >= project.start && page <= project.end) {
+          preloadImage(getImageSrc(project, page));
+        }
+      });
 
-      <figure>
-        <img src="images/edwood/archi5-faceb.jpg" alt="Construction neuve conçue par Archi 5 et Face B">
-        <figcaption>Archi 5 et Face B — Construction neuve — Étanchéité et lattage</figcaption>
-      </figure>
-    </div>
-  </section>
+      const projectIndex = PROJECTS.findIndex(item => item.slug === project.slug);
+      const previousProject = PROJECTS[projectIndex - 1];
+      const nextProject = PROJECTS[projectIndex + 1];
 
-  <!-- INFO -->
-  <section class="info-section" id="info">
-    <div>
-      <div class="section-label">Info</div>
-      <h2 class="info-title">Guillaume<br>Morvan</h2>
-    </div>
+      if (previousProject) preloadImage(getImageSrc(previousProject, previousProject.start));
+      if (nextProject) preloadImage(getImageSrc(nextProject, nextProject.start));
+    }
 
-    <div class="info-text">
-      <p>
-        Mon parcours s’est construit hors des trajectoires linéaires. J’ai commencé mes études d’architecture à 23 ans et les ai autofinancées en travaillant comme serveur et barman. Cette expérience m’a donné une conscience concrète de la ténacité, de l’organisation et de la patience.
-      </p>
-      <p>
-        Diplômé d’État en architecture en 2024, j’ai ensuite prolongé cette formation par deux expériences complémentaires : la conception d’équipements publics chez TANK Architectes et le chantier bois sur des ouvrages d’ampleur chez Edwood. Ce chemin m’a appris à ne jamais dissocier l’ambition architecturale de ses conditions concrètes de réalisation : les usages, les délais, les coûts, la matière et le dialogue avec ceux qui construisent.
-      </p>
+    function preloadAboutAround(num) {
+      [num - 1, num + 1].forEach(page => {
+        if (page >= 1 && page <= ABOUT_TOTAL) {
+          preloadImage(getAboutSrc(page));
+        }
+      });
+    }
 
-      <div class="contact-list">
-        <a href="mailto:guillaume.morvan3@gmail.com">guillaume.morvan3@gmail.com</a>
-        <a href="tel:+33688903482">06 88 90 34 82</a>
-        <span>Valenciennes — France</span>
-      </div>
-    </div>
-  </section>
+    function clearUrl() {
+      history.replaceState({}, "", window.location.pathname);
+    }
 
+    function updateProjectUrl(num) {
+      const url = new URL(window.location);
+
+      url.searchParams.delete("about");
+
+      if (currentProject) {
+        url.searchParams.set("project", currentProject.slug);
+      }
+
+      url.searchParams.set("page", num);
+      history.replaceState({}, "", url);
+    }
+
+    function updateAboutUrl(num) {
+      const url = new URL(window.location);
+
+      url.searchParams.delete("project");
+      url.searchParams.set("about", "true");
+      url.searchParams.set("page", num);
+
+      history.replaceState({}, "", url);
+    }
+
+    function hideAllMainViews() {
+      summary.classList.add("hidden");
+      about.classList.add("hidden");
+      viewer.classList.add("hidden");
+      closeInfoPanel();
+      closeIndexPanel();
+    }
+
+    function showSummary() {
+      home.classList.add("hidden");
+      site.classList.remove("hidden");
+      hideAllMainViews();
+      summary.classList.remove("hidden");
+
+      currentProject = null;
+      currentImage = null;
+      currentAboutPage = 1;
+
+      closeDrawer();
+      clearUrl();
+    }
+
+    function showAbout(targetPage = 1) {
+      home.classList.add("hidden");
+      site.classList.remove("hidden");
+      hideAllMainViews();
+      about.classList.remove("hidden");
+
+      currentProject = null;
+      currentImage = null;
+
+      closeDrawer();
+      goToAboutPage(targetPage, "none");
+    }
+
+    function showViewer(project, targetPage, direction = "none") {
+      currentProject = project;
+
+      home.classList.add("hidden");
+      site.classList.remove("hidden");
+      hideAllMainViews();
+      viewer.classList.remove("hidden");
+
+      mobileCurrentTitle.textContent = project.displayTitle || project.title;
+      loadProjectInfo(project);
+      goToPage(targetPage || project.start, direction);
+    }
+
+    async function setImageWithTransition(src, direction) {
+      const token = ++transitionToken;
+      const currentSrc = pageImage.getAttribute("src") || "";
+
+      imageStage.classList.remove(
+        "animate-next-page",
+        "animate-prev-page",
+        "animate-next-project",
+        "animate-prev-project"
+      );
+
+      if (animationTimer) {
+        clearTimeout(animationTimer);
+        animationTimer = null;
+      }
+
+      if (!currentSrc || direction === "none" || currentSrc === src) {
+        previousImage.style.display = "none";
+        pageImage.src = src;
+        preloadImage(src);
+        return;
+      }
+
+      await preloadImage(src);
+      if (token !== transitionToken) return;
+
+      previousImage.src = currentSrc;
+      previousImage.style.display = "block";
+      pageImage.src = src;
+
+      void imageStage.offsetWidth;
+      imageStage.classList.add(direction);
+
+      animationTimer = setTimeout(() => {
+        imageStage.classList.remove(direction);
+        previousImage.style.display = "none";
+        previousImage.removeAttribute("src");
+      }, 300);
+    }
+
+    async function setAboutImageWithTransition(src, direction) {
+      const token = ++aboutTransitionToken;
+      const currentSrc = aboutImage.getAttribute("src") || "";
+
+      aboutWrap.classList.remove("animate-about-next", "animate-about-prev");
+
+      if (aboutAnimationTimer) {
+        clearTimeout(aboutAnimationTimer);
+        aboutAnimationTimer = null;
+      }
+
+      if (!currentSrc || direction === "none" || currentSrc === src) {
+        aboutPreviousImage.style.display = "none";
+        aboutImage.src = src;
+        preloadImage(src);
+        return;
+      }
+
+      await preloadImage(src);
+      if (token !== aboutTransitionToken) return;
+
+      aboutPreviousImage.src = currentSrc;
+      aboutPreviousImage.style.display = "block";
+      aboutImage.src = src;
+
+      void aboutWrap.offsetWidth;
+      aboutWrap.classList.add(direction);
+
+      aboutAnimationTimer = setTimeout(() => {
+        aboutWrap.classList.remove(direction);
+        aboutPreviousImage.style.display = "none";
+        aboutPreviousImage.removeAttribute("src");
+      }, 300);
+    }
+
+    function goToPage(num, direction = "none") {
+      const target = parseInt(num, 10);
+
+      if (!currentProject || !target) return;
+      if (target < currentProject.start || target > currentProject.end) return;
+
+      currentImage = target;
+      closeInfoPanel();
+      closeIndexPanel();
+
+      const targetSrc = getImageSrc(currentProject, currentImage);
+      setImageWithTransition(targetSrc, direction);
+      preloadAround(currentProject, currentImage);
+
+      updateProjectUrl(currentImage);
+      updateMobileProjectUi();
+    }
+
+    function previousPage() {
+      if (!currentProject || currentImage <= currentProject.start) return;
+      goToPage(currentImage - 1, "animate-prev-page");
+    }
+
+    function nextPage() {
+      if (!currentProject || currentImage >= currentProject.end) return;
+      goToPage(currentImage + 1, "animate-next-page");
+    }
+
+    function previousProject() {
+      if (!currentProject) return;
+
+      const index = PROJECTS.findIndex(project => project.slug === currentProject.slug);
+      if (index <= 0) return;
+
+      const previous = PROJECTS[index - 1];
+      showViewer(previous, previous.start, "animate-prev-project");
+    }
+
+    function nextProject() {
+      if (!currentProject) return;
+
+      const index = PROJECTS.findIndex(project => project.slug === currentProject.slug);
+      if (index < 0 || index >= PROJECTS.length - 1) return;
+
+      const next = PROJECTS[index + 1];
+      showViewer(next, next.start, "animate-next-project");
+    }
+
+    function updateMobileProjectUi() {
+      if (!currentProject || currentImage === null) return;
+
+      const total = currentProject.end - currentProject.start + 1;
+      const index = currentImage - currentProject.start + 1;
+
+      mobileCounter.textContent = `${index}/${total}`;
+      mobileCurrentTitle.textContent = currentProject.displayTitle || currentProject.title;
+
+      prevPageButton.disabled = currentImage <= currentProject.start;
+      nextPageButton.disabled = currentImage >= currentProject.end;
+    }
+
+    function goToAboutPage(num, direction = "none") {
+      const target = parseInt(num, 10);
+
+      if (!target) return;
+      if (target < 1 || target > ABOUT_TOTAL) return;
+
+      currentAboutPage = target;
+
+      const targetSrc = getAboutSrc(currentAboutPage);
+      setAboutImageWithTransition(targetSrc, direction);
+      preloadAboutAround(currentAboutPage);
+      updateAboutUrl(currentAboutPage);
+    }
+
+    function previousAboutPage() {
+      if (currentAboutPage <= 1) return;
+      goToAboutPage(currentAboutPage - 1, "animate-about-prev");
+    }
+
+    function nextAboutPage() {
+      if (currentAboutPage >= ABOUT_TOTAL) return;
+      goToAboutPage(currentAboutPage + 1, "animate-about-next");
+    }
+
+    function renderInfoText(project, text) {
+      const cleanText = (text || "").trim();
+      const fallbackTitle = project.infoTitle || project.line || project.fullTitle || project.title;
+
+      if (!cleanText) {
+        mobileInfoText.innerHTML = `<h2 class="info-title">${escapeHtml(fallbackTitle)}</h2>`;
+        return;
+      }
+
+      const lines = cleanText.replace(/\r\n/g, "\n").split("\n");
+      let cursor = 0;
+
+      function skipEmpty() {
+        while (cursor < lines.length && lines[cursor].trim() === "") cursor++;
+      }
+
+      function readBlock() {
+        const block = [];
+        while (cursor < lines.length && lines[cursor].trim() !== "") {
+          block.push(lines[cursor].trim());
+          cursor++;
+        }
+        return block;
+      }
+
+      skipEmpty();
+
+      let metaLines = [];
+      let title = fallbackTitle;
+
+      const firstBlock = readBlock();
+
+      if (firstBlock.length > 1 && !firstBlock[0].startsWith("##")) {
+        metaLines = firstBlock;
+      } else if (firstBlock.length === 1 && !firstBlock[0].startsWith("##")) {
+        title = firstBlock[0];
+      } else {
+        cursor = 0;
+      }
+
+      skipEmpty();
+
+      if (metaLines.length > 0 && cursor < lines.length) {
+        const possibleTitleBlock = readBlock();
+
+        if (
+          possibleTitleBlock.length === 1 &&
+          !possibleTitleBlock[0].startsWith("##") &&
+          possibleTitleBlock[0].length <= 120
+        ) {
+          title = possibleTitleBlock[0];
+        } else {
+          cursor -= possibleTitleBlock.length;
+        }
+      }
+
+      skipEmpty();
+
+      const contentHtml = [];
+      let paragraphLines = [];
+
+      function flushParagraph() {
+        if (paragraphLines.length === 0) return;
+
+        const paragraph = paragraphLines.join(" ").trim();
+
+        if (paragraph) {
+          contentHtml.push(`<p>${escapeHtml(paragraph)}</p>`);
+        }
+
+        paragraphLines = [];
+      }
+
+      while (cursor < lines.length) {
+        const line = lines[cursor].trim();
+
+        if (line === "") {
+          flushParagraph();
+          cursor++;
+          continue;
+        }
+
+        if (line.startsWith("##")) {
+          flushParagraph();
+
+          const subtitle = line.replace(/^##+/, "").trim();
+
+          if (subtitle) {
+            contentHtml.push(`<h3 class="info-section-title">${escapeHtml(subtitle)}</h3>`);
+          }
+
+          cursor++;
+          continue;
+        }
+
+        paragraphLines.push(line);
+        cursor++;
+      }
+
+      flushParagraph();
+
+      const metaHtml = metaLines.length
+        ? `
+          <ul class="info-meta">
+            ${metaLines.map(line => `<li>${escapeHtml(line)}</li>`).join("")}
+          </ul>
+        `
+        : "";
+
+      const bodyHtml = contentHtml.length
+        ? `<div class="info-body">${contentHtml.join("")}</div>`
+        : "";
+
+      mobileInfoText.innerHTML = `
+        <h2 class="info-title">${escapeHtml(title)}</h2>
+        ${metaHtml}
+        ${bodyHtml}
+      `;
+    }
+
+    async function loadProjectInfo(project) {
+      renderInfoText(project, project.fallbackInfo || project.line || "");
+
+      if (!project.infoFile) return;
+
+      try {
+        const response = await fetch(getInfoSrc(project));
+        if (!response.ok) return;
+
+        const text = await response.text();
+        if (text.trim().length > 0) {
+          renderInfoText(project, text);
+        }
+      } catch (error) {
+        renderInfoText(project, project.fallbackInfo || project.line || "");
+      }
+    }
+
+    function escapeHtml(value) {
+      return String(value)
+        .replaceAll("&", "&amp;")
+        .replaceAll("<", "&lt;")
+        .replaceAll(">", "&gt;")
+        .replaceAll('"', "&quot;")
+        .replaceAll("'", "&#039;");
+    }
+
+    function openMenuDrawer() {
+      closeInfoPanel();
+      closeIndexPanel();
+      drawer.classList.add("open");
+      overlay.classList.add("open");
+    }
+
+    function toggleMenuDrawer() {
+      if (drawer.classList.contains("open")) closeDrawer();
+      else openMenuDrawer();
+    }
+
+    function closeDrawer() {
+      drawer.classList.remove("open");
+      overlay.classList.remove("open");
+    }
+
+    function openInfoPanel() {
+      if (viewer.classList.contains("hidden")) return;
+      closeDrawer();
+      closeIndexPanel();
+      mobileInfoPanel.classList.add("open");
+    }
+
+    function closeInfoPanel() {
+      mobileInfoPanel.classList.remove("open");
+    }
+
+    function toggleInfoPanel() {
+      if (mobileInfoPanel.classList.contains("open")) closeInfoPanel();
+      else openInfoPanel();
+    }
+
+    function openIndexPanel() {
+      if (viewer.classList.contains("hidden")) return;
+      closeDrawer();
+      closeInfoPanel();
+      mobileIndexPanel.classList.add("open");
+    }
+
+    function closeIndexPanel() {
+      mobileIndexPanel.classList.remove("open");
+    }
+
+    function toggleIndexPanel() {
+      if (mobileIndexPanel.classList.contains("open")) closeIndexPanel();
+      else openIndexPanel();
+    }
+
+    function buildProjectCards() {
+      projectGrid.innerHTML = "";
+
+      PROJECTS.forEach((project, index) => {
+        const button = document.createElement("button");
+        button.className = "project-card";
+
+        button.innerHTML = `
+          <img class="thumb" src="${getVignetteSrc(project.thumb)}" alt="${project.fullTitle}" />
+          <span class="card-text">
+            <span class="card-title">${String(index + 1).padStart(2, "0")} — ${project.title}</span>
+            <span class="card-type">${project.type}</span>
+            <span class="card-line">${project.line}</span>
+          </span>
+        `;
+
+        button.addEventListener("click", () => showViewer(project, project.start, "none"));
+        projectGrid.appendChild(button);
+      });
+    }
+
+    function buildProjectIndex() {
+      mobileIndexList.innerHTML = "";
+
+      PROJECTS.forEach((project, index) => {
+        const button = document.createElement("button");
+
+        button.innerHTML = `
+          <span class="index-number">${String(index + 1).padStart(2, "0")}</span>
+          <span class="index-title">${project.displayTitle || project.title}</span>
+          <span class="index-subtitle">${project.type}</span>
+        `;
+
+        button.addEventListener("click", () => {
+          closeIndexPanel();
+          showViewer(project, project.start, "none");
+        });
+
+        mobileIndexList.appendChild(button);
+      });
+    }
+
+    function startGesture(x, y) {
+      gestureStartX = x;
+      gestureStartY = y;
+      gestureActive = true;
+    }
+
+    function endProjectGesture(x, y) {
+      if (!gestureActive) return;
+
+      gestureActive = false;
+
+      const now = Date.now();
+      if (now - lastGestureTime < 220) return;
+      lastGestureTime = now;
+
+      const dx = x - gestureStartX;
+      const dy = y - gestureStartY;
+
+      const absX = Math.abs(dx);
+      const absY = Math.abs(dy);
+
+      if (absX < SWIPE_MIN && absY < SWIPE_MIN) return;
+
+      closeInfoPanel();
+      closeIndexPanel();
+
+      if (absX > absY * DIRECTION_RATIO) {
+        if (dx < 0) nextPage();
+        else previousPage();
+        return;
+      }
+
+      if (absY > absX * DIRECTION_RATIO) {
+        if (dy < 0) nextProject();
+        else previousProject();
+      }
+    }
+
+    function endAboutGesture(x, y) {
+      if (!gestureActive) return;
+
+      gestureActive = false;
+
+      const now = Date.now();
+      if (now - lastGestureTime < 220) return;
+      lastGestureTime = now;
+
+      const dx = x - gestureStartX;
+      const dy = y - gestureStartY;
+
+      const absX = Math.abs(dx);
+      const absY = Math.abs(dy);
+
+      if (absY < SWIPE_MIN) return;
+      if (absY < absX * DIRECTION_RATIO) return;
+
+      if (dy < 0) nextAboutPage();
+      else previousAboutPage();
+    }
+
+    function preventGestureScroll(e) {
+      e.preventDefault();
+    }
+
+    home.addEventListener("click", showSummary);
+
+    document.getElementById("home-name").addEventListener("click", event => {
+      event.stopPropagation();
+    });
+
+    document.getElementById("mobile-menu-button").addEventListener("click", toggleMenuDrawer);
+    document.getElementById("close-drawer").addEventListener("click", closeDrawer);
+
+    document.getElementById("drawer-home").addEventListener("click", showSummary);
+    document.getElementById("drawer-about").addEventListener("click", () => showAbout(1));
+
+    overlay.addEventListener("click", closeDrawer);
+
+    mobileCurrentTitle.addEventListener("click", showSummary);
+    mobileIndexButton.addEventListener("click", toggleIndexPanel);
+    mobileInfoButton.addEventListener("click", toggleInfoPanel);
+
+    prevPageButton.addEventListener("click", previousPage);
+    nextPageButton.addEventListener("click", nextPage);
+
+    documentWrap.addEventListener("pointerdown", e => startGesture(e.clientX, e.clientY));
+    documentWrap.addEventListener("pointerup", e => endProjectGesture(e.clientX, e.clientY));
+    documentWrap.addEventListener("pointercancel", () => { gestureActive = false; });
+    documentWrap.addEventListener("touchmove", preventGestureScroll, { passive: false });
+
+    aboutWrap.addEventListener("pointerdown", e => startGesture(e.clientX, e.clientY));
+    aboutWrap.addEventListener("pointerup", e => endAboutGesture(e.clientX, e.clientY));
+    aboutWrap.addEventListener("pointercancel", () => { gestureActive = false; });
+    aboutWrap.addEventListener("touchmove", preventGestureScroll, { passive: false });
+
+    buildProjectCards();
+    buildProjectIndex();
+
+    const params = new URLSearchParams(window.location.search);
+    const directPage = parseInt(params.get("page"), 10);
+    const directProjectSlug = params.get("project");
+    const directAbout = params.get("about");
+
+    let directProject = null;
+
+    if (directAbout) {
+      showAbout(directPage || 1);
+    } else {
+      if (directProjectSlug) {
+        directProject = PROJECTS.find(project => project.slug === directProjectSlug);
+      }
+
+      if (!directProject && directPage) {
+        directProject = PROJECTS[0];
+      }
+
+      if (directProject) {
+        showViewer(directProject, directPage || directProject.start, "none");
+      }
+    }
+  </script>
 </body>
 </html>
