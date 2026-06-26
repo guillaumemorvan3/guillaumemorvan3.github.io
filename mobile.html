@@ -711,19 +711,42 @@
 
     <div id="drawer-nav" class="drawer-nav">
       <button id="drawer-home">Accueil</button>
-      <button id="drawer-about">À propos</button>
+      <button id="drawer-foundation">Fondation</button>
+      <button id="drawer-parcours">Parcours</button>
+      <button id="drawer-contact">Contact</button>
     </div>
   </aside>
 
   <script>
-    const ASSET_VERSION = "2026-06-26-4";
+    const ASSET_VERSION = "2026-06-26-5";
 
     const VIGNETTE_FOLDER = "Vignettes/";
-    const ABOUT_FOLDER = "apropos-mobile/";
-    const ABOUT_TOTAL = 4;
-
     const SWIPE_MIN = 45;
     const DIRECTION_RATIO = 1.15;
+
+    const ABOUT_SECTIONS = [
+      {
+        slug: "fondation",
+        label: "Fondation",
+        folder: "apropos-mobile/fondation/",
+        start: 1,
+        end: 1
+      },
+      {
+        slug: "parcours",
+        label: "Parcours",
+        folder: "apropos-mobile/parcours/",
+        start: 1,
+        end: 1
+      },
+      {
+        slug: "contact",
+        label: "Contact",
+        folder: "apropos-mobile/contact/",
+        start: 1,
+        end: 1
+      }
+    ];
 
     const PROJECTS = [
       {
@@ -810,6 +833,7 @@
 
     let currentProject = null;
     let currentImage = null;
+    let currentAboutSection = null;
     let currentAboutPage = 1;
 
     let gestureStartX = 0;
@@ -850,8 +874,8 @@
       return encodeURI(`${project.folder}${project.filePrefix} (${num}).jpg`) + `?v=${ASSET_VERSION}`;
     }
 
-    function getAboutSrc(num) {
-      return encodeURI(`${ABOUT_FOLDER}page (${num}).jpg`) + `?v=${ASSET_VERSION}`;
+    function getAboutSrc(section, num) {
+      return encodeURI(`${section.folder}page (${num}).jpg`) + `?v=${ASSET_VERSION}`;
     }
 
     function getVignetteSrc(filename) {
@@ -895,18 +919,40 @@
       if (nextProject) preloadImage(getImageSrc(nextProject, nextProject.start));
     }
 
+    function preloadAboutAround(section, num) {
+      if (!section || !num) return;
+
+      [num - 1, num + 1].forEach(page => {
+        if (page >= section.start && page <= section.end) {
+          preloadImage(getAboutSrc(section, page));
+        }
+      });
+    }
+
     function clearUrl() {
       history.replaceState({}, "", window.location.pathname);
     }
 
-    function updateUrl(num) {
+    function updateProjectUrl(num) {
       const url = new URL(window.location);
+
+      url.searchParams.delete("about");
 
       if (currentProject) {
         url.searchParams.set("project", currentProject.slug);
       }
 
       url.searchParams.set("page", num);
+      history.replaceState({}, "", url);
+    }
+
+    function updateAboutUrl(section, num) {
+      const url = new URL(window.location);
+
+      url.searchParams.delete("project");
+      url.searchParams.set("about", section.slug);
+      url.searchParams.set("page", num);
+
       history.replaceState({}, "", url);
     }
 
@@ -923,30 +969,42 @@
       site.classList.remove("hidden");
       hideAllMainViews();
       summary.classList.remove("hidden");
+
       currentProject = null;
       currentImage = null;
+      currentAboutSection = null;
+      currentAboutPage = 1;
+
       closeDrawer();
       clearUrl();
     }
 
-    function showAbout() {
+    function showAboutSection(slug, targetPage = 1) {
+      const section = ABOUT_SECTIONS.find(item => item.slug === slug);
+      if (!section) return;
+
       home.classList.add("hidden");
       site.classList.remove("hidden");
       hideAllMainViews();
       about.classList.remove("hidden");
+
       currentProject = null;
       currentImage = null;
+      currentAboutSection = section;
+
       closeDrawer();
-      clearUrl();
-      goToAboutPage(1);
+      goToAboutPage(targetPage);
     }
 
     function showViewer(project, targetPage, direction = "none") {
       currentProject = project;
+      currentAboutSection = null;
+
       home.classList.add("hidden");
       site.classList.remove("hidden");
       hideAllMainViews();
       viewer.classList.remove("hidden");
+
       mobileCurrentTitle.textContent = project.displayTitle || project.title;
       loadProjectInfo(project);
       goToPage(targetPage || project.start, direction);
@@ -1006,7 +1064,7 @@
       setImageWithTransition(targetSrc, direction);
       preloadAround(currentProject, currentImage);
 
-      updateUrl(currentImage);
+      updateProjectUrl(currentImage);
       updateMobileProjectUi();
     }
 
@@ -1201,17 +1259,32 @@
     }
 
     function goToAboutPage(num) {
-      if (num < 1 || num > ABOUT_TOTAL) return;
-      currentAboutPage = num;
-      aboutImage.src = getAboutSrc(currentAboutPage);
+      if (!currentAboutSection) return;
+
+      const target = parseInt(num, 10);
+
+      if (target < currentAboutSection.start || target > currentAboutSection.end) return;
+
+      currentAboutPage = target;
+      aboutImage.src = getAboutSrc(currentAboutSection, currentAboutPage);
+
+      preloadImage(aboutImage.src);
+      preloadAboutAround(currentAboutSection, currentAboutPage);
+      updateAboutUrl(currentAboutSection, currentAboutPage);
     }
 
     function previousAboutPage() {
-      if (currentAboutPage > 1) goToAboutPage(currentAboutPage - 1);
+      if (!currentAboutSection) return;
+      if (currentAboutPage > currentAboutSection.start) {
+        goToAboutPage(currentAboutPage - 1);
+      }
     }
 
     function nextAboutPage() {
-      if (currentAboutPage < ABOUT_TOTAL) goToAboutPage(currentAboutPage + 1);
+      if (!currentAboutSection) return;
+      if (currentAboutPage < currentAboutSection.end) {
+        goToAboutPage(currentAboutPage + 1);
+      }
     }
 
     function openMenuDrawer() {
@@ -1373,8 +1446,11 @@
 
     document.getElementById("mobile-menu-button").addEventListener("click", toggleMenuDrawer);
     document.getElementById("close-drawer").addEventListener("click", closeDrawer);
+
     document.getElementById("drawer-home").addEventListener("click", showSummary);
-    document.getElementById("drawer-about").addEventListener("click", showAbout);
+    document.getElementById("drawer-foundation").addEventListener("click", () => showAboutSection("fondation"));
+    document.getElementById("drawer-parcours").addEventListener("click", () => showAboutSection("parcours"));
+    document.getElementById("drawer-contact").addEventListener("click", () => showAboutSection("contact"));
 
     overlay.addEventListener("click", closeDrawer);
 
@@ -1401,19 +1477,24 @@
     const params = new URLSearchParams(window.location.search);
     const directPage = parseInt(params.get("page"), 10);
     const directProjectSlug = params.get("project");
+    const directAboutSlug = params.get("about");
 
     let directProject = null;
 
-    if (directProjectSlug) {
-      directProject = PROJECTS.find(project => project.slug === directProjectSlug);
-    }
+    if (directAboutSlug) {
+      showAboutSection(directAboutSlug, directPage || 1);
+    } else {
+      if (directProjectSlug) {
+        directProject = PROJECTS.find(project => project.slug === directProjectSlug);
+      }
 
-    if (!directProject && directPage) {
-      directProject = PROJECTS[0];
-    }
+      if (!directProject && directPage) {
+        directProject = PROJECTS[0];
+      }
 
-    if (directProject) {
-      showViewer(directProject, directPage || directProject.start, "none");
+      if (directProject) {
+        showViewer(directProject, directPage || directProject.start, "none");
+      }
     }
   </script>
 </body>
