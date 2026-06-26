@@ -6,6 +6,12 @@
   <title>Guillaume Morvan — Portfolio</title>
 
   <style>
+    :root {
+      --cover-focus-x: 62%;
+      --cover-focus-y: 52%;
+      --cover-zoom: 1.05;
+    }
+
     * { box-sizing: border-box; }
 
     html,
@@ -36,8 +42,11 @@
       width: 100%;
       height: 100%;
       object-fit: cover;
-      object-position: center;
+      object-position: var(--cover-focus-x) var(--cover-focus-y);
+      transform: scale(var(--cover-zoom));
+      transform-origin: var(--cover-focus-x) var(--cover-focus-y);
       display: block;
+      will-change: transform;
     }
 
     .home-name {
@@ -718,7 +727,7 @@
   </aside>
 
   <script>
-    const ASSET_VERSION = "2026-06-26-6";
+    const ASSET_VERSION = "2026-06-26-7";
 
     const VIGNETTE_FOLDER = "Vignettes/";
     const SWIPE_MIN = 45;
