@@ -54,7 +54,7 @@
       font-weight: 400;
       letter-spacing: 0.04em;
       text-transform: uppercase;
-      cursor: pointer;
+      cursor: default;
     }
 
     #site {
@@ -89,9 +89,10 @@
       font-weight: 400;
       letter-spacing: 0.04em;
       text-transform: uppercase;
-      cursor: pointer;
+      cursor: default;
       white-space: nowrap;
       color: #111;
+      pointer-events: none;
     }
 
     .mobile-menu-button {
@@ -425,6 +426,7 @@
       text-overflow: ellipsis;
       max-width: 42vw;
       text-align: center;
+      cursor: pointer;
     }
 
     .bottom-panel {
@@ -714,7 +716,7 @@
   </aside>
 
   <script>
-    const ASSET_VERSION = "2026-06-26-3";
+    const ASSET_VERSION = "2026-06-26-4";
 
     const VIGNETTE_FOLDER = "Vignettes/";
     const ABOUT_FOLDER = "apropos-mobile/";
@@ -1364,8 +1366,10 @@
     }
 
     home.addEventListener("click", showSummary);
-    document.getElementById("home-name").addEventListener("click", showSummary);
-    document.getElementById("brand").addEventListener("click", showSummary);
+
+    document.getElementById("home-name").addEventListener("click", event => {
+      event.stopPropagation();
+    });
 
     document.getElementById("mobile-menu-button").addEventListener("click", toggleMenuDrawer);
     document.getElementById("close-drawer").addEventListener("click", closeDrawer);
@@ -1374,6 +1378,7 @@
 
     overlay.addEventListener("click", closeDrawer);
 
+    mobileCurrentTitle.addEventListener("click", showSummary);
     mobileIndexButton.addEventListener("click", toggleIndexPanel);
     mobileInfoButton.addEventListener("click", toggleInfoPanel);
 
