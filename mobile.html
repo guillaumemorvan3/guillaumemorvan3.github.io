@@ -492,12 +492,19 @@
       margin-top: 0;
     }
 
+    .info-body {
+      text-align: justify;
+      text-align-last: left;
+      hyphens: auto;
+    }
+
     .info-body p {
       margin: 0 0 16px 0;
       font-size: 15px;
       line-height: 1.48;
       color: #111;
-      text-align: left;
+      text-align: justify;
+      text-align-last: left;
       text-indent: 1.6em;
       hyphens: auto;
     }
@@ -707,7 +714,7 @@
   </aside>
 
   <script>
-    const ASSET_VERSION = "2026-06-26-2";
+    const ASSET_VERSION = "2026-06-26-3";
 
     const VIGNETTE_FOLDER = "Vignettes/";
     const ABOUT_FOLDER = "apropos-mobile/";
@@ -1118,8 +1125,7 @@
       }
 
       while (cursor < lines.length) {
-        const rawLine = lines[cursor];
-        const line = rawLine.trim();
+        const line = lines[cursor].trim();
 
         if (line === "") {
           flushParagraph();
