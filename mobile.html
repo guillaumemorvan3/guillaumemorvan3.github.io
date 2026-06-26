@@ -7,8 +7,8 @@
 
   <style>
     :root {
-      --cover-focus-x: 62%;
-      --cover-focus-y: 52%;
+      --cover-focus-x: 54%;
+      --cover-focus-y: 47%;
       --cover-zoom: 1.05;
     }
 
@@ -727,34 +727,16 @@
   </aside>
 
   <script>
-    const ASSET_VERSION = "2026-06-26-7";
+    const ASSET_VERSION = "2026-06-26-8";
 
     const VIGNETTE_FOLDER = "Vignettes/";
     const SWIPE_MIN = 45;
     const DIRECTION_RATIO = 1.15;
 
     const ABOUT_SECTIONS = [
-      {
-        slug: "fondation",
-        label: "Fondation",
-        folder: "apropos-mobile/fondation/",
-        start: 1,
-        end: 1
-      },
-      {
-        slug: "parcours",
-        label: "Parcours",
-        folder: "apropos-mobile/parcours/",
-        start: 1,
-        end: 1
-      },
-      {
-        slug: "contact",
-        label: "Contact",
-        folder: "apropos-mobile/contact/",
-        start: 1,
-        end: 1
-      }
+      { slug: "fondation", label: "Fondation", folder: "apropos-mobile/fondation/", start: 1, end: 1 },
+      { slug: "parcours", label: "Parcours", folder: "apropos-mobile/parcours/", start: 1, end: 1 },
+      { slug: "contact", label: "Contact", folder: "apropos-mobile/contact/", start: 1, end: 1 }
     ];
 
     const PROJECTS = [
@@ -944,7 +926,6 @@
 
     function updateProjectUrl(num) {
       const url = new URL(window.location);
-
       url.searchParams.delete("about");
 
       if (currentProject) {
@@ -957,11 +938,9 @@
 
     function updateAboutUrl(section, num) {
       const url = new URL(window.location);
-
       url.searchParams.delete("project");
       url.searchParams.set("about", section.slug);
       url.searchParams.set("page", num);
-
       history.replaceState({}, "", url);
     }
 
