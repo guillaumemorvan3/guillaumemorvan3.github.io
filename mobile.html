@@ -447,22 +447,45 @@
       touch-action: pan-y;
     }
 
-    .info-text p {
+    .info-title {
+      margin: 0 0 24px 0;
+      font-size: 19px;
+      line-height: 1.2;
+      font-weight: 600;
+      letter-spacing: -0.02em;
+      color: #111;
+      text-align: left;
+    }
+
+    .info-meta {
+      margin: 0 0 28px 0;
+      padding: 0;
+      list-style: none;
+      text-align: left;
+    }
+
+    .info-meta li {
+      margin: 0 0 6px 0;
+      padding: 0;
+      font-size: 15px;
+      line-height: 1.35;
+      font-weight: 600;
+      color: #111;
+      text-align: left;
+      text-indent: 0;
+    }
+
+    .info-body p {
       margin: 0 0 16px 0;
       font-size: 15px;
       line-height: 1.48;
       color: #111;
-      text-align: justify;
-      text-align-last: left;
+      text-align: left;
       text-indent: 1.6em;
       hyphens: auto;
     }
 
-    .info-text p:first-child {
-      text-indent: 1.6em;
-    }
-
-    .info-text p:last-child {
+    .info-body p:last-child {
       margin-bottom: 0;
     }
 
@@ -667,7 +690,7 @@
   </aside>
 
   <script>
-    const ASSET_VERSION = "2026-06-25-10";
+    const ASSET_VERSION = "2026-06-25-12";
 
     const VIGNETTE_FOLDER = "Vignettes/";
     const ABOUT_FOLDER = "apropos-mobile/";
@@ -684,6 +707,7 @@
         fullTitle: "Station ferroviaire Melle",
         type: "Projet urbain et bâtiment mixte",
         line: "Évolutivité et appropriation des espaces.",
+        infoTitle: "Évolutivité et appropriation de l’espace commun",
         infoFile: "pages-mobile/melle/info.txt",
         fallbackInfo: "Le projet investit le parc ferroviaire de Ledeberg, au sud de Gand, dans un tissu pavillonnaire dense.",
         thumb: "melle.jpg",
@@ -699,6 +723,7 @@
         fullTitle: "Église Saint-Joseph",
         type: "Réhabilitation patrimoniale",
         line: "Révéler les qualités cachées du patrimoine.",
+        infoTitle: "Révéler les qualités cachées du patrimoine",
         infoFile: "pages-mobile/saint-joseph/info.txt",
         fallbackInfo: "Le projet interroge la capacité d’un édifice patrimonial à accueillir de nouveaux usages sans perdre sa présence ni sa mémoire.",
         thumb: "saint-joseph.jpg",
@@ -714,13 +739,14 @@
         fullTitle: "Ferme Nord",
         type: "Réhabilitation et extension",
         line: "L’harmonieux contraste.",
+        infoTitle: "L’harmonieux contraste",
         infoFile: "pages-mobile/ferme-nord/info.txt",
         fallbackInfo: "La Ferme Nord met en tension patrimoine agricole, extension contemporaine et paysage dunaire.",
         thumb: "ferme-nord.jpg",
         folder: "pages-mobile/ferme-nord/",
         filePrefix: "page",
         start: 1,
-        end: 29
+        end: 27
       },
       {
         slug: "tank",
@@ -729,12 +755,14 @@
         fullTitle: "TANK Architectes",
         type: "Expérience en agence",
         line: "L’architecte dans une pratique engagée pour la qualité.",
+        infoTitle: "L’architecte engagé dans la qualité",
+        infoFile: "pages-mobile/tank/info.txt",
         fallbackInfo: "L’expérience chez TANK Architectes m’a permis d’approcher une pratique collective exigeante.",
         thumb: "tank.jpg",
-        folder: "pages/",
+        folder: "pages-mobile/tank/",
         filePrefix: "page",
-        start: 34,
-        end: 39
+        start: 1,
+        end: 13
       },
       {
         slug: "edwood",
@@ -743,6 +771,7 @@
         fullTitle: "Edwood",
         type: "Construction bois",
         line: "Le chantier comme école de la réalité constructive.",
+        infoTitle: "Le chantier comme école de la réalité constructive",
         fallbackInfo: "Chez Edwood, l’expérience en atelier et sur chantier m’a permis d’approfondir la réalité constructive du projet.",
         thumb: "edwood.jpg",
         folder: "pages/",
@@ -997,26 +1026,69 @@
       nextPageButton.disabled = currentImage >= currentProject.end;
     }
 
-    function renderInfoText(text) {
+    function renderInfoText(project, text) {
       const cleanText = (text || "").trim();
 
+      const title = project.infoTitle || project.line || project.fullTitle || project.title;
+
       if (!cleanText) {
-        mobileInfoText.innerHTML = "";
+        mobileInfoText.innerHTML = `<h2 class="info-title">${escapeHtml(title)}</h2>`;
         return;
       }
 
-      const paragraphs = cleanText
+      const blocks = cleanText
         .split(/\n\s*\n/g)
-        .map(paragraph => paragraph.replace(/\n/g, " ").trim())
+        .map(block => block.trim())
         .filter(Boolean);
 
-      mobileInfoText.innerHTML = paragraphs
-        .map(paragraph => `<p>${escapeHtml(paragraph)}</p>`)
-        .join("");
+      let metaLines = [];
+      let bodyBlocks = blocks;
+
+      if (blocks.length > 0) {
+        const firstBlockLines = blocks[0]
+          .split(/\n/g)
+          .map(line => line.trim())
+          .filter(Boolean);
+
+        const looksLikeMeta =
+          firstBlockLines.length > 0 &&
+          firstBlockLines.every(line => line.includes(":") || line.includes("—"));
+
+        if (looksLikeMeta) {
+          metaLines = firstBlockLines;
+          bodyBlocks = blocks.slice(1);
+        }
+      }
+
+      const metaHtml = metaLines.length
+        ? `
+          <ul class="info-meta">
+            ${metaLines.map(line => `<li>${escapeHtml(line)}</li>`).join("")}
+          </ul>
+        `
+        : "";
+
+      const bodyHtml = bodyBlocks.length
+        ? `
+          <div class="info-body">
+            ${bodyBlocks
+              .map(block => block.replace(/\n/g, " ").trim())
+              .filter(Boolean)
+              .map(paragraph => `<p>${escapeHtml(paragraph)}</p>`)
+              .join("")}
+          </div>
+        `
+        : "";
+
+      mobileInfoText.innerHTML = `
+        <h2 class="info-title">${escapeHtml(title)}</h2>
+        ${metaHtml}
+        ${bodyHtml}
+      `;
     }
 
     async function loadProjectInfo(project) {
-      renderInfoText(project.fallbackInfo || project.line || "");
+      renderInfoText(project, project.fallbackInfo || project.line || "");
 
       if (!project.infoFile) return;
 
@@ -1026,10 +1098,10 @@
 
         const text = await response.text();
         if (text.trim().length > 0) {
-          renderInfoText(text);
+          renderInfoText(project, text);
         }
       } catch (error) {
-        renderInfoText(project.fallbackInfo || project.line || "");
+        renderInfoText(project, project.fallbackInfo || project.line || "");
       }
     }
 
