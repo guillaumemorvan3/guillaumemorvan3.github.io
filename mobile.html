@@ -469,11 +469,27 @@
       padding: 0;
       font-size: 15px;
       line-height: 1.35;
-      font-weight: 550;
+      font-weight: 600;
       color: #111;
       text-align: left;
       text-indent: 0;
       letter-spacing: -0.005em;
+    }
+
+    .info-section-title {
+      margin: 26px 0 9px 0;
+      padding: 0;
+      font-size: 15px;
+      line-height: 1.35;
+      font-weight: 650;
+      color: #111;
+      text-align: left;
+      text-indent: 0;
+      letter-spacing: -0.005em;
+    }
+
+    .info-section-title:first-child {
+      margin-top: 0;
     }
 
     .info-body p {
@@ -691,7 +707,7 @@
   </aside>
 
   <script>
-    const ASSET_VERSION = "2026-06-26-1";
+    const ASSET_VERSION = "2026-06-26-2";
 
     const VIGNETTE_FOLDER = "Vignettes/";
     const ABOUT_FOLDER = "apropos-mobile/";
@@ -1030,37 +1046,105 @@
 
     function renderInfoText(project, text) {
       const cleanText = (text || "").trim();
-
-      const title = project.infoTitle || project.line || project.fullTitle || project.title;
+      const fallbackTitle = project.infoTitle || project.line || project.fullTitle || project.title;
 
       if (!cleanText) {
-        mobileInfoText.innerHTML = `<h2 class="info-title">${escapeHtml(title)}</h2>`;
+        mobileInfoText.innerHTML = `<h2 class="info-title">${escapeHtml(fallbackTitle)}</h2>`;
         return;
       }
 
-      const blocks = cleanText
-        .split(/\n\s*\n/g)
-        .map(block => block.trim())
-        .filter(Boolean);
+      const lines = cleanText.replace(/\r\n/g, "\n").split("\n");
+      let cursor = 0;
+
+      function skipEmpty() {
+        while (cursor < lines.length && lines[cursor].trim() === "") cursor++;
+      }
+
+      function readBlock() {
+        const block = [];
+        while (cursor < lines.length && lines[cursor].trim() !== "") {
+          block.push(lines[cursor].trim());
+          cursor++;
+        }
+        return block;
+      }
+
+      skipEmpty();
 
       let metaLines = [];
-      let bodyBlocks = blocks;
+      let title = fallbackTitle;
 
-      if (blocks.length > 0) {
-        const firstBlockLines = blocks[0]
-          .split(/\n/g)
-          .map(line => line.trim())
-          .filter(Boolean);
+      const firstBlock = readBlock();
 
-        const looksLikeMeta =
-          firstBlockLines.length > 0 &&
-          firstBlockLines.every(line => line.includes(":") || line.includes("—"));
+      if (firstBlock.length > 1 && !firstBlock[0].startsWith("##")) {
+        metaLines = firstBlock;
+      } else if (firstBlock.length === 1 && !firstBlock[0].startsWith("##")) {
+        title = firstBlock[0];
+      } else {
+        cursor = 0;
+      }
 
-        if (looksLikeMeta) {
-          metaLines = firstBlockLines;
-          bodyBlocks = blocks.slice(1);
+      skipEmpty();
+
+      if (metaLines.length > 0 && cursor < lines.length) {
+        const possibleTitleBlock = readBlock();
+
+        if (
+          possibleTitleBlock.length === 1 &&
+          !possibleTitleBlock[0].startsWith("##") &&
+          possibleTitleBlock[0].length <= 120
+        ) {
+          title = possibleTitleBlock[0];
+        } else {
+          cursor -= possibleTitleBlock.length;
         }
       }
+
+      skipEmpty();
+
+      const contentHtml = [];
+      let paragraphLines = [];
+
+      function flushParagraph() {
+        if (paragraphLines.length === 0) return;
+
+        const paragraph = paragraphLines.join(" ").trim();
+
+        if (paragraph) {
+          contentHtml.push(`<p>${escapeHtml(paragraph)}</p>`);
+        }
+
+        paragraphLines = [];
+      }
+
+      while (cursor < lines.length) {
+        const rawLine = lines[cursor];
+        const line = rawLine.trim();
+
+        if (line === "") {
+          flushParagraph();
+          cursor++;
+          continue;
+        }
+
+        if (line.startsWith("##")) {
+          flushParagraph();
+
+          const subtitle = line.replace(/^##+/, "").trim();
+
+          if (subtitle) {
+            contentHtml.push(`<h3 class="info-section-title">${escapeHtml(subtitle)}</h3>`);
+          }
+
+          cursor++;
+          continue;
+        }
+
+        paragraphLines.push(line);
+        cursor++;
+      }
+
+      flushParagraph();
 
       const metaHtml = metaLines.length
         ? `
@@ -1070,16 +1154,8 @@
         `
         : "";
 
-      const bodyHtml = bodyBlocks.length
-        ? `
-          <div class="info-body">
-            ${bodyBlocks
-              .map(block => block.replace(/\n/g, " ").trim())
-              .filter(Boolean)
-              .map(paragraph => `<p>${escapeHtml(paragraph)}</p>`)
-              .join("")}
-          </div>
-        `
+      const bodyHtml = contentHtml.length
+        ? `<div class="info-body">${contentHtml.join("")}</div>`
         : "";
 
       mobileInfoText.innerHTML = `
