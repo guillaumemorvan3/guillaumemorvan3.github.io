@@ -11,14 +11,16 @@
 
   <style>
     :root {
-      --cover-focus-x: 62%;
-      --cover-focus-y: 52%;
+      --cover-focus-x: 54%;
+      --cover-focus-y: 47%;
       --cover-zoom: 1.05;
 
       --font-main: "Poppins", Arial, Helvetica, sans-serif;
+
       --weight-regular: 400;
       --weight-medium: 500;
       --weight-semibold: 600;
+
       --text-black: #111;
       --text-soft: rgba(17, 17, 17, 0.72);
       --text-light: rgba(17, 17, 17, 0.54);
@@ -185,7 +187,7 @@
       padding: 0;
       text-align: left;
       cursor: pointer;
-      color: var(--text-black);
+      color: #111;
       font-family: var(--font-main);
     }
 
@@ -205,7 +207,6 @@
 
     .card-title {
       display: block;
-      font-family: var(--font-main);
       font-size: 12px;
       font-weight: var(--weight-semibold);
       letter-spacing: 0.01em;
@@ -215,7 +216,6 @@
 
     .card-type {
       display: block;
-      font-family: var(--font-main);
       font-size: 11px;
       line-height: 1.4;
       font-weight: var(--weight-regular);
@@ -225,7 +225,6 @@
 
     .card-line {
       display: block;
-      font-family: var(--font-main);
       font-size: 11px;
       line-height: 1.4;
       font-weight: var(--weight-regular);
@@ -612,16 +611,48 @@
       justify-content: center;
       overflow: hidden;
       touch-action: none;
+      position: relative;
+      background: #ffffff;
     }
 
-    #about-image {
+    .about-image-layer {
+      position: absolute;
+      inset: 0;
       width: 100vw;
       height: 100%;
       object-fit: contain;
+      object-position: center;
       user-select: none;
       -webkit-user-drag: none;
       background: #ffffff;
       pointer-events: none;
+    }
+
+    .about-previous-image {
+      display: none;
+      z-index: 1;
+    }
+
+    .about-current-image {
+      z-index: 2;
+    }
+
+    .about-wrap.animate-about-next .about-previous-image {
+      display: block;
+      animation: outUp 280ms ease forwards;
+    }
+
+    .about-wrap.animate-about-next .about-current-image {
+      animation: inBottom 280ms ease forwards;
+    }
+
+    .about-wrap.animate-about-prev .about-previous-image {
+      display: block;
+      animation: outDown 280ms ease forwards;
+    }
+
+    .about-wrap.animate-about-prev .about-current-image {
+      animation: inTop 280ms ease forwards;
     }
 
     .drawer {
@@ -716,7 +747,8 @@
 
     <main id="about" class="about hidden">
       <div id="about-wrap" class="about-wrap">
-        <img id="about-image" src="" alt="À propos — Guillaume Morvan" />
+        <img id="about-previous-image" class="about-image-layer about-previous-image" src="" alt="" />
+        <img id="about-image" class="about-image-layer about-current-image" src="" alt="À propos — Guillaume Morvan" />
       </div>
     </main>
 
@@ -764,63 +796,31 @@
   </aside>
 
   <script>
-    const ASSET_VERSION = "2026-06-26-10";
+    const ASSET_VERSION = "2026-06-29-1";
 
     const VIGNETTE_FOLDER = "Vignettes/";
-    const SWIPE_MIN = 45;
-    const DIRECTION_RATIO = 1.15;
-
     const ABOUT_FOLDER = "apropos-mobile/";
     const ABOUT_TOTAL = 5;
 
+    const SWIPE_MIN = 45;
+    const DIRECTION_RATIO = 1.15;
+
     const PROJECTS = [
       {
-        slug: "melle",
-        title: "Melle",
-        displayTitle: "Melle",
-        fullTitle: "Station ferroviaire Melle",
-        type: "Projet urbain et bâtiment mixte",
-        line: "Évolutivité et appropriation des espaces.",
-        infoTitle: "Évolutivité et appropriation de l’espace commun",
-        infoFile: "pages-mobile/melle/info.txt",
-        fallbackInfo: "Le projet investit le parc ferroviaire de Ledeberg, au sud de Gand, dans un tissu pavillonnaire dense.",
-        thumb: "melle.jpg",
-        folder: "pages-mobile/melle/",
+        slug: "edwood",
+        title: "Edwood",
+        displayTitle: "Edwood",
+        fullTitle: "Edwood",
+        type: "Construction bois",
+        line: "Le chantier comme école de la réalité constructive.",
+        infoTitle: "Le chantier comme école de la réalité constructive",
+        infoFile: "pages-mobile/edwood/info.txt",
+        fallbackInfo: "Chez Edwood, l’expérience en atelier et sur chantier m’a permis d’approfondir la réalité constructive du projet.",
+        thumb: "edwood.jpg",
+        folder: "pages-mobile/edwood/",
         filePrefix: "page",
         start: 1,
-        end: 9
-      },
-      {
-        slug: "saint-joseph",
-        title: "Saint-Joseph",
-        displayTitle: "Saint-Joseph",
-        fullTitle: "Église Saint-Joseph",
-        type: "Réhabilitation patrimoniale",
-        line: "Révéler les qualités cachées du patrimoine.",
-        infoTitle: "Révéler les qualités cachées du patrimoine",
-        infoFile: "pages-mobile/saint-joseph/info.txt",
-        fallbackInfo: "Le projet interroge la capacité d’un édifice patrimonial à accueillir de nouveaux usages sans perdre sa présence ni sa mémoire.",
-        thumb: "saint-joseph.jpg",
-        folder: "pages-mobile/saint-joseph/",
-        filePrefix: "page",
-        start: 1,
-        end: 15
-      },
-      {
-        slug: "ferme-nord",
-        title: "Ferme Nord",
-        displayTitle: "Ferme Nord",
-        fullTitle: "Ferme Nord",
-        type: "Réhabilitation et extension",
-        line: "L’harmonieux contraste.",
-        infoTitle: "L’harmonieux contraste",
-        infoFile: "pages-mobile/ferme-nord/info.txt",
-        fallbackInfo: "La Ferme Nord met en tension patrimoine agricole, extension contemporaine et paysage dunaire.",
-        thumb: "ferme-nord.jpg",
-        folder: "pages-mobile/ferme-nord/",
-        filePrefix: "page",
-        start: 1,
-        end: 29
+        end: 7
       },
       {
         slug: "tank",
@@ -839,20 +839,52 @@
         end: 13
       },
       {
-        slug: "edwood",
-        title: "Edwood",
-        displayTitle: "Edwood",
-        fullTitle: "Edwood",
-        type: "Construction bois",
-        line: "Le chantier comme école de la réalité constructive.",
-        infoTitle: "Le chantier comme école de la réalité constructive",
-        infoFile: "pages-mobile/edwood/info.txt",
-        fallbackInfo: "Chez Edwood, l’expérience en atelier et sur chantier m’a permis d’approfondir la réalité constructive du projet.",
-        thumb: "edwood.jpg",
-        folder: "pages-mobile/edwood/",
+        slug: "ferme-nord",
+        title: "Ferme Nord",
+        displayTitle: "Ferme Nord",
+        fullTitle: "Ferme Nord",
+        type: "Réhabilitation et extension",
+        line: "L’harmonieux contraste.",
+        infoTitle: "L’harmonieux contraste",
+        infoFile: "pages-mobile/ferme-nord/info.txt",
+        fallbackInfo: "La Ferme Nord met en tension patrimoine agricole, extension contemporaine et paysage dunaire.",
+        thumb: "ferme-nord.jpg",
+        folder: "pages-mobile/ferme-nord/",
         filePrefix: "page",
         start: 1,
-        end: 7
+        end: 29
+      },
+      {
+        slug: "saint-joseph",
+        title: "Saint-Joseph",
+        displayTitle: "Saint-Joseph",
+        fullTitle: "Église Saint-Joseph",
+        type: "Réhabilitation patrimoniale",
+        line: "Révéler les qualités cachées du patrimoine.",
+        infoTitle: "Révéler les qualités cachées du patrimoine",
+        infoFile: "pages-mobile/saint-joseph/info.txt",
+        fallbackInfo: "Le projet interroge la capacité d’un édifice patrimonial à accueillir de nouveaux usages sans perdre sa présence ni sa mémoire.",
+        thumb: "saint-joseph.jpg",
+        folder: "pages-mobile/saint-joseph/",
+        filePrefix: "page",
+        start: 1,
+        end: 15
+      },
+      {
+        slug: "melle",
+        title: "Melle",
+        displayTitle: "Melle",
+        fullTitle: "Station ferroviaire Melle",
+        type: "Projet urbain et bâtiment mixte",
+        line: "Évolutivité et appropriation des espaces.",
+        infoTitle: "Évolutivité et appropriation de l’espace commun",
+        infoFile: "pages-mobile/melle/info.txt",
+        fallbackInfo: "Le projet investit le parc ferroviaire de Ledeberg, au sud de Gand, dans un tissu pavillonnaire dense.",
+        thumb: "melle.jpg",
+        folder: "pages-mobile/melle/",
+        filePrefix: "page",
+        start: 1,
+        end: 9
       }
     ];
 
@@ -865,7 +897,9 @@
     let gestureActive = false;
     let lastGestureTime = 0;
     let animationTimer = null;
+    let aboutAnimationTimer = null;
     let transitionToken = 0;
+    let aboutTransitionToken = 0;
 
     const imageCache = new Map();
 
@@ -874,17 +908,23 @@
     const summary = document.getElementById("summary");
     const about = document.getElementById("about");
     const viewer = document.getElementById("viewer");
+
     const documentWrap = document.getElementById("document-wrap");
     const imageStage = document.getElementById("image-stage");
     const previousImage = document.getElementById("previous-image");
     const pageImage = document.getElementById("page-image");
+
+    const aboutWrap = document.getElementById("about-wrap");
+    const aboutPreviousImage = document.getElementById("about-previous-image");
+    const aboutImage = document.getElementById("about-image");
+
     const prevPageButton = document.getElementById("prev-page-button");
     const nextPageButton = document.getElementById("next-page-button");
-    const aboutWrap = document.getElementById("about-wrap");
-    const aboutImage = document.getElementById("about-image");
+
     const drawer = document.getElementById("drawer");
     const overlay = document.getElementById("overlay");
     const projectGrid = document.getElementById("project-grid");
+
     const mobileCurrentTitle = document.getElementById("mobile-current-title");
     const mobileIndexButton = document.getElementById("mobile-index-button");
     const mobileInfoButton = document.getElementById("mobile-info-button");
@@ -944,8 +984,6 @@
     }
 
     function preloadAboutAround(num) {
-      if (!num) return;
-
       [num - 1, num + 1].forEach(page => {
         if (page >= 1 && page <= ABOUT_TOTAL) {
           preloadImage(getAboutSrc(page));
@@ -1012,7 +1050,7 @@
       currentImage = null;
 
       closeDrawer();
-      goToAboutPage(targetPage);
+      goToAboutPage(targetPage, "none");
     }
 
     function showViewer(project, targetPage, direction = "none") {
@@ -1065,6 +1103,41 @@
         imageStage.classList.remove(direction);
         previousImage.style.display = "none";
         previousImage.removeAttribute("src");
+      }, 300);
+    }
+
+    async function setAboutImageWithTransition(src, direction) {
+      const token = ++aboutTransitionToken;
+      const currentSrc = aboutImage.getAttribute("src") || "";
+
+      aboutWrap.classList.remove("animate-about-next", "animate-about-prev");
+
+      if (aboutAnimationTimer) {
+        clearTimeout(aboutAnimationTimer);
+        aboutAnimationTimer = null;
+      }
+
+      if (!currentSrc || direction === "none" || currentSrc === src) {
+        aboutPreviousImage.style.display = "none";
+        aboutImage.src = src;
+        preloadImage(src);
+        return;
+      }
+
+      await preloadImage(src);
+      if (token !== aboutTransitionToken) return;
+
+      aboutPreviousImage.src = currentSrc;
+      aboutPreviousImage.style.display = "block";
+      aboutImage.src = src;
+
+      void aboutWrap.offsetWidth;
+      aboutWrap.classList.add(direction);
+
+      aboutAnimationTimer = setTimeout(() => {
+        aboutWrap.classList.remove(direction);
+        aboutPreviousImage.style.display = "none";
+        aboutPreviousImage.removeAttribute("src");
       }, 300);
     }
 
@@ -1127,6 +1200,30 @@
 
       prevPageButton.disabled = currentImage <= currentProject.start;
       nextPageButton.disabled = currentImage >= currentProject.end;
+    }
+
+    function goToAboutPage(num, direction = "none") {
+      const target = parseInt(num, 10);
+
+      if (!target) return;
+      if (target < 1 || target > ABOUT_TOTAL) return;
+
+      currentAboutPage = target;
+
+      const targetSrc = getAboutSrc(currentAboutPage);
+      setAboutImageWithTransition(targetSrc, direction);
+      preloadAboutAround(currentAboutPage);
+      updateAboutUrl(currentAboutPage);
+    }
+
+    function previousAboutPage() {
+      if (currentAboutPage <= 1) return;
+      goToAboutPage(currentAboutPage - 1, "animate-about-prev");
+    }
+
+    function nextAboutPage() {
+      if (currentAboutPage >= ABOUT_TOTAL) return;
+      goToAboutPage(currentAboutPage + 1, "animate-about-next");
     }
 
     function renderInfoText(project, text) {
@@ -1274,32 +1371,6 @@
         .replaceAll(">", "&gt;")
         .replaceAll('"', "&quot;")
         .replaceAll("'", "&#039;");
-    }
-
-    function goToAboutPage(num) {
-      const target = parseInt(num, 10);
-
-      if (!target) return;
-      if (target < 1 || target > ABOUT_TOTAL) return;
-
-      currentAboutPage = target;
-      aboutImage.src = getAboutSrc(currentAboutPage);
-
-      preloadImage(aboutImage.src);
-      preloadAboutAround(currentAboutPage);
-      updateAboutUrl(currentAboutPage);
-    }
-
-    function previousAboutPage() {
-      if (currentAboutPage > 1) {
-        goToAboutPage(currentAboutPage - 1);
-      }
-    }
-
-    function nextAboutPage() {
-      if (currentAboutPage < ABOUT_TOTAL) {
-        goToAboutPage(currentAboutPage + 1);
-      }
     }
 
     function openMenuDrawer() {
@@ -1494,11 +1565,11 @@
     const params = new URLSearchParams(window.location.search);
     const directPage = parseInt(params.get("page"), 10);
     const directProjectSlug = params.get("project");
-    const directAboutSlug = params.get("about");
+    const directAbout = params.get("about");
 
     let directProject = null;
 
-    if (directAboutSlug) {
+    if (directAbout) {
       showAbout(directPage || 1);
     } else {
       if (directProjectSlug) {
