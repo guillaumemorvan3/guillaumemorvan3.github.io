@@ -620,6 +620,15 @@
       background: #ffffff;
     }
 
+    .about-image-crop {
+      width: 100vw;
+      height: auto;
+      overflow: hidden;
+      background: #ffffff;
+      margin: 0;
+      padding: 0;
+    }
+
     .about-page-image {
       width: 100vw;
       height: auto;
@@ -632,19 +641,19 @@
     }
 
     .about-text {
-      padding: 22px 34px 0;
+      padding: 12px 34px 0;
       background: #ffffff;
     }
 
     .about-caption {
-      margin: 0 0 12px 0;
+      margin: 0 0 16px 0;
       font-family: var(--font-main);
-      font-size: 16px;
+      font-size: 17px;
       line-height: 1.28;
       font-weight: var(--weight-semibold);
       letter-spacing: -0.018em;
       color: var(--text-black);
-      text-align: left;
+      text-align: center;
     }
 
     .about-copy {
@@ -656,17 +665,34 @@
       margin: 0 0 14px 0;
       font-family: var(--font-main);
       font-size: 13px;
-      line-height: 1.6;
+      line-height: 1.62;
       font-weight: var(--weight-regular);
       letter-spacing: -0.005em;
       color: var(--text-black);
       text-align: justify;
       text-align-last: left;
+      text-indent: 1.45em;
       hyphens: auto;
     }
 
     .about-copy p:last-child {
       margin-bottom: 0;
+    }
+
+    .about-text.is-contact {
+      padding-left: 34px;
+      padding-right: 34px;
+      text-align: center;
+    }
+
+    .about-text.is-contact .about-caption {
+      text-align: center;
+    }
+
+    .about-text.is-contact .about-copy p {
+      text-align: center;
+      text-align-last: center;
+      text-indent: 0;
     }
 
     .drawer {
@@ -807,7 +833,7 @@
   </aside>
 
   <script>
-    const ASSET_VERSION = "2026-07-07-1";
+    const ASSET_VERSION = "2026-07-07-2";
 
     const VIGNETTE_FOLDER = "Vignettes/";
     const ABOUT_FOLDER = "apropos-mobile/";
@@ -911,6 +937,7 @@
     let animationTimer = null;
     let transitionToken = 0;
     let aboutScrollTimer = null;
+    let resizeTimer = null;
 
     const imageCache = new Map();
 
@@ -1078,6 +1105,7 @@
       updateAboutUrl(validPage);
 
       requestAnimationFrame(() => {
+        trimAllAboutImages();
         scrollToAboutPage(validPage, "auto");
       });
     }
@@ -1231,6 +1259,79 @@
 
       prevPageButton.disabled = currentImage <= currentProject.start;
       nextPageButton.disabled = currentImage >= currentProject.end;
+    }
+
+    function trimWhiteBottom(img) {
+      const wrapper = img.closest(".about-image-crop");
+      if (!wrapper || !img.naturalWidth || !img.naturalHeight) return;
+
+      try {
+        const scanWidth = Math.min(420, img.naturalWidth);
+        const scanHeight = Math.max(1, Math.round(img.naturalHeight * scanWidth / img.naturalWidth));
+
+        const canvas = document.createElement("canvas");
+        canvas.width = scanWidth;
+        canvas.height = scanHeight;
+
+        const ctx = canvas.getContext("2d", { willReadFrequently: true });
+        ctx.drawImage(img, 0, 0, scanWidth, scanHeight);
+
+        const data = ctx.getImageData(0, 0, scanWidth, scanHeight).data;
+        const rowThreshold = Math.max(3, Math.floor(scanWidth * 0.01));
+
+        let bottomContentY = scanHeight - 1;
+
+        for (let y = scanHeight - 1; y >= 0; y--) {
+          let contentPixels = 0;
+
+          for (let x = 0; x < scanWidth; x++) {
+            const index = (y * scanWidth + x) * 4;
+            const r = data[index];
+            const g = data[index + 1];
+            const b = data[index + 2];
+            const a = data[index + 3];
+
+            const isContent =
+              a > 20 &&
+              (r < 242 || g < 242 || b < 242);
+
+            if (isContent) {
+              contentPixels++;
+              if (contentPixels >= rowThreshold) break;
+            }
+          }
+
+          if (contentPixels >= rowThreshold) {
+            bottomContentY = y;
+            break;
+          }
+        }
+
+        const safetyMargin = Math.round(scanHeight * 0.025);
+        const cropY = Math.min(scanHeight, bottomContentY + safetyMargin);
+        const ratio = cropY / scanHeight;
+
+        if (ratio > 0.98) {
+          wrapper.style.height = "auto";
+          return;
+        }
+
+        const renderedWidth = wrapper.clientWidth || window.innerWidth;
+        const fullRenderedHeight = renderedWidth * img.naturalHeight / img.naturalWidth;
+        const croppedRenderedHeight = Math.ceil(fullRenderedHeight * ratio);
+
+        wrapper.style.height = `${croppedRenderedHeight}px`;
+      } catch (error) {
+        wrapper.style.height = "auto";
+      }
+    }
+
+    function trimAllAboutImages() {
+      document.querySelectorAll(".about-page-image").forEach(img => {
+        if (img.complete) {
+          trimWhiteBottom(img);
+        }
+      });
     }
 
     function renderInfoText(project, text) {
@@ -1402,6 +1503,18 @@
         ? `<div class="about-copy">${renderParagraphs(body)}</div>`
         : "";
 
+      const contactDetector = `${caption} ${body}`.toLowerCase();
+      const isContact =
+        contactDetector.includes("contact") ||
+        contactDetector.includes("@") ||
+        contactDetector.includes("tél") ||
+        contactDetector.includes("tel.") ||
+        contactDetector.includes("téléphone");
+
+      if (isContact) {
+        textContainer.classList.add("is-contact");
+      }
+
       textContainer.innerHTML = `${captionHtml}${bodyHtml}`;
       textContainer.classList.remove("hidden");
     }
@@ -1514,6 +1627,9 @@
         article.id = `about-page-${num}`;
         article.className = "about-item";
 
+        const imageCrop = document.createElement("div");
+        imageCrop.className = "about-image-crop";
+
         const img = document.createElement("img");
         img.className = "about-page-image";
         img.src = getAboutImageSrc(num);
@@ -1521,10 +1637,15 @@
         img.loading = index === 0 ? "eager" : "lazy";
         img.decoding = "async";
 
+        img.addEventListener("load", () => {
+          trimWhiteBottom(img);
+        });
+
         const textContainer = document.createElement("div");
         textContainer.className = "about-text hidden";
 
-        article.appendChild(img);
+        imageCrop.appendChild(img);
+        article.appendChild(imageCrop);
         article.appendChild(textContainer);
         aboutFeed.appendChild(article);
 
@@ -1605,6 +1726,11 @@
     aboutFeed.addEventListener("scroll", () => {
       clearTimeout(aboutScrollTimer);
       aboutScrollTimer = setTimeout(updateAboutPageFromScroll, 120);
+    });
+
+    window.addEventListener("resize", () => {
+      clearTimeout(resizeTimer);
+      resizeTimer = setTimeout(trimAllAboutImages, 150);
     });
 
     buildProjectCards();
