@@ -613,6 +613,13 @@
       margin: 0;
     }
 
+    .about-item {
+      width: 100vw;
+      margin: 0;
+      padding: 0 0 42px 0;
+      background: #ffffff;
+    }
+
     .about-page-image {
       width: 100vw;
       height: auto;
@@ -622,6 +629,44 @@
       background: #ffffff;
       user-select: none;
       -webkit-user-drag: none;
+    }
+
+    .about-text {
+      padding: 22px 34px 0;
+      background: #ffffff;
+    }
+
+    .about-caption {
+      margin: 0 0 12px 0;
+      font-family: var(--font-main);
+      font-size: 16px;
+      line-height: 1.28;
+      font-weight: var(--weight-semibold);
+      letter-spacing: -0.018em;
+      color: var(--text-black);
+      text-align: left;
+    }
+
+    .about-copy {
+      margin: 0;
+      padding: 0;
+    }
+
+    .about-copy p {
+      margin: 0 0 14px 0;
+      font-family: var(--font-main);
+      font-size: 13px;
+      line-height: 1.6;
+      font-weight: var(--weight-regular);
+      letter-spacing: -0.005em;
+      color: var(--text-black);
+      text-align: justify;
+      text-align-last: left;
+      hyphens: auto;
+    }
+
+    .about-copy p:last-child {
+      margin-bottom: 0;
     }
 
     .drawer {
@@ -762,7 +807,7 @@
   </aside>
 
   <script>
-    const ASSET_VERSION = "2026-06-26-10";
+    const ASSET_VERSION = "2026-07-07-1";
 
     const VIGNETTE_FOLDER = "Vignettes/";
     const ABOUT_FOLDER = "apropos-mobile/";
@@ -774,52 +819,20 @@
 
     const PROJECTS = [
       {
-        slug: "melle",
-        title: "Melle",
-        displayTitle: "Melle",
-        fullTitle: "Station ferroviaire Melle",
-        type: "Projet urbain et bâtiment mixte",
-        line: "Évolutivité et appropriation des espaces.",
-        infoTitle: "Évolutivité et appropriation de l’espace commun",
-        infoFile: "pages-mobile/melle/info.txt",
-        fallbackInfo: "Le projet investit le parc ferroviaire de Ledeberg, au sud de Gand, dans un tissu pavillonnaire dense.",
-        thumb: "melle.jpg",
-        folder: "pages-mobile/melle/",
+        slug: "edwood",
+        title: "Edwood",
+        displayTitle: "Edwood",
+        fullTitle: "Edwood",
+        type: "Construction bois",
+        line: "Le chantier comme école de la réalité constructive.",
+        infoTitle: "Le chantier comme école de la réalité constructive",
+        infoFile: "pages-mobile/edwood/info.txt",
+        fallbackInfo: "Chez Edwood, l’expérience en atelier et sur chantier m’a permis d’approfondir la réalité constructive du projet.",
+        thumb: "edwood.jpg",
+        folder: "pages-mobile/edwood/",
         filePrefix: "page",
         start: 1,
-        end: 9
-      },
-      {
-        slug: "saint-joseph",
-        title: "Saint-Joseph",
-        displayTitle: "Saint-Joseph",
-        fullTitle: "Église Saint-Joseph",
-        type: "Réhabilitation patrimoniale",
-        line: "Révéler les qualités cachées du patrimoine.",
-        infoTitle: "Révéler les qualités cachées du patrimoine",
-        infoFile: "pages-mobile/saint-joseph/info.txt",
-        fallbackInfo: "Le projet interroge la capacité d’un édifice patrimonial à accueillir de nouveaux usages sans perdre sa présence ni sa mémoire.",
-        thumb: "saint-joseph.jpg",
-        folder: "pages-mobile/saint-joseph/",
-        filePrefix: "page",
-        start: 1,
-        end: 15
-      },
-      {
-        slug: "ferme-nord",
-        title: "Ferme Nord",
-        displayTitle: "Ferme Nord",
-        fullTitle: "Ferme Nord",
-        type: "Réhabilitation et extension",
-        line: "L’harmonieux contraste.",
-        infoTitle: "L’harmonieux contraste",
-        infoFile: "pages-mobile/ferme-nord/info.txt",
-        fallbackInfo: "La Ferme Nord met en tension patrimoine agricole, extension contemporaine et paysage dunaire.",
-        thumb: "ferme-nord.jpg",
-        folder: "pages-mobile/ferme-nord/",
-        filePrefix: "page",
-        start: 1,
-        end: 29
+        end: 7
       },
       {
         slug: "tank",
@@ -838,20 +851,52 @@
         end: 13
       },
       {
-        slug: "edwood",
-        title: "Edwood",
-        displayTitle: "Edwood",
-        fullTitle: "Edwood",
-        type: "Construction bois",
-        line: "Le chantier comme école de la réalité constructive.",
-        infoTitle: "Le chantier comme école de la réalité constructive",
-        infoFile: "pages-mobile/edwood/info.txt",
-        fallbackInfo: "Chez Edwood, l’expérience en atelier et sur chantier m’a permis d’approfondir la réalité constructive du projet.",
-        thumb: "edwood.jpg",
-        folder: "pages-mobile/edwood/",
+        slug: "ferme-nord",
+        title: "Ferme Nord",
+        displayTitle: "Ferme Nord",
+        fullTitle: "Ferme Nord",
+        type: "Réhabilitation et extension",
+        line: "L’harmonieux contraste.",
+        infoTitle: "L’harmonieux contraste",
+        infoFile: "pages-mobile/ferme-nord/info.txt",
+        fallbackInfo: "La Ferme Nord met en tension patrimoine agricole, extension contemporaine et paysage dunaire.",
+        thumb: "ferme-nord.jpg",
+        folder: "pages-mobile/ferme-nord/",
         filePrefix: "page",
         start: 1,
-        end: 7
+        end: 29
+      },
+      {
+        slug: "saint-joseph",
+        title: "Saint-Joseph",
+        displayTitle: "Saint-Joseph",
+        fullTitle: "Église Saint-Joseph",
+        type: "Réhabilitation patrimoniale",
+        line: "Révéler les qualités cachées du patrimoine.",
+        infoTitle: "Révéler les qualités cachées du patrimoine",
+        infoFile: "pages-mobile/saint-joseph/info.txt",
+        fallbackInfo: "Le projet interroge la capacité d’un édifice patrimonial à accueillir de nouveaux usages sans perdre sa présence ni sa mémoire.",
+        thumb: "saint-joseph.jpg",
+        folder: "pages-mobile/saint-joseph/",
+        filePrefix: "page",
+        start: 1,
+        end: 15
+      },
+      {
+        slug: "melle",
+        title: "Melle",
+        displayTitle: "Melle",
+        fullTitle: "Station ferroviaire Melle",
+        type: "Projet urbain et bâtiment mixte",
+        line: "Évolutivité et appropriation des espaces.",
+        infoTitle: "Évolutivité et appropriation de l’espace commun",
+        infoFile: "pages-mobile/melle/info.txt",
+        fallbackInfo: "Le projet investit le parc ferroviaire de Ledeberg, au sud de Gand, dans un tissu pavillonnaire dense.",
+        thumb: "melle.jpg",
+        folder: "pages-mobile/melle/",
+        filePrefix: "page",
+        start: 1,
+        end: 9
       }
     ];
 
@@ -901,8 +946,16 @@
       return encodeURI(`${project.folder}${project.filePrefix} (${num}).jpg`) + `?v=${ASSET_VERSION}`;
     }
 
-    function getAboutSrc(num) {
+    function getAboutImageSrc(num) {
       return encodeURI(`${ABOUT_FOLDER}page (${num}).jpg`) + `?v=${ASSET_VERSION}`;
+    }
+
+    function getAboutTextSrc(num) {
+      return encodeURI(`${ABOUT_FOLDER}page (${num}).txt`) + `?v=${ASSET_VERSION}`;
+    }
+
+    function getAboutCaptionSrc(num) {
+      return encodeURI(`${ABOUT_FOLDER}caption (${num}).txt`) + `?v=${ASSET_VERSION}`;
     }
 
     function getVignetteSrc(filename) {
@@ -947,7 +1000,18 @@
     }
 
     function preloadAboutImages() {
-      ABOUT_PAGES.forEach(num => preloadImage(getAboutSrc(num)));
+      ABOUT_PAGES.forEach(num => preloadImage(getAboutImageSrc(num)));
+    }
+
+    async function fetchTextFile(src) {
+      try {
+        const response = await fetch(src);
+        if (!response.ok) return "";
+        const text = await response.text();
+        return text.trim();
+      } catch (error) {
+        return "";
+      }
     }
 
     function clearUrl() {
@@ -1307,6 +1371,41 @@
       }
     }
 
+    function renderParagraphs(text) {
+      const clean = (text || "").trim();
+
+      if (!clean) return "";
+
+      return clean
+        .replace(/\r\n/g, "\n")
+        .split(/\n\s*\n/)
+        .map(paragraph => paragraph.trim())
+        .filter(Boolean)
+        .map(paragraph => `<p>${escapeHtml(paragraph).replace(/\n/g, "<br>")}</p>`)
+        .join("");
+    }
+
+    async function loadAboutText(num, textContainer) {
+      const caption = await fetchTextFile(getAboutCaptionSrc(num));
+      const body = await fetchTextFile(getAboutTextSrc(num));
+
+      if (!caption && !body) {
+        textContainer.classList.add("hidden");
+        return;
+      }
+
+      const captionHtml = caption
+        ? `<h2 class="about-caption">${escapeHtml(caption).replace(/\n/g, "<br>")}</h2>`
+        : "";
+
+      const bodyHtml = body
+        ? `<div class="about-copy">${renderParagraphs(body)}</div>`
+        : "";
+
+      textContainer.innerHTML = `${captionHtml}${bodyHtml}`;
+      textContainer.classList.remove("hidden");
+    }
+
     function escapeHtml(value) {
       return String(value)
         .replaceAll("&", "&amp;")
@@ -1411,16 +1510,25 @@
       aboutFeed.innerHTML = "";
 
       ABOUT_PAGES.forEach((num, index) => {
-        const img = document.createElement("img");
+        const article = document.createElement("article");
+        article.id = `about-page-${num}`;
+        article.className = "about-item";
 
-        img.id = `about-page-${num}`;
+        const img = document.createElement("img");
         img.className = "about-page-image";
-        img.src = getAboutSrc(num);
+        img.src = getAboutImageSrc(num);
         img.alt = `À propos — page ${num}`;
         img.loading = index === 0 ? "eager" : "lazy";
         img.decoding = "async";
 
-        aboutFeed.appendChild(img);
+        const textContainer = document.createElement("div");
+        textContainer.className = "about-text hidden";
+
+        article.appendChild(img);
+        article.appendChild(textContainer);
+        aboutFeed.appendChild(article);
+
+        loadAboutText(num, textContainer);
       });
 
       preloadAboutImages();
