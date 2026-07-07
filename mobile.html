@@ -596,63 +596,32 @@
     .about {
       width: 100vw;
       height: calc(100dvh - 84px);
-      display: flex;
-      align-items: center;
-      justify-content: center;
-      overflow: hidden;
       background: #ffffff;
+      overflow: hidden;
     }
 
-    .about-wrap {
-      width: 100vw;
-      height: calc(100dvh - 84px);
-      display: flex;
-      align-items: center;
-      justify-content: center;
-      overflow: hidden;
-      touch-action: none;
-      position: relative;
-      background: #ffffff;
-    }
-
-    .about-image-layer {
-      position: absolute;
-      inset: 0;
+    .about-feed {
       width: 100vw;
       height: 100%;
-      object-fit: contain;
-      object-position: center;
+      overflow-y: auto;
+      overflow-x: hidden;
+      background: #ffffff;
+      -webkit-overflow-scrolling: touch;
+      overscroll-behavior: contain;
+      touch-action: pan-y;
+      padding: 0;
+      margin: 0;
+    }
+
+    .about-page-image {
+      width: 100vw;
+      height: auto;
+      display: block;
+      margin: 0;
+      padding: 0;
+      background: #ffffff;
       user-select: none;
       -webkit-user-drag: none;
-      background: #ffffff;
-      pointer-events: none;
-    }
-
-    .about-previous-image {
-      display: none;
-      z-index: 1;
-    }
-
-    .about-current-image {
-      z-index: 2;
-    }
-
-    .about-wrap.animate-about-next .about-previous-image {
-      display: block;
-      animation: outUp 280ms ease forwards;
-    }
-
-    .about-wrap.animate-about-next .about-current-image {
-      animation: inBottom 280ms ease forwards;
-    }
-
-    .about-wrap.animate-about-prev .about-previous-image {
-      display: block;
-      animation: outDown 280ms ease forwards;
-    }
-
-    .about-wrap.animate-about-prev .about-current-image {
-      animation: inTop 280ms ease forwards;
     }
 
     .drawer {
@@ -746,10 +715,7 @@
     </main>
 
     <main id="about" class="about hidden">
-      <div id="about-wrap" class="about-wrap">
-        <img id="about-previous-image" class="about-image-layer about-previous-image" src="" alt="" />
-        <img id="about-image" class="about-image-layer about-current-image" src="" alt="À propos — Guillaume Morvan" />
-      </div>
+      <div id="about-feed" class="about-feed"></div>
     </main>
 
     <main id="viewer" class="viewer hidden">
@@ -796,63 +762,32 @@
   </aside>
 
   <script>
-    const ASSET_VERSION = "2026-06-29-1";
+    const ASSET_VERSION = "2026-06-26-10";
 
     const VIGNETTE_FOLDER = "Vignettes/";
     const ABOUT_FOLDER = "apropos-mobile/";
-    const ABOUT_TOTAL = 5;
+
+    const ABOUT_PAGES = [2, 3, 4];
 
     const SWIPE_MIN = 45;
     const DIRECTION_RATIO = 1.15;
 
     const PROJECTS = [
       {
-        slug: "edwood",
-        title: "Edwood",
-        displayTitle: "Edwood",
-        fullTitle: "Edwood",
-        type: "Construction bois",
-        line: "Le chantier comme école de la réalité constructive.",
-        infoTitle: "Le chantier comme école de la réalité constructive",
-        infoFile: "pages-mobile/edwood/info.txt",
-        fallbackInfo: "Chez Edwood, l’expérience en atelier et sur chantier m’a permis d’approfondir la réalité constructive du projet.",
-        thumb: "edwood.jpg",
-        folder: "pages-mobile/edwood/",
+        slug: "melle",
+        title: "Melle",
+        displayTitle: "Melle",
+        fullTitle: "Station ferroviaire Melle",
+        type: "Projet urbain et bâtiment mixte",
+        line: "Évolutivité et appropriation des espaces.",
+        infoTitle: "Évolutivité et appropriation de l’espace commun",
+        infoFile: "pages-mobile/melle/info.txt",
+        fallbackInfo: "Le projet investit le parc ferroviaire de Ledeberg, au sud de Gand, dans un tissu pavillonnaire dense.",
+        thumb: "melle.jpg",
+        folder: "pages-mobile/melle/",
         filePrefix: "page",
         start: 1,
-        end: 7
-      },
-      {
-        slug: "tank",
-        title: "TANK",
-        displayTitle: "TANK",
-        fullTitle: "TANK Architectes",
-        type: "Expérience en agence",
-        line: "L’architecte dans une pratique engagée pour la qualité.",
-        infoTitle: "L’architecte engagé dans la qualité",
-        infoFile: "pages-mobile/tank/info.txt",
-        fallbackInfo: "L’expérience chez TANK Architectes m’a permis d’approcher une pratique collective exigeante.",
-        thumb: "tank.jpg",
-        folder: "pages-mobile/tank/",
-        filePrefix: "page",
-        start: 1,
-        end: 13
-      },
-      {
-        slug: "ferme-nord",
-        title: "Ferme Nord",
-        displayTitle: "Ferme Nord",
-        fullTitle: "Ferme Nord",
-        type: "Réhabilitation et extension",
-        line: "L’harmonieux contraste.",
-        infoTitle: "L’harmonieux contraste",
-        infoFile: "pages-mobile/ferme-nord/info.txt",
-        fallbackInfo: "La Ferme Nord met en tension patrimoine agricole, extension contemporaine et paysage dunaire.",
-        thumb: "ferme-nord.jpg",
-        folder: "pages-mobile/ferme-nord/",
-        filePrefix: "page",
-        start: 1,
-        end: 29
+        end: 9
       },
       {
         slug: "saint-joseph",
@@ -871,35 +806,66 @@
         end: 15
       },
       {
-        slug: "melle",
-        title: "Melle",
-        displayTitle: "Melle",
-        fullTitle: "Station ferroviaire Melle",
-        type: "Projet urbain et bâtiment mixte",
-        line: "Évolutivité et appropriation des espaces.",
-        infoTitle: "Évolutivité et appropriation de l’espace commun",
-        infoFile: "pages-mobile/melle/info.txt",
-        fallbackInfo: "Le projet investit le parc ferroviaire de Ledeberg, au sud de Gand, dans un tissu pavillonnaire dense.",
-        thumb: "melle.jpg",
-        folder: "pages-mobile/melle/",
+        slug: "ferme-nord",
+        title: "Ferme Nord",
+        displayTitle: "Ferme Nord",
+        fullTitle: "Ferme Nord",
+        type: "Réhabilitation et extension",
+        line: "L’harmonieux contraste.",
+        infoTitle: "L’harmonieux contraste",
+        infoFile: "pages-mobile/ferme-nord/info.txt",
+        fallbackInfo: "La Ferme Nord met en tension patrimoine agricole, extension contemporaine et paysage dunaire.",
+        thumb: "ferme-nord.jpg",
+        folder: "pages-mobile/ferme-nord/",
         filePrefix: "page",
         start: 1,
-        end: 9
+        end: 29
+      },
+      {
+        slug: "tank",
+        title: "TANK",
+        displayTitle: "TANK",
+        fullTitle: "TANK Architectes",
+        type: "Expérience en agence",
+        line: "L’architecte dans une pratique engagée pour la qualité.",
+        infoTitle: "L’architecte engagé dans la qualité",
+        infoFile: "pages-mobile/tank/info.txt",
+        fallbackInfo: "L’expérience chez TANK Architectes m’a permis d’approcher une pratique collective exigeante.",
+        thumb: "tank.jpg",
+        folder: "pages-mobile/tank/",
+        filePrefix: "page",
+        start: 1,
+        end: 13
+      },
+      {
+        slug: "edwood",
+        title: "Edwood",
+        displayTitle: "Edwood",
+        fullTitle: "Edwood",
+        type: "Construction bois",
+        line: "Le chantier comme école de la réalité constructive.",
+        infoTitle: "Le chantier comme école de la réalité constructive",
+        infoFile: "pages-mobile/edwood/info.txt",
+        fallbackInfo: "Chez Edwood, l’expérience en atelier et sur chantier m’a permis d’approfondir la réalité constructive du projet.",
+        thumb: "edwood.jpg",
+        folder: "pages-mobile/edwood/",
+        filePrefix: "page",
+        start: 1,
+        end: 7
       }
     ];
 
     let currentProject = null;
     let currentImage = null;
-    let currentAboutPage = 1;
+    let currentAboutPage = ABOUT_PAGES[0];
 
     let gestureStartX = 0;
     let gestureStartY = 0;
     let gestureActive = false;
     let lastGestureTime = 0;
     let animationTimer = null;
-    let aboutAnimationTimer = null;
     let transitionToken = 0;
-    let aboutTransitionToken = 0;
+    let aboutScrollTimer = null;
 
     const imageCache = new Map();
 
@@ -907,16 +873,13 @@
     const site = document.getElementById("site");
     const summary = document.getElementById("summary");
     const about = document.getElementById("about");
+    const aboutFeed = document.getElementById("about-feed");
     const viewer = document.getElementById("viewer");
 
     const documentWrap = document.getElementById("document-wrap");
     const imageStage = document.getElementById("image-stage");
     const previousImage = document.getElementById("previous-image");
     const pageImage = document.getElementById("page-image");
-
-    const aboutWrap = document.getElementById("about-wrap");
-    const aboutPreviousImage = document.getElementById("about-previous-image");
-    const aboutImage = document.getElementById("about-image");
 
     const prevPageButton = document.getElementById("prev-page-button");
     const nextPageButton = document.getElementById("next-page-button");
@@ -983,12 +946,8 @@
       if (nextProject) preloadImage(getImageSrc(nextProject, nextProject.start));
     }
 
-    function preloadAboutAround(num) {
-      [num - 1, num + 1].forEach(page => {
-        if (page >= 1 && page <= ABOUT_TOTAL) {
-          preloadImage(getAboutSrc(page));
-        }
-      });
+    function preloadAboutImages() {
+      ABOUT_PAGES.forEach(num => preloadImage(getAboutSrc(num)));
     }
 
     function clearUrl() {
@@ -1034,13 +993,12 @@
 
       currentProject = null;
       currentImage = null;
-      currentAboutPage = 1;
 
       closeDrawer();
       clearUrl();
     }
 
-    function showAbout(targetPage = 1) {
+    function showAbout(targetPage = ABOUT_PAGES[0]) {
       home.classList.add("hidden");
       site.classList.remove("hidden");
       hideAllMainViews();
@@ -1050,7 +1008,51 @@
       currentImage = null;
 
       closeDrawer();
-      goToAboutPage(targetPage, "none");
+
+      const validPage = ABOUT_PAGES.includes(targetPage) ? targetPage : ABOUT_PAGES[0];
+      currentAboutPage = validPage;
+      updateAboutUrl(validPage);
+
+      requestAnimationFrame(() => {
+        scrollToAboutPage(validPage, "auto");
+      });
+    }
+
+    function scrollToAboutPage(num, behavior = "smooth") {
+      const target = document.getElementById(`about-page-${num}`);
+      if (!target) {
+        aboutFeed.scrollTo({ top: 0, behavior });
+        return;
+      }
+
+      aboutFeed.scrollTo({
+        top: target.offsetTop,
+        behavior
+      });
+    }
+
+    function updateAboutPageFromScroll() {
+      if (about.classList.contains("hidden")) return;
+
+      let nearestPage = ABOUT_PAGES[0];
+      let nearestDistance = Infinity;
+
+      ABOUT_PAGES.forEach(num => {
+        const element = document.getElementById(`about-page-${num}`);
+        if (!element) return;
+
+        const distance = Math.abs(element.offsetTop - aboutFeed.scrollTop);
+
+        if (distance < nearestDistance) {
+          nearestDistance = distance;
+          nearestPage = num;
+        }
+      });
+
+      if (nearestPage !== currentAboutPage) {
+        currentAboutPage = nearestPage;
+        updateAboutUrl(nearestPage);
+      }
     }
 
     function showViewer(project, targetPage, direction = "none") {
@@ -1103,41 +1105,6 @@
         imageStage.classList.remove(direction);
         previousImage.style.display = "none";
         previousImage.removeAttribute("src");
-      }, 300);
-    }
-
-    async function setAboutImageWithTransition(src, direction) {
-      const token = ++aboutTransitionToken;
-      const currentSrc = aboutImage.getAttribute("src") || "";
-
-      aboutWrap.classList.remove("animate-about-next", "animate-about-prev");
-
-      if (aboutAnimationTimer) {
-        clearTimeout(aboutAnimationTimer);
-        aboutAnimationTimer = null;
-      }
-
-      if (!currentSrc || direction === "none" || currentSrc === src) {
-        aboutPreviousImage.style.display = "none";
-        aboutImage.src = src;
-        preloadImage(src);
-        return;
-      }
-
-      await preloadImage(src);
-      if (token !== aboutTransitionToken) return;
-
-      aboutPreviousImage.src = currentSrc;
-      aboutPreviousImage.style.display = "block";
-      aboutImage.src = src;
-
-      void aboutWrap.offsetWidth;
-      aboutWrap.classList.add(direction);
-
-      aboutAnimationTimer = setTimeout(() => {
-        aboutWrap.classList.remove(direction);
-        aboutPreviousImage.style.display = "none";
-        aboutPreviousImage.removeAttribute("src");
       }, 300);
     }
 
@@ -1200,30 +1167,6 @@
 
       prevPageButton.disabled = currentImage <= currentProject.start;
       nextPageButton.disabled = currentImage >= currentProject.end;
-    }
-
-    function goToAboutPage(num, direction = "none") {
-      const target = parseInt(num, 10);
-
-      if (!target) return;
-      if (target < 1 || target > ABOUT_TOTAL) return;
-
-      currentAboutPage = target;
-
-      const targetSrc = getAboutSrc(currentAboutPage);
-      setAboutImageWithTransition(targetSrc, direction);
-      preloadAboutAround(currentAboutPage);
-      updateAboutUrl(currentAboutPage);
-    }
-
-    function previousAboutPage() {
-      if (currentAboutPage <= 1) return;
-      goToAboutPage(currentAboutPage - 1, "animate-about-prev");
-    }
-
-    function nextAboutPage() {
-      if (currentAboutPage >= ABOUT_TOTAL) return;
-      goToAboutPage(currentAboutPage + 1, "animate-about-next");
     }
 
     function renderInfoText(project, text) {
@@ -1464,6 +1407,25 @@
       });
     }
 
+    function buildAboutFeed() {
+      aboutFeed.innerHTML = "";
+
+      ABOUT_PAGES.forEach((num, index) => {
+        const img = document.createElement("img");
+
+        img.id = `about-page-${num}`;
+        img.className = "about-page-image";
+        img.src = getAboutSrc(num);
+        img.alt = `À propos — page ${num}`;
+        img.loading = index === 0 ? "eager" : "lazy";
+        img.decoding = "async";
+
+        aboutFeed.appendChild(img);
+      });
+
+      preloadAboutImages();
+    }
+
     function startGesture(x, y) {
       gestureStartX = x;
       gestureStartY = y;
@@ -1502,28 +1464,6 @@
       }
     }
 
-    function endAboutGesture(x, y) {
-      if (!gestureActive) return;
-
-      gestureActive = false;
-
-      const now = Date.now();
-      if (now - lastGestureTime < 220) return;
-      lastGestureTime = now;
-
-      const dx = x - gestureStartX;
-      const dy = y - gestureStartY;
-
-      const absX = Math.abs(dx);
-      const absY = Math.abs(dy);
-
-      if (absY < SWIPE_MIN) return;
-      if (absY < absX * DIRECTION_RATIO) return;
-
-      if (dy < 0) nextAboutPage();
-      else previousAboutPage();
-    }
-
     function preventGestureScroll(e) {
       e.preventDefault();
     }
@@ -1538,7 +1478,7 @@
     document.getElementById("close-drawer").addEventListener("click", closeDrawer);
 
     document.getElementById("drawer-home").addEventListener("click", showSummary);
-    document.getElementById("drawer-about").addEventListener("click", () => showAbout(1));
+    document.getElementById("drawer-about").addEventListener("click", () => showAbout(ABOUT_PAGES[0]));
 
     overlay.addEventListener("click", closeDrawer);
 
@@ -1554,13 +1494,14 @@
     documentWrap.addEventListener("pointercancel", () => { gestureActive = false; });
     documentWrap.addEventListener("touchmove", preventGestureScroll, { passive: false });
 
-    aboutWrap.addEventListener("pointerdown", e => startGesture(e.clientX, e.clientY));
-    aboutWrap.addEventListener("pointerup", e => endAboutGesture(e.clientX, e.clientY));
-    aboutWrap.addEventListener("pointercancel", () => { gestureActive = false; });
-    aboutWrap.addEventListener("touchmove", preventGestureScroll, { passive: false });
+    aboutFeed.addEventListener("scroll", () => {
+      clearTimeout(aboutScrollTimer);
+      aboutScrollTimer = setTimeout(updateAboutPageFromScroll, 120);
+    });
 
     buildProjectCards();
     buildProjectIndex();
+    buildAboutFeed();
 
     const params = new URLSearchParams(window.location.search);
     const directPage = parseInt(params.get("page"), 10);
@@ -1570,7 +1511,7 @@
     let directProject = null;
 
     if (directAbout) {
-      showAbout(directPage || 1);
+      showAbout(directPage || ABOUT_PAGES[0]);
     } else {
       if (directProjectSlug) {
         directProject = PROJECTS.find(project => project.slug === directProjectSlug);
