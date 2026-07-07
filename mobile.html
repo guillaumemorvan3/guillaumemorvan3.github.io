@@ -235,7 +235,7 @@
       width: 100vw;
       height: calc(100dvh - 84px);
       display: grid;
-      grid-template-rows: minmax(0, 1fr) 24px 52px;
+      grid-template-rows: minmax(0, 1fr) auto 24px 52px;
       background: #ffffff;
       overflow: hidden;
     }
@@ -359,6 +359,19 @@
     @keyframes outDown {
       from { transform: translateY(0); opacity: 1; }
       to { transform: translateY(100%); opacity: 1; }
+    }
+
+    .mobile-page-caption {
+      padding: 0 34px 8px;
+      font-family: var(--font-main);
+      font-size: 13px;
+      line-height: 1.35;
+      font-weight: var(--weight-medium);
+      letter-spacing: -0.012em;
+      color: rgba(17, 17, 17, 0.76);
+      text-align: center;
+      white-space: pre-line;
+      background: #ffffff;
     }
 
     .mobile-swipe-indicator {
@@ -620,6 +633,14 @@
       background: #ffffff;
     }
 
+    .about-item.is-text-only {
+      min-height: calc(100dvh - 84px);
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      padding: 54px 34px;
+    }
+
     .about-image-crop {
       width: 100vw;
       height: auto;
@@ -642,6 +663,12 @@
 
     .about-text {
       padding: 12px 34px 0;
+      background: #ffffff;
+    }
+
+    .about-item.is-text-only .about-text {
+      width: 100%;
+      padding: 0;
       background: #ffffff;
     }
 
@@ -676,6 +703,22 @@
     }
 
     .about-copy p:last-child {
+      margin-bottom: 0;
+    }
+
+    .about-item.is-quote .about-copy p {
+      font-size: 16px;
+      line-height: 1.58;
+      font-weight: var(--weight-regular);
+      letter-spacing: -0.012em;
+      text-align: center;
+      text-align-last: center;
+      text-indent: 0;
+      margin: 0 auto 16px;
+      max-width: 28em;
+    }
+
+    .about-item.is-quote .about-copy p:last-child {
       margin-bottom: 0;
     }
 
@@ -797,6 +840,8 @@
         </div>
       </div>
 
+      <div id="mobile-page-caption" class="mobile-page-caption hidden"></div>
+
       <div class="mobile-swipe-indicator">
         <button id="prev-page-button" class="swipe-arrow-button" aria-label="Page précédente">‹</button>
         <span id="mobile-counter">1/1</span>
@@ -833,12 +878,20 @@
   </aside>
 
   <script>
-    const ASSET_VERSION = "2026-07-07-2";
+    const ASSET_VERSION = "2026-07-07-4";
 
     const VIGNETTE_FOLDER = "Vignettes/";
     const ABOUT_FOLDER = "apropos-mobile/";
 
-    const ABOUT_PAGES = [2, 3, 4];
+    const ABOUT_ITEMS = [
+      { num: 1, hasImage: false, isQuote: true },
+      { num: 2, hasImage: true, isQuote: false },
+      { num: 3, hasImage: true, isQuote: false },
+      { num: 4, hasImage: true, isQuote: false },
+      { num: 5, hasImage: false, isQuote: true }
+    ];
+
+    const ABOUT_PAGES = ABOUT_ITEMS.map(item => item.num);
 
     const SWIPE_MIN = 45;
     const DIRECTION_RATIO = 1.15;
@@ -936,6 +989,7 @@
     let lastGestureTime = 0;
     let animationTimer = null;
     let transitionToken = 0;
+    let captionToken = 0;
     let aboutScrollTimer = null;
     let resizeTimer = null;
 
@@ -953,6 +1007,7 @@
     const previousImage = document.getElementById("previous-image");
     const pageImage = document.getElementById("page-image");
 
+    const mobilePageCaption = document.getElementById("mobile-page-caption");
     const prevPageButton = document.getElementById("prev-page-button");
     const nextPageButton = document.getElementById("next-page-button");
 
@@ -971,6 +1026,10 @@
 
     function getImageSrc(project, num) {
       return encodeURI(`${project.folder}${project.filePrefix} (${num}).jpg`) + `?v=${ASSET_VERSION}`;
+    }
+
+    function getProjectCaptionSrc(project, num) {
+      return encodeURI(`${project.folder}caption (${num}).txt`) + `?v=${ASSET_VERSION}`;
     }
 
     function getAboutImageSrc(num) {
@@ -1027,7 +1086,9 @@
     }
 
     function preloadAboutImages() {
-      ABOUT_PAGES.forEach(num => preloadImage(getAboutImageSrc(num)));
+      ABOUT_ITEMS.forEach(item => {
+        if (item.hasImage) preloadImage(getAboutImageSrc(item.num));
+      });
     }
 
     async function fetchTextFile(src) {
@@ -1214,8 +1275,33 @@
       setImageWithTransition(targetSrc, direction);
       preloadAround(currentProject, currentImage);
 
+      loadProjectPageCaption(currentProject, currentImage);
+
       updateProjectUrl(currentImage);
       updateMobileProjectUi();
+    }
+
+    async function loadProjectPageCaption(project, num) {
+      const token = ++captionToken;
+
+      mobilePageCaption.textContent = "";
+      mobilePageCaption.classList.add("hidden");
+
+      if (!project || !num) return;
+
+      const caption = await fetchTextFile(getProjectCaptionSrc(project, num));
+
+      if (token !== captionToken) return;
+      if (!currentProject || currentProject.slug !== project.slug || currentImage !== num) return;
+
+      if (!caption) {
+        mobilePageCaption.textContent = "";
+        mobilePageCaption.classList.add("hidden");
+        return;
+      }
+
+      mobilePageCaption.textContent = caption;
+      mobilePageCaption.classList.remove("hidden");
     }
 
     function previousPage() {
@@ -1486,7 +1572,8 @@
         .join("");
     }
 
-    async function loadAboutText(num, textContainer) {
+    async function loadAboutText(item, textContainer) {
+      const num = item.num;
       const caption = await fetchTextFile(getAboutCaptionSrc(num));
       const body = await fetchTextFile(getAboutTextSrc(num));
 
@@ -1622,34 +1709,45 @@
     function buildAboutFeed() {
       aboutFeed.innerHTML = "";
 
-      ABOUT_PAGES.forEach((num, index) => {
+      ABOUT_ITEMS.forEach((item, index) => {
         const article = document.createElement("article");
-        article.id = `about-page-${num}`;
+        article.id = `about-page-${item.num}`;
         article.className = "about-item";
 
-        const imageCrop = document.createElement("div");
-        imageCrop.className = "about-image-crop";
+        if (!item.hasImage) {
+          article.classList.add("is-text-only");
+        }
 
-        const img = document.createElement("img");
-        img.className = "about-page-image";
-        img.src = getAboutImageSrc(num);
-        img.alt = `À propos — page ${num}`;
-        img.loading = index === 0 ? "eager" : "lazy";
-        img.decoding = "async";
+        if (item.isQuote) {
+          article.classList.add("is-quote");
+        }
 
-        img.addEventListener("load", () => {
-          trimWhiteBottom(img);
-        });
+        if (item.hasImage) {
+          const imageCrop = document.createElement("div");
+          imageCrop.className = "about-image-crop";
+
+          const img = document.createElement("img");
+          img.className = "about-page-image";
+          img.src = getAboutImageSrc(item.num);
+          img.alt = `À propos — page ${item.num}`;
+          img.loading = index === 0 ? "eager" : "lazy";
+          img.decoding = "async";
+
+          img.addEventListener("load", () => {
+            trimWhiteBottom(img);
+          });
+
+          imageCrop.appendChild(img);
+          article.appendChild(imageCrop);
+        }
 
         const textContainer = document.createElement("div");
         textContainer.className = "about-text hidden";
 
-        imageCrop.appendChild(img);
-        article.appendChild(imageCrop);
         article.appendChild(textContainer);
         aboutFeed.appendChild(article);
 
-        loadAboutText(num, textContainer);
+        loadAboutText(item, textContainer);
       });
 
       preloadAboutImages();
