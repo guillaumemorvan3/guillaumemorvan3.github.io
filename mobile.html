@@ -20,7 +20,7 @@
       --weight-regular: 400;
       --weight-medium: 500;
       --weight-semibold: 600;
-      --weight-title: 700;
+      --weight-title: 600;
 
       --text-black: #111;
       --text-soft: rgba(17, 17, 17, 0.72);
@@ -75,11 +75,11 @@
       padding: 0;
       color: #ffffff;
       font-family: var(--font-main);
-      font-size: 25px;
+      font-size: 18px;
       line-height: 1;
       font-weight: var(--weight-title);
-      letter-spacing: 0.035em;
-      text-transform: uppercase;
+      letter-spacing: 0.012em;
+      text-transform: none;
       cursor: default;
     }
 
@@ -111,11 +111,11 @@
       background: transparent;
       padding: 0;
       font-family: var(--font-main);
-      font-size: 25px;
+      font-size: 18px;
       line-height: 1;
       font-weight: var(--weight-title);
-      letter-spacing: 0.035em;
-      text-transform: uppercase;
+      letter-spacing: 0.012em;
+      text-transform: none;
       cursor: default;
       white-space: nowrap;
       color: var(--text-black);
@@ -263,6 +263,24 @@
       background: #ffffff;
     }
 
+    .page-layer {
+      position: absolute;
+      inset: 0;
+      width: 100vw;
+      height: 100%;
+      overflow: hidden;
+      background: #ffffff;
+    }
+
+    .previous-layer {
+      display: none;
+      z-index: 1;
+    }
+
+    .current-layer {
+      z-index: 2;
+    }
+
     .page-image-layer {
       position: absolute;
       inset: 0;
@@ -275,15 +293,6 @@
       -webkit-user-drag: none;
       pointer-events: none;
       background: #ffffff;
-    }
-
-    .previous-image {
-      display: none;
-      z-index: 1;
-    }
-
-    .current-image {
-      z-index: 2;
     }
 
     .mobile-page-caption {
@@ -308,39 +317,39 @@
       pointer-events: none;
     }
 
-    .image-stage.animate-next-page .previous-image {
+    .image-stage.animate-next-page .previous-layer {
       display: block;
       animation: outLeft 260ms ease forwards;
     }
 
-    .image-stage.animate-next-page .current-image {
+    .image-stage.animate-next-page .current-layer {
       animation: inRight 260ms ease forwards;
     }
 
-    .image-stage.animate-prev-page .previous-image {
+    .image-stage.animate-prev-page .previous-layer {
       display: block;
       animation: outRight 260ms ease forwards;
     }
 
-    .image-stage.animate-prev-page .current-image {
+    .image-stage.animate-prev-page .current-layer {
       animation: inLeft 260ms ease forwards;
     }
 
-    .image-stage.animate-next-project .previous-image {
+    .image-stage.animate-next-project .previous-layer {
       display: block;
       animation: outUp 280ms ease forwards;
     }
 
-    .image-stage.animate-next-project .current-image {
+    .image-stage.animate-next-project .current-layer {
       animation: inBottom 280ms ease forwards;
     }
 
-    .image-stage.animate-prev-project .previous-image {
+    .image-stage.animate-prev-project .previous-layer {
       display: block;
       animation: outDown 280ms ease forwards;
     }
 
-    .image-stage.animate-prev-project .current-image {
+    .image-stage.animate-prev-project .current-layer {
       animation: inTop 280ms ease forwards;
     }
 
@@ -855,13 +864,13 @@
 <body>
   <section id="home" class="home">
     <img src="cover.jpg" alt="Guillaume Morvan — Portfolio" class="home-image" />
-    <button id="home-name" class="home-name">GUILLAUME MORVAN</button>
+    <button id="home-name" class="home-name">Guillaume Morvan</button>
   </section>
 
   <section id="site" class="hidden">
     <header class="topbar">
       <div class="mobile-header-row">
-        <button id="brand">GUILLAUME MORVAN</button>
+        <button id="brand">Guillaume Morvan</button>
         <button id="mobile-menu-button" class="mobile-menu-button" aria-label="Menu">
           <span></span>
         </button>
@@ -879,9 +888,15 @@
     <main id="viewer" class="viewer hidden">
       <div id="document-wrap" class="document-wrap">
         <div id="image-stage" class="image-stage">
-          <img id="previous-image" class="page-image-layer previous-image" src="" alt="" />
-          <img id="page-image" class="page-image-layer current-image" src="" alt="Portfolio Guillaume Morvan" />
-          <div id="mobile-page-caption" class="mobile-page-caption hidden"></div>
+          <div id="previous-layer" class="page-layer previous-layer">
+            <img id="previous-image" class="page-image-layer" src="" alt="" />
+            <div id="previous-page-caption" class="mobile-page-caption hidden"></div>
+          </div>
+
+          <div id="current-layer" class="page-layer current-layer">
+            <img id="page-image" class="page-image-layer" src="" alt="Portfolio Guillaume Morvan" />
+            <div id="mobile-page-caption" class="mobile-page-caption hidden"></div>
+          </div>
         </div>
       </div>
 
@@ -921,7 +936,7 @@
   </aside>
 
   <script>
-    const ASSET_VERSION = "2026-07-08-3";
+    const ASSET_VERSION = "2026-07-08-4";
 
     const VIGNETTE_FOLDER = "Vignettes/";
     const ABOUT_FOLDER = "apropos-mobile/";
@@ -1049,9 +1064,12 @@
 
     const documentWrap = document.getElementById("document-wrap");
     const imageStage = document.getElementById("image-stage");
+    const previousLayer = document.getElementById("previous-layer");
+    const currentLayer = document.getElementById("current-layer");
     const previousImage = document.getElementById("previous-image");
     const pageImage = document.getElementById("page-image");
 
+    const previousPageCaption = document.getElementById("previous-page-caption");
     const mobilePageCaption = document.getElementById("mobile-page-caption");
     const prevPageButton = document.getElementById("prev-page-button");
     const nextPageButton = document.getElementById("next-page-button");
@@ -1183,6 +1201,19 @@
         });
     }
 
+    function setCaptionElement(element, caption) {
+      const cleanCaption = normalizeCaptionCase(caption);
+
+      if (!cleanCaption) {
+        element.textContent = "";
+        element.classList.add("hidden");
+        return;
+      }
+
+      element.textContent = cleanCaption;
+      element.classList.remove("hidden");
+    }
+
     function clearUrl() {
       history.replaceState({}, "", window.location.pathname);
     }
@@ -1302,9 +1333,11 @@
       goToPage(targetPage || project.start, direction);
     }
 
-    async function setImageWithTransition(src, direction) {
+    async function setImageWithTransition(src, direction, caption) {
       const token = ++transitionToken;
       const currentSrc = pageImage.getAttribute("src") || "";
+      const currentCaptionText = mobilePageCaption.textContent || "";
+      const currentCaptionHidden = mobilePageCaption.classList.contains("hidden");
 
       imageStage.classList.remove(
         "animate-next-page",
@@ -1319,8 +1352,9 @@
       }
 
       if (!currentSrc || direction === "none" || currentSrc === src) {
-        previousImage.style.display = "none";
+        previousLayer.style.display = "none";
         pageImage.src = src;
+        setCaptionElement(mobilePageCaption, caption);
         preloadImage(src);
         return true;
       }
@@ -1329,8 +1363,17 @@
       if (token !== transitionToken) return false;
 
       previousImage.src = currentSrc;
-      previousImage.style.display = "block";
+
+      previousPageCaption.textContent = currentCaptionText;
+      if (currentCaptionHidden || !currentCaptionText) {
+        previousPageCaption.classList.add("hidden");
+      } else {
+        previousPageCaption.classList.remove("hidden");
+      }
+
+      previousLayer.style.display = "block";
       pageImage.src = src;
+      setCaptionElement(mobilePageCaption, caption);
 
       void imageStage.offsetWidth;
       imageStage.classList.add(direction);
@@ -1338,24 +1381,13 @@
       return new Promise(resolve => {
         animationTimer = setTimeout(() => {
           imageStage.classList.remove(direction);
-          previousImage.style.display = "none";
+          previousLayer.style.display = "none";
           previousImage.removeAttribute("src");
+          previousPageCaption.textContent = "";
+          previousPageCaption.classList.add("hidden");
           resolve(token === transitionToken);
         }, 300);
       });
-    }
-
-    function setProjectCaption(caption) {
-      const cleanCaption = normalizeCaptionCase(caption);
-
-      if (!cleanCaption) {
-        mobilePageCaption.textContent = "";
-        mobilePageCaption.classList.add("hidden");
-        return;
-      }
-
-      mobilePageCaption.textContent = cleanCaption;
-      mobilePageCaption.classList.remove("hidden");
     }
 
     function goToPage(num, direction = "none") {
@@ -1374,9 +1406,6 @@
       closeInfoPanel();
       closeIndexPanel();
 
-      mobilePageCaption.textContent = "";
-      mobilePageCaption.classList.add("hidden");
-
       Promise.all([
         preloadImage(targetSrc),
         fetchTextFileCached(captionSrc)
@@ -1385,9 +1414,7 @@
         if (!currentProject || currentProject.slug !== projectAtRequest.slug || currentImage !== imageAtRequest) return;
 
         const caption = results[1];
-
-        setProjectCaption(caption);
-        setImageWithTransition(targetSrc, direction);
+        setImageWithTransition(targetSrc, direction, caption);
       });
 
       preloadAround(projectAtRequest, imageAtRequest);
