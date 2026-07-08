@@ -75,7 +75,7 @@
       padding: 0;
       color: #ffffff;
       font-family: var(--font-main);
-      font-size: 20.5px;
+      font-size: 21.2px;
       line-height: 1;
       font-weight: var(--weight-title);
       letter-spacing: 0.002em;
@@ -111,7 +111,7 @@
       background: transparent;
       padding: 0;
       font-family: var(--font-main);
-      font-size: 20.5px;
+      font-size: 21.2px;
       line-height: 1;
       font-weight: var(--weight-title);
       letter-spacing: 0.002em;
@@ -664,8 +664,12 @@
     }
 
     .about-item.is-quote {
-      padding-top: 38px;
-      padding-bottom: 34px;
+      padding-top: 18px;
+      padding-bottom: 26px;
+    }
+
+    .about-item:first-child.is-quote {
+      padding-top: 8px;
     }
 
     .about-image-title {
@@ -764,11 +768,11 @@
       margin-top: 13px;
       margin-bottom: 0;
       max-width: 31em;
-      font-size: 10.8px;
-      line-height: 1.36;
+      font-size: 10px;
+      line-height: 1.34;
       font-weight: var(--weight-regular);
       letter-spacing: 0.018em;
-      color: rgba(17, 17, 17, 0.48);
+      color: rgba(17, 17, 17, 0.42);
       text-align: center;
       text-align-last: center;
       text-indent: 0;
@@ -936,7 +940,7 @@
   </aside>
 
   <script>
-    const ASSET_VERSION = "2026-07-08-5";
+    const ASSET_VERSION = "2026-07-08-6";
 
     const VIGNETTE_FOLDER = "Vignettes/";
     const ABOUT_FOLDER = "apropos-mobile/";
@@ -1289,6 +1293,8 @@
       const validPage = ABOUT_PAGES.includes(targetPage) ? targetPage : ABOUT_PAGES[0];
       currentAboutPage = validPage;
       updateAboutUrl(validPage);
+
+      aboutFeed.scrollTop = 0;
 
       requestAnimationFrame(() => {
         trimAllAboutImages();
@@ -1709,20 +1715,64 @@
       });
     }
 
+    function looksLikeQuoteReference(line) {
+      const clean = String(line || "").trim().toLowerCase();
+
+      return (
+        clean.startsWith("—") ||
+        clean.startsWith("–") ||
+        clean.startsWith("-") ||
+        clean.startsWith("source") ||
+        clean.startsWith("réf") ||
+        clean.includes("quirot") ||
+        clean.includes("marrey") ||
+        clean.includes("trelcat") ||
+        clean.includes("p.") ||
+        clean.includes("cosa mentale") ||
+        clean.includes("archibooks") ||
+        clean.includes("édition") ||
+        clean.includes("editions") ||
+        clean.includes("éditions")
+      );
+    }
+
     function renderParagraphs(text, isQuote = false) {
       const clean = (text || "").trim();
 
       if (!clean) return "";
 
-      const paragraphs = clean
+      let paragraphs = clean
         .replace(/\r\n/g, "\n")
         .split(/\n\s*\n/)
         .map(paragraph => paragraph.trim())
         .filter(Boolean);
 
+      if (isQuote && paragraphs.length === 1) {
+        const lines = paragraphs[0]
+          .split("\n")
+          .map(line => line.trim())
+          .filter(Boolean);
+
+        if (lines.length > 1 && looksLikeQuoteReference(lines[lines.length - 1])) {
+          const quote = lines.slice(0, -1).map(line => escapeHtml(line)).join("<br>");
+          const reference = escapeHtml(lines[lines.length - 1]);
+
+          return `
+            <p>${quote}</p>
+            <p class="quote-reference">${reference}</p>
+          `;
+        }
+      }
+
       return paragraphs
         .map((paragraph, index) => {
-          const isReference = isQuote && paragraphs.length > 1 && index === paragraphs.length - 1;
+          const isReference =
+            isQuote &&
+            (
+              (paragraphs.length > 1 && index === paragraphs.length - 1) ||
+              looksLikeQuoteReference(paragraph)
+            );
+
           const className = isReference ? ` class="quote-reference"` : "";
           return `<p${className}>${escapeHtml(paragraph).replace(/\n/g, "<br>")}</p>`;
         })
