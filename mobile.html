@@ -75,12 +75,12 @@
       padding: 0;
       color: #ffffff;
       font-family: var(--font-main);
-      font-size: 18px;
+      font-size: 20.5px;
       line-height: 1;
       font-weight: var(--weight-title);
-      letter-spacing: 0.012em;
+      letter-spacing: 0.002em;
       text-transform: none;
-      cursor: default;
+      cursor: pointer;
     }
 
     #site {
@@ -111,15 +111,15 @@
       background: transparent;
       padding: 0;
       font-family: var(--font-main);
-      font-size: 18px;
+      font-size: 20.5px;
       line-height: 1;
       font-weight: var(--weight-title);
-      letter-spacing: 0.012em;
+      letter-spacing: 0.002em;
       text-transform: none;
-      cursor: default;
+      cursor: pointer;
       white-space: nowrap;
       color: var(--text-black);
-      pointer-events: none;
+      pointer-events: auto;
     }
 
     .mobile-menu-button {
@@ -664,8 +664,8 @@
     }
 
     .about-item.is-quote {
-      padding-top: 34px;
-      padding-bottom: 30px;
+      padding-top: 38px;
+      padding-bottom: 34px;
     }
 
     .about-image-title {
@@ -749,10 +749,10 @@
     .about-item.is-quote .about-copy p {
       margin: 0 auto 10px;
       max-width: 29em;
-      font-size: 16.5px;
-      line-height: 1.5;
-      font-weight: var(--weight-medium);
-      letter-spacing: -0.004em;
+      font-size: 20px;
+      line-height: 1.36;
+      font-weight: var(--weight-regular);
+      letter-spacing: -0.008em;
       color: var(--text-black);
       text-align: center;
       text-align-last: center;
@@ -761,14 +761,14 @@
     }
 
     .about-item.is-quote .about-copy p.quote-reference {
-      margin-top: 12px;
+      margin-top: 13px;
       margin-bottom: 0;
       max-width: 31em;
-      font-size: 11.5px;
-      line-height: 1.38;
+      font-size: 10.8px;
+      line-height: 1.36;
       font-weight: var(--weight-regular);
-      letter-spacing: 0.01em;
-      color: rgba(17, 17, 17, 0.58);
+      letter-spacing: 0.018em;
+      color: rgba(17, 17, 17, 0.48);
       text-align: center;
       text-align-last: center;
       text-indent: 0;
@@ -936,7 +936,7 @@
   </aside>
 
   <script>
-    const ASSET_VERSION = "2026-07-08-4";
+    const ASSET_VERSION = "2026-07-08-5";
 
     const VIGNETTE_FOLDER = "Vignettes/";
     const ABOUT_FOLDER = "apropos-mobile/";
@@ -1247,6 +1247,19 @@
       viewer.classList.add("hidden");
       closeInfoPanel();
       closeIndexPanel();
+    }
+
+    function showHome() {
+      currentProject = null;
+      currentImage = null;
+
+      site.classList.add("hidden");
+      home.classList.remove("hidden");
+
+      closeDrawer();
+      closeInfoPanel();
+      closeIndexPanel();
+      clearUrl();
     }
 
     function showSummary() {
@@ -1965,7 +1978,10 @@
 
     document.getElementById("home-name").addEventListener("click", event => {
       event.stopPropagation();
+      showHome();
     });
+
+    document.getElementById("brand").addEventListener("click", showHome);
 
     document.getElementById("mobile-menu-button").addEventListener("click", toggleMenuDrawer);
     document.getElementById("close-drawer").addEventListener("click", closeDrawer);
