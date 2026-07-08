@@ -7,7 +7,7 @@
 
   <link rel="preconnect" href="https://fonts.googleapis.com">
   <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
-  <link href="https://fonts.googleapis.com/css2?family=IBM+Plex+Sans:wght@300;400;450;500;600&display=swap" rel="stylesheet">
+  <link href="https://fonts.googleapis.com/css2?family=IBM+Plex+Sans:wght@300;400;500;600;700&display=swap" rel="stylesheet">
 
   <style>
     :root {
@@ -19,9 +19,9 @@
 
       --weight-light: 300;
       --weight-regular: 400;
-      --weight-medium: 450;
-      --weight-semibold: 500;
-      --weight-strong: 600;
+      --weight-medium: 500;
+      --weight-semibold: 600;
+      --weight-title: 700;
 
       --text-black: #111;
       --text-soft: rgba(17, 17, 17, 0.72);
@@ -78,8 +78,8 @@
       font-family: var(--font-main);
       font-size: 24px;
       line-height: 1;
-      font-weight: var(--weight-medium);
-      letter-spacing: 0.04em;
+      font-weight: var(--weight-title);
+      letter-spacing: 0.038em;
       text-transform: uppercase;
       cursor: default;
     }
@@ -114,8 +114,8 @@
       font-family: var(--font-main);
       font-size: 24px;
       line-height: 1;
-      font-weight: var(--weight-medium);
-      letter-spacing: 0.04em;
+      font-weight: var(--weight-title);
+      letter-spacing: 0.038em;
       text-transform: uppercase;
       cursor: default;
       white-space: nowrap;
@@ -295,17 +295,24 @@
       z-index: 20;
       padding: 7px 10px 8px;
       font-family: var(--font-main);
-      font-size: 12px;
+      font-size: 13px;
       line-height: 1.32;
-      font-weight: var(--weight-medium);
-      letter-spacing: 0.005em;
-      color: rgba(17, 17, 17, 0.82);
+      font-weight: var(--weight-semibold);
+      letter-spacing: 0.002em;
+      color: rgba(17, 17, 17, 0.84);
       text-align: center;
+      text-transform: none;
       white-space: pre-line;
-      background: rgba(255, 255, 255, 0.78);
+      background: rgba(255, 255, 255, 0.76);
       backdrop-filter: blur(3px);
       -webkit-backdrop-filter: blur(3px);
       pointer-events: none;
+      opacity: 1;
+      transition: opacity 140ms ease;
+    }
+
+    .image-stage.is-transitioning .mobile-page-caption {
+      opacity: 0;
     }
 
     .image-stage.animate-next-page .previous-image {
@@ -697,7 +704,8 @@
       padding: 0;
     }
 
-    .about-copy p {
+    .about-copy p,
+    .about-item.is-quote .about-copy p {
       margin: 0 0 14px 0;
       font-family: var(--font-main);
       font-size: 13px;
@@ -711,31 +719,22 @@
       hyphens: auto;
     }
 
-    .about-copy p:last-child {
+    .about-copy p:last-child,
+    .about-item.is-quote .about-copy p:last-child {
       margin-bottom: 0;
     }
 
-    .about-item.is-quote .about-copy p {
-      font-size: 15px;
-      line-height: 1.55;
-      font-weight: var(--weight-regular);
-      letter-spacing: 0;
-      text-align: center;
-      text-align-last: center;
-      text-indent: 0;
-      margin: 0 auto 8px;
-      max-width: 29em;
-    }
-
     .about-item.is-quote .about-copy p.quote-reference {
-      margin-top: 12px;
+      margin-top: 10px;
       margin-bottom: 0;
       font-size: 11.5px;
       line-height: 1.42;
       font-weight: var(--weight-light);
       letter-spacing: 0.01em;
       color: rgba(17, 17, 17, 0.58);
-      max-width: 31em;
+      text-align: center;
+      text-align-last: center;
+      text-indent: 0;
     }
 
     .about-text.is-contact {
@@ -894,7 +893,7 @@
   </aside>
 
   <script>
-    const ASSET_VERSION = "2026-07-07-5";
+    const ASSET_VERSION = "2026-07-08-2";
 
     const VIGNETTE_FOLDER = "Vignettes/";
     const ABOUT_FOLDER = "apropos-mobile/";
@@ -938,7 +937,7 @@
         line: "L’architecte dans une pratique engagée pour la qualité.",
         infoTitle: "L’architecte engagé dans la qualité",
         infoFile: "pages-mobile/tank/info.txt",
-        fallbackInfo: "L’expérience chez TANK Architectes m’a permis d’approcher une pratique collective exigeante.",
+        fallbackInfo: "L’expérience chez TANK Architectes m’a permis d’approcher une pratique collective exigeante, fondée sur la qualité du dessin, la précision constructive et le dialogue entre conception, économie et mise en œuvre.",
         thumb: "tank.jpg",
         folder: "pages-mobile/tank/",
         filePrefix: "page",
@@ -1006,6 +1005,7 @@
     let animationTimer = null;
     let transitionToken = 0;
     let captionToken = 0;
+    let infoToken = 0;
     let aboutScrollTimer = null;
     let resizeTimer = null;
 
@@ -1116,6 +1116,26 @@
       } catch (error) {
         return "";
       }
+    }
+
+    function normalizeCaptionCase(text) {
+      const clean = String(text || "").trim();
+
+      if (!clean) return "";
+
+      const letters = clean.replace(/[^A-Za-zÀ-ÖØ-öø-ÿ]/g, "");
+      const hasLower = /[a-zà-öø-ÿ]/.test(letters);
+      const hasUpper = /[A-ZÀ-ÖØ-Þ]/.test(letters);
+
+      if (!letters || hasLower || !hasUpper) {
+        return clean;
+      }
+
+      return clean
+        .toLocaleLowerCase("fr-FR")
+        .replace(/(^|[.!?]\s+|—\s+|- )([a-zà-öø-ÿ])/g, function(match, prefix, letter) {
+          return prefix + letter.toLocaleUpperCase("fr-FR");
+        });
     }
 
     function clearUrl() {
@@ -1257,11 +1277,11 @@
         previousImage.style.display = "none";
         pageImage.src = src;
         preloadImage(src);
-        return;
+        return true;
       }
 
       await preloadImage(src);
-      if (token !== transitionToken) return;
+      if (token !== transitionToken) return false;
 
       previousImage.src = currentSrc;
       previousImage.style.display = "block";
@@ -1270,11 +1290,14 @@
       void imageStage.offsetWidth;
       imageStage.classList.add(direction);
 
-      animationTimer = setTimeout(() => {
-        imageStage.classList.remove(direction);
-        previousImage.style.display = "none";
-        previousImage.removeAttribute("src");
-      }, 300);
+      return new Promise(resolve => {
+        animationTimer = setTimeout(() => {
+          imageStage.classList.remove(direction);
+          previousImage.style.display = "none";
+          previousImage.removeAttribute("src");
+          resolve(token === transitionToken);
+        }, 300);
+      });
     }
 
     function goToPage(num, direction = "none") {
@@ -1287,12 +1310,23 @@
       closeInfoPanel();
       closeIndexPanel();
 
+      const projectAtRequest = currentProject;
+      const imageAtRequest = target;
       const targetSrc = getImageSrc(currentProject, currentImage);
-      setImageWithTransition(targetSrc, direction);
+
+      mobilePageCaption.textContent = "";
+      mobilePageCaption.classList.add("hidden");
+      imageStage.classList.add("is-transitioning");
+
+      setImageWithTransition(targetSrc, direction).then(success => {
+        if (!success) return;
+        if (!currentProject || currentProject.slug !== projectAtRequest.slug || currentImage !== imageAtRequest) return;
+
+        loadProjectPageCaption(projectAtRequest, imageAtRequest);
+        imageStage.classList.remove("is-transitioning");
+      });
+
       preloadAround(currentProject, currentImage);
-
-      loadProjectPageCaption(currentProject, currentImage);
-
       updateProjectUrl(currentImage);
       updateMobileProjectUi();
     }
@@ -1316,7 +1350,7 @@
         return;
       }
 
-      mobilePageCaption.textContent = caption;
+      mobilePageCaption.textContent = normalizeCaptionCase(caption);
       mobilePageCaption.classList.remove("hidden");
     }
 
@@ -1363,77 +1397,18 @@
       nextPageButton.disabled = currentImage >= currentProject.end;
     }
 
-    function trimWhiteBottom(img) {
-      const wrapper = img.closest(".about-image-crop");
-      if (!wrapper || !img.naturalWidth || !img.naturalHeight) return;
+    function renderProjectFallbackInfo(project) {
+      const title = project.infoTitle || project.line || project.fullTitle || project.title;
+      const body = project.fallbackInfo || project.line || "";
 
-      try {
-        const scanWidth = Math.min(420, img.naturalWidth);
-        const scanHeight = Math.max(1, Math.round(img.naturalHeight * scanWidth / img.naturalWidth));
+      const bodyHtml = body
+        ? `<div class="info-body"><p>${escapeHtml(body)}</p></div>`
+        : "";
 
-        const canvas = document.createElement("canvas");
-        canvas.width = scanWidth;
-        canvas.height = scanHeight;
-
-        const ctx = canvas.getContext("2d", { willReadFrequently: true });
-        ctx.drawImage(img, 0, 0, scanWidth, scanHeight);
-
-        const data = ctx.getImageData(0, 0, scanWidth, scanHeight).data;
-        const rowThreshold = Math.max(3, Math.floor(scanWidth * 0.01));
-
-        let bottomContentY = scanHeight - 1;
-
-        for (let y = scanHeight - 1; y >= 0; y--) {
-          let contentPixels = 0;
-
-          for (let x = 0; x < scanWidth; x++) {
-            const index = (y * scanWidth + x) * 4;
-            const r = data[index];
-            const g = data[index + 1];
-            const b = data[index + 2];
-            const a = data[index + 3];
-
-            const isContent =
-              a > 20 &&
-              (r < 242 || g < 242 || b < 242);
-
-            if (isContent) {
-              contentPixels++;
-              if (contentPixels >= rowThreshold) break;
-            }
-          }
-
-          if (contentPixels >= rowThreshold) {
-            bottomContentY = y;
-            break;
-          }
-        }
-
-        const safetyMargin = Math.round(scanHeight * 0.025);
-        const cropY = Math.min(scanHeight, bottomContentY + safetyMargin);
-        const ratio = cropY / scanHeight;
-
-        if (ratio > 0.98) {
-          wrapper.style.height = "auto";
-          return;
-        }
-
-        const renderedWidth = wrapper.clientWidth || window.innerWidth;
-        const fullRenderedHeight = renderedWidth * img.naturalHeight / img.naturalWidth;
-        const croppedRenderedHeight = Math.ceil(fullRenderedHeight * ratio);
-
-        wrapper.style.height = `${croppedRenderedHeight}px`;
-      } catch (error) {
-        wrapper.style.height = "auto";
-      }
-    }
-
-    function trimAllAboutImages() {
-      document.querySelectorAll(".about-page-image").forEach(img => {
-        if (img.complete) {
-          trimWhiteBottom(img);
-        }
-      });
+      mobileInfoText.innerHTML = `
+        <h2 class="info-title">${escapeHtml(title)}</h2>
+        ${bodyHtml}
+      `;
     }
 
     function renderInfoText(project, text) {
@@ -1441,7 +1416,7 @@
       const fallbackTitle = project.infoTitle || project.line || project.fullTitle || project.title;
 
       if (!cleanText) {
-        mobileInfoText.innerHTML = `<h2 class="info-title">${escapeHtml(fallbackTitle)}</h2>`;
+        renderProjectFallbackInfo(project);
         return;
       }
 
@@ -1557,7 +1532,8 @@
     }
 
     async function loadProjectInfo(project) {
-      renderInfoText(project, project.fallbackInfo || project.line || "");
+      const token = ++infoToken;
+      renderProjectFallbackInfo(project);
 
       if (!project.infoFile) return;
 
@@ -1566,12 +1542,90 @@
         if (!response.ok) return;
 
         const text = await response.text();
+
+        if (token !== infoToken) return;
+        if (!currentProject || currentProject.slug !== project.slug) return;
+
         if (text.trim().length > 0) {
           renderInfoText(project, text);
         }
       } catch (error) {
-        renderInfoText(project, project.fallbackInfo || project.line || "");
+        if (token !== infoToken) return;
+        renderProjectFallbackInfo(project);
       }
+    }
+
+    function trimWhiteBottom(img) {
+      const wrapper = img.closest(".about-image-crop");
+      if (!wrapper || !img.naturalWidth || !img.naturalHeight) return;
+
+      try {
+        const scanWidth = Math.min(420, img.naturalWidth);
+        const scanHeight = Math.max(1, Math.round(img.naturalHeight * scanWidth / img.naturalWidth));
+
+        const canvas = document.createElement("canvas");
+        canvas.width = scanWidth;
+        canvas.height = scanHeight;
+
+        const ctx = canvas.getContext("2d", { willReadFrequently: true });
+        ctx.drawImage(img, 0, 0, scanWidth, scanHeight);
+
+        const data = ctx.getImageData(0, 0, scanWidth, scanHeight).data;
+        const rowThreshold = Math.max(3, Math.floor(scanWidth * 0.01));
+
+        let bottomContentY = scanHeight - 1;
+
+        for (let y = scanHeight - 1; y >= 0; y--) {
+          let contentPixels = 0;
+
+          for (let x = 0; x < scanWidth; x++) {
+            const index = (y * scanWidth + x) * 4;
+            const r = data[index];
+            const g = data[index + 1];
+            const b = data[index + 2];
+            const a = data[index + 3];
+
+            const isContent =
+              a > 20 &&
+              (r < 242 || g < 242 || b < 242);
+
+            if (isContent) {
+              contentPixels++;
+              if (contentPixels >= rowThreshold) break;
+            }
+          }
+
+          if (contentPixels >= rowThreshold) {
+            bottomContentY = y;
+            break;
+          }
+        }
+
+        const safetyMargin = Math.round(scanHeight * 0.025);
+        const cropY = Math.min(scanHeight, bottomContentY + safetyMargin);
+        const ratio = cropY / scanHeight;
+
+        if (ratio > 0.98) {
+          wrapper.style.height = "auto";
+          return;
+        }
+
+        const renderedWidth = wrapper.clientWidth || window.innerWidth;
+        const fullRenderedHeight = renderedWidth * img.naturalHeight / img.naturalWidth;
+        const croppedRenderedHeight = Math.ceil(fullRenderedHeight * ratio);
+
+        wrapper.style.height = `${croppedRenderedHeight}px`;
+      } catch (error) {
+        wrapper.style.height = "auto";
+      }
+    }
+
+    function trimAllAboutImages() {
+      document.querySelectorAll(".about-page-image").forEach(img => {
+        if (img.complete) {
+          trimWhiteBottom(img);
+        }
+      });
     }
 
     function renderParagraphs(text, isQuote = false) {
