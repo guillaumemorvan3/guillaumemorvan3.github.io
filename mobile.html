@@ -7,7 +7,7 @@
 
   <link rel="preconnect" href="https://fonts.googleapis.com">
   <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
-  <link href="https://fonts.googleapis.com/css2?family=IBM+Plex+Sans:wght@300;400;500;600;700&display=swap" rel="stylesheet">
+  <link href="https://fonts.googleapis.com/css2?family=Afacad:wght@400;500;600;700&display=swap" rel="stylesheet">
 
   <style>
     :root {
@@ -15,9 +15,8 @@
       --cover-focus-y: 47%;
       --cover-zoom: 1.05;
 
-      --font-main: "IBM Plex Sans", Arial, Helvetica, sans-serif;
+      --font-main: "Afacad", Arial, Helvetica, sans-serif;
 
-      --weight-light: 300;
       --weight-regular: 400;
       --weight-medium: 500;
       --weight-semibold: 600;
@@ -76,10 +75,10 @@
       padding: 0;
       color: #ffffff;
       font-family: var(--font-main);
-      font-size: 24px;
+      font-size: 25px;
       line-height: 1;
       font-weight: var(--weight-title);
-      letter-spacing: 0.038em;
+      letter-spacing: 0.035em;
       text-transform: uppercase;
       cursor: default;
     }
@@ -112,10 +111,10 @@
       background: transparent;
       padding: 0;
       font-family: var(--font-main);
-      font-size: 24px;
+      font-size: 25px;
       line-height: 1;
       font-weight: var(--weight-title);
-      letter-spacing: 0.038em;
+      letter-spacing: 0.035em;
       text-transform: uppercase;
       cursor: default;
       white-space: nowrap;
@@ -211,15 +210,15 @@
       display: block;
       font-size: 12px;
       font-weight: var(--weight-semibold);
-      letter-spacing: 0.025em;
+      letter-spacing: 0.018em;
       text-transform: uppercase;
       margin-bottom: 6px;
     }
 
     .card-type {
       display: block;
-      font-size: 11px;
-      line-height: 1.42;
+      font-size: 11.5px;
+      line-height: 1.38;
       font-weight: var(--weight-regular);
       color: #555;
       margin-bottom: 5px;
@@ -227,8 +226,8 @@
 
     .card-line {
       display: block;
-      font-size: 11px;
-      line-height: 1.42;
+      font-size: 11.5px;
+      line-height: 1.38;
       font-weight: var(--weight-regular);
       color: #222;
     }
@@ -307,12 +306,6 @@
       backdrop-filter: blur(3px);
       -webkit-backdrop-filter: blur(3px);
       pointer-events: none;
-      opacity: 1;
-      transition: opacity 140ms ease;
-    }
-
-    .image-stage.is-transitioning .mobile-page-caption {
-      opacity: 0;
     }
 
     .image-stage.animate-next-page .previous-image {
@@ -457,7 +450,7 @@
       font-size: 14px;
       line-height: 1.15;
       font-weight: var(--weight-medium);
-      letter-spacing: 0.005em;
+      letter-spacing: 0.003em;
       color: var(--text-soft);
       cursor: pointer;
       white-space: nowrap;
@@ -479,7 +472,7 @@
       grid-column: 2;
       justify-self: center;
       font-family: var(--font-main);
-      font-size: 15px;
+      font-size: 15.5px;
       line-height: 1.15;
       font-weight: var(--weight-semibold);
       letter-spacing: 0;
@@ -518,7 +511,7 @@
       font-size: 20px;
       line-height: 1.18;
       font-weight: var(--weight-semibold);
-      letter-spacing: -0.01em;
+      letter-spacing: -0.006em;
       color: var(--text-black);
       text-align: left;
     }
@@ -610,7 +603,7 @@
       font-size: 17px;
       line-height: 1.2;
       font-weight: var(--weight-semibold);
-      letter-spacing: -0.005em;
+      letter-spacing: -0.004em;
       color: var(--text-black);
     }
 
@@ -646,15 +639,37 @@
     .about-item {
       width: 100vw;
       margin: 0;
-      padding: 0 0 34px 0;
+      padding: 0 0 54px 0;
       background: #ffffff;
+    }
+
+    .about-item.has-image {
+      padding-top: 30px;
     }
 
     .about-item.is-text-only {
       display: block;
       min-height: 0;
-      padding: 26px 34px 22px;
+      padding: 34px 34px 28px;
       background: #ffffff;
+    }
+
+    .about-item.is-quote {
+      padding-top: 34px;
+      padding-bottom: 30px;
+    }
+
+    .about-image-title {
+      padding: 0 34px 14px;
+      margin: 0;
+      font-family: var(--font-main);
+      font-size: 18px;
+      line-height: 1.22;
+      font-weight: var(--weight-semibold);
+      letter-spacing: -0.004em;
+      color: var(--text-black);
+      text-align: center;
+      white-space: pre-line;
     }
 
     .about-image-crop {
@@ -678,7 +693,7 @@
     }
 
     .about-text {
-      padding: 12px 34px 0;
+      padding: 13px 34px 0;
       background: #ffffff;
     }
 
@@ -691,10 +706,10 @@
     .about-caption {
       margin: 0 0 16px 0;
       font-family: var(--font-main);
-      font-size: 17px;
-      line-height: 1.28;
+      font-size: 18px;
+      line-height: 1.24;
       font-weight: var(--weight-semibold);
-      letter-spacing: 0;
+      letter-spacing: -0.004em;
       color: var(--text-black);
       text-align: center;
     }
@@ -704,12 +719,11 @@
       padding: 0;
     }
 
-    .about-copy p,
-    .about-item.is-quote .about-copy p {
+    .about-copy p {
       margin: 0 0 14px 0;
       font-family: var(--font-main);
-      font-size: 13px;
-      line-height: 1.62;
+      font-size: 13.5px;
+      line-height: 1.58;
       font-weight: var(--weight-regular);
       letter-spacing: 0;
       color: var(--text-black);
@@ -719,17 +733,31 @@
       hyphens: auto;
     }
 
-    .about-copy p:last-child,
-    .about-item.is-quote .about-copy p:last-child {
+    .about-copy p:last-child {
       margin-bottom: 0;
     }
 
+    .about-item.is-quote .about-copy p {
+      margin: 0 auto 10px;
+      max-width: 29em;
+      font-size: 16.5px;
+      line-height: 1.5;
+      font-weight: var(--weight-medium);
+      letter-spacing: -0.004em;
+      color: var(--text-black);
+      text-align: center;
+      text-align-last: center;
+      text-indent: 0;
+      hyphens: none;
+    }
+
     .about-item.is-quote .about-copy p.quote-reference {
-      margin-top: 10px;
+      margin-top: 12px;
       margin-bottom: 0;
+      max-width: 31em;
       font-size: 11.5px;
-      line-height: 1.42;
-      font-weight: var(--weight-light);
+      line-height: 1.38;
+      font-weight: var(--weight-regular);
       letter-spacing: 0.01em;
       color: rgba(17, 17, 17, 0.58);
       text-align: center;
@@ -788,7 +816,7 @@
       background: transparent;
       font-family: var(--font-main);
       font-size: 28px;
-      font-weight: var(--weight-light);
+      font-weight: var(--weight-regular);
       cursor: pointer;
     }
 
@@ -800,7 +828,7 @@
       background: transparent;
       text-align: left;
       font-family: var(--font-main);
-      font-size: 15px;
+      font-size: 15.5px;
       line-height: 1.25;
       font-weight: var(--weight-medium);
       letter-spacing: 0;
@@ -893,7 +921,7 @@
   </aside>
 
   <script>
-    const ASSET_VERSION = "2026-07-08-2";
+    const ASSET_VERSION = "2026-07-08-3";
 
     const VIGNETTE_FOLDER = "Vignettes/";
     const ABOUT_FOLDER = "apropos-mobile/";
@@ -1004,12 +1032,13 @@
     let lastGestureTime = 0;
     let animationTimer = null;
     let transitionToken = 0;
-    let captionToken = 0;
+    let pageRequestToken = 0;
     let infoToken = 0;
     let aboutScrollTimer = null;
     let resizeTimer = null;
 
     const imageCache = new Map();
+    const textCache = new Map();
 
     const home = document.getElementById("home");
     const site = document.getElementById("site");
@@ -1084,29 +1113,6 @@
       return promise;
     }
 
-    function preloadAround(project, num) {
-      if (!project || !num) return;
-
-      [num - 1, num + 1].forEach(page => {
-        if (page >= project.start && page <= project.end) {
-          preloadImage(getImageSrc(project, page));
-        }
-      });
-
-      const projectIndex = PROJECTS.findIndex(item => item.slug === project.slug);
-      const previousProject = PROJECTS[projectIndex - 1];
-      const nextProject = PROJECTS[projectIndex + 1];
-
-      if (previousProject) preloadImage(getImageSrc(previousProject, previousProject.start));
-      if (nextProject) preloadImage(getImageSrc(nextProject, nextProject.start));
-    }
-
-    function preloadAboutImages() {
-      ABOUT_ITEMS.forEach(item => {
-        if (item.hasImage) preloadImage(getAboutImageSrc(item.num));
-      });
-    }
-
     async function fetchTextFile(src) {
       try {
         const response = await fetch(src);
@@ -1116,6 +1122,45 @@
       } catch (error) {
         return "";
       }
+    }
+
+    function fetchTextFileCached(src) {
+      if (textCache.has(src)) return textCache.get(src);
+
+      const promise = fetchTextFile(src);
+      textCache.set(src, promise);
+      return promise;
+    }
+
+    function preloadAround(project, num) {
+      if (!project || !num) return;
+
+      [num - 1, num + 1].forEach(page => {
+        if (page >= project.start && page <= project.end) {
+          preloadImage(getImageSrc(project, page));
+          fetchTextFileCached(getProjectCaptionSrc(project, page));
+        }
+      });
+
+      const projectIndex = PROJECTS.findIndex(item => item.slug === project.slug);
+      const previousProject = PROJECTS[projectIndex - 1];
+      const nextProject = PROJECTS[projectIndex + 1];
+
+      if (previousProject) {
+        preloadImage(getImageSrc(previousProject, previousProject.start));
+        fetchTextFileCached(getProjectCaptionSrc(previousProject, previousProject.start));
+      }
+
+      if (nextProject) {
+        preloadImage(getImageSrc(nextProject, nextProject.start));
+        fetchTextFileCached(getProjectCaptionSrc(nextProject, nextProject.start));
+      }
+    }
+
+    function preloadAboutImages() {
+      ABOUT_ITEMS.forEach(item => {
+        if (item.hasImage) preloadImage(getAboutImageSrc(item.num));
+      });
     }
 
     function normalizeCaptionCase(text) {
@@ -1300,58 +1345,54 @@
       });
     }
 
+    function setProjectCaption(caption) {
+      const cleanCaption = normalizeCaptionCase(caption);
+
+      if (!cleanCaption) {
+        mobilePageCaption.textContent = "";
+        mobilePageCaption.classList.add("hidden");
+        return;
+      }
+
+      mobilePageCaption.textContent = cleanCaption;
+      mobilePageCaption.classList.remove("hidden");
+    }
+
     function goToPage(num, direction = "none") {
       const target = parseInt(num, 10);
 
       if (!currentProject || !target) return;
       if (target < currentProject.start || target > currentProject.end) return;
 
+      const requestToken = ++pageRequestToken;
+      const projectAtRequest = currentProject;
+      const imageAtRequest = target;
+      const targetSrc = getImageSrc(projectAtRequest, imageAtRequest);
+      const captionSrc = getProjectCaptionSrc(projectAtRequest, imageAtRequest);
+
       currentImage = target;
       closeInfoPanel();
       closeIndexPanel();
 
-      const projectAtRequest = currentProject;
-      const imageAtRequest = target;
-      const targetSrc = getImageSrc(currentProject, currentImage);
-
       mobilePageCaption.textContent = "";
       mobilePageCaption.classList.add("hidden");
-      imageStage.classList.add("is-transitioning");
 
-      setImageWithTransition(targetSrc, direction).then(success => {
-        if (!success) return;
+      Promise.all([
+        preloadImage(targetSrc),
+        fetchTextFileCached(captionSrc)
+      ]).then(results => {
+        if (requestToken !== pageRequestToken) return;
         if (!currentProject || currentProject.slug !== projectAtRequest.slug || currentImage !== imageAtRequest) return;
 
-        loadProjectPageCaption(projectAtRequest, imageAtRequest);
-        imageStage.classList.remove("is-transitioning");
+        const caption = results[1];
+
+        setProjectCaption(caption);
+        setImageWithTransition(targetSrc, direction);
       });
 
-      preloadAround(currentProject, currentImage);
+      preloadAround(projectAtRequest, imageAtRequest);
       updateProjectUrl(currentImage);
       updateMobileProjectUi();
-    }
-
-    async function loadProjectPageCaption(project, num) {
-      const token = ++captionToken;
-
-      mobilePageCaption.textContent = "";
-      mobilePageCaption.classList.add("hidden");
-
-      if (!project || !num) return;
-
-      const caption = await fetchTextFile(getProjectCaptionSrc(project, num));
-
-      if (token !== captionToken) return;
-      if (!currentProject || currentProject.slug !== project.slug || currentImage !== num) return;
-
-      if (!caption) {
-        mobilePageCaption.textContent = "";
-        mobilePageCaption.classList.add("hidden");
-        return;
-      }
-
-      mobilePageCaption.textContent = normalizeCaptionCase(caption);
-      mobilePageCaption.classList.remove("hidden");
     }
 
     function previousPage() {
@@ -1648,17 +1689,28 @@
         .join("");
     }
 
-    async function loadAboutText(item, textContainer) {
+    async function loadAboutText(item, titleContainer, textContainer) {
       const num = item.num;
       const caption = await fetchTextFile(getAboutCaptionSrc(num));
       const body = await fetchTextFile(getAboutTextSrc(num));
+
+      if (titleContainer) {
+        if (caption) {
+          titleContainer.textContent = caption;
+          titleContainer.classList.remove("hidden");
+        } else {
+          titleContainer.classList.add("hidden");
+        }
+      }
 
       if (!caption && !body) {
         textContainer.classList.add("hidden");
         return;
       }
 
-      const captionHtml = caption
+      const article = textContainer.closest(".about-item");
+
+      const captionHtml = !titleContainer && caption
         ? `<h2 class="about-caption">${escapeHtml(caption).replace(/\n/g, "<br>")}</h2>`
         : "";
 
@@ -1676,6 +1728,7 @@
 
       if (isContact) {
         textContainer.classList.add("is-contact");
+        if (article) article.classList.add("is-contact");
       }
 
       textContainer.innerHTML = `${captionHtml}${bodyHtml}`;
@@ -1790,6 +1843,10 @@
         article.id = `about-page-${item.num}`;
         article.className = "about-item";
 
+        if (item.hasImage) {
+          article.classList.add("has-image");
+        }
+
         if (!item.hasImage) {
           article.classList.add("is-text-only");
         }
@@ -1798,7 +1855,13 @@
           article.classList.add("is-quote");
         }
 
+        let titleContainer = null;
+
         if (item.hasImage) {
+          titleContainer = document.createElement("h2");
+          titleContainer.className = "about-image-title hidden";
+          article.appendChild(titleContainer);
+
           const imageCrop = document.createElement("div");
           imageCrop.className = "about-image-crop";
 
@@ -1823,7 +1886,7 @@
         article.appendChild(textContainer);
         aboutFeed.appendChild(article);
 
-        loadAboutText(item, textContainer);
+        loadAboutText(item, titleContainer, textContainer);
       });
 
       preloadAboutImages();
