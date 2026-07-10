@@ -158,54 +158,64 @@
     .summary {
       width: 100vw;
       height: calc(100dvh - 84px);
-      padding: 16px 0 32px;
+      padding: 0;
       overflow: hidden;
       background: #ffffff;
     }
 
     .project-grid {
-      display: flex;
-      flex-direction: column;
-      align-items: center;
       width: 100vw;
       height: 100%;
       overflow-y: auto;
       overflow-x: hidden;
-      gap: 34px;
-      padding: 0 34px 24px;
+      padding: 0;
+      margin: 0;
       scroll-snap-type: y mandatory;
       -webkit-overflow-scrolling: touch;
       touch-action: pan-y;
+      background: #ffffff;
     }
 
     .project-grid::-webkit-scrollbar { display: none; }
 
     .project-card {
-      flex: 0 0 auto;
-      width: 78vw;
-      scroll-snap-align: center;
+      width: 100vw;
+      height: calc(100dvh - 84px);
+      min-height: calc(100dvh - 84px);
+      scroll-snap-align: start;
+      scroll-snap-stop: always;
       border: none;
-      background: transparent;
-      padding: 0;
+      background: #ffffff;
+      padding: 0 34px 18px;
       text-align: center;
       cursor: pointer;
       color: #111;
       font-family: var(--font-main);
+      display: flex;
+      flex-direction: column;
+      align-items: center;
+      justify-content: center;
+      overflow: hidden;
     }
 
     .thumb {
-      width: 100%;
+      width: 78vw;
+      max-width: 78vw;
+      max-height: calc((100dvh - 84px) - 112px);
       aspect-ratio: 3 / 4;
       display: block;
       object-fit: cover;
       object-position: center;
       background: #f0f0f0;
+      flex: 0 1 auto;
     }
 
     .card-text {
+      width: 78vw;
       padding-top: 13px;
       display: block;
       text-align: center;
+      flex: 0 0 auto;
     }
 
     .card-title {
@@ -945,7 +955,7 @@
   </aside>
 
   <script>
-    const ASSET_VERSION = "2026-07-08-6";
+    const ASSET_VERSION = "2026-07-08-7";
 
     const VIGNETTE_FOLDER = "Vignettes/";
     const ABOUT_FOLDER = "apropos-mobile/";
