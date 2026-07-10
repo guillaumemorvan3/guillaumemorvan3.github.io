@@ -75,7 +75,7 @@
       padding: 0;
       color: #ffffff;
       font-family: var(--font-main);
-      font-size: 21.4px;
+      font-size: 22.4px;
       line-height: 1;
       font-weight: var(--weight-title);
       letter-spacing: 0.002em;
@@ -111,7 +111,7 @@
       background: transparent;
       padding: 0;
       font-family: var(--font-main);
-      font-size: 21.4px;
+      font-size: 22.4px;
       line-height: 1;
       font-weight: var(--weight-title);
       letter-spacing: 0.002em;
@@ -213,7 +213,7 @@
 
     .card-text {
       width: 78vw;
-      padding-top: 13px;
+      padding-top: 14px;
       display: block;
       text-align: center;
       flex: 0 0 auto;
@@ -221,7 +221,7 @@
 
     .card-title {
       display: block;
-      font-size: 12.6px;
+      font-size: 13.8px;
       font-weight: var(--weight-semibold);
       letter-spacing: 0.018em;
       text-transform: uppercase;
@@ -231,7 +231,7 @@
 
     .card-type {
       display: block;
-      font-size: 12.2px;
+      font-size: 13.2px;
       line-height: 1.38;
       font-weight: var(--weight-regular);
       color: #555;
@@ -241,7 +241,7 @@
 
     .card-line {
       display: block;
-      font-size: 12.2px;
+      font-size: 13.2px;
       line-height: 1.38;
       font-weight: var(--weight-regular);
       color: #222;
@@ -266,14 +266,20 @@
       padding: 0;
       border: none;
       border-radius: 999px;
-      background: rgba(17, 17, 17, 0.24);
+      background: rgba(17, 17, 17, 0.22);
       cursor: pointer;
-      transition: background 180ms ease, transform 180ms ease, height 180ms ease;
     }
 
-    .home-project-dot.active {
+    .home-project-dot-marker {
+      position: absolute;
+      left: 0;
+      top: -5.5px;
+      width: 7px;
       height: 18px;
+      border-radius: 999px;
       background: rgba(17, 17, 17, 0.62);
+      pointer-events: none;
+      will-change: transform;
     }
 
     .viewer {
@@ -347,7 +353,7 @@
       z-index: 20;
       padding: 7px 10px 8px;
       font-family: var(--font-main);
-      font-size: 13.8px;
+      font-size: 15px;
       line-height: 1.32;
       font-weight: var(--weight-semibold);
       letter-spacing: 0.002em;
@@ -455,7 +461,7 @@
       padding: 0;
       margin: 0;
       font-family: var(--font-main);
-      font-size: 26px;
+      font-size: 28px;
       line-height: 1;
       color: rgba(17, 17, 17, 0.48);
       transform: translateY(-5px);
@@ -475,7 +481,7 @@
 
     #mobile-counter {
       font-family: var(--font-main);
-      font-size: 13.8px;
+      font-size: 15px;
       line-height: 1;
       font-weight: var(--weight-medium);
       color: var(--text-light);
@@ -500,7 +506,7 @@
       background: transparent;
       padding: 0;
       font-family: var(--font-main);
-      font-size: 14.8px;
+      font-size: 16px;
       line-height: 1.15;
       font-weight: var(--weight-medium);
       letter-spacing: 0.003em;
@@ -525,7 +531,7 @@
       grid-column: 2;
       justify-self: center;
       font-family: var(--font-main);
-      font-size: 16.2px;
+      font-size: 17.4px;
       line-height: 1.15;
       font-weight: var(--weight-semibold);
       letter-spacing: 0;
@@ -561,7 +567,7 @@
     .info-title {
       margin: 0 0 24px 0;
       font-family: var(--font-main);
-      font-size: 21px;
+      font-size: 23px;
       line-height: 1.18;
       font-weight: var(--weight-semibold);
       letter-spacing: -0.006em;
@@ -580,7 +586,7 @@
       margin: 0 0 7px 0;
       padding: 0;
       font-family: var(--font-main);
-      font-size: 14.8px;
+      font-size: 16px;
       line-height: 1.38;
       font-weight: var(--weight-semibold);
       letter-spacing: 0;
@@ -593,7 +599,7 @@
       margin: 28px 0 10px 0;
       padding: 0;
       font-family: var(--font-main);
-      font-size: 14.8px;
+      font-size: 16px;
       line-height: 1.35;
       font-weight: var(--weight-semibold);
       letter-spacing: 0;
@@ -615,7 +621,7 @@
     .info-body p {
       margin: 0 0 16px 0;
       font-family: var(--font-main);
-      font-size: 14.8px;
+      font-size: 16px;
       line-height: 1.62;
       font-weight: var(--weight-regular);
       letter-spacing: 0;
@@ -632,7 +638,7 @@
 
     .index-list button {
       width: 100%;
-      padding: 16px 0;
+      padding: 17px 0;
       border: none;
       border-bottom: 1px solid rgba(17, 17, 17, 0.12);
       background: transparent;
@@ -644,7 +650,7 @@
 
     .index-number {
       display: block;
-      font-size: 11.8px;
+      font-size: 12.8px;
       line-height: 1.2;
       font-weight: var(--weight-medium);
       color: rgba(17, 17, 17, 0.42);
@@ -653,7 +659,7 @@
 
     .index-title {
       display: block;
-      font-size: 18px;
+      font-size: 19.4px;
       line-height: 1.2;
       font-weight: var(--weight-semibold);
       letter-spacing: -0.004em;
@@ -662,7 +668,7 @@
 
     .index-subtitle {
       display: block;
-      font-size: 12.8px;
+      font-size: 14px;
       line-height: 1.4;
       font-weight: var(--weight-regular);
       margin-top: 5px;
@@ -685,46 +691,50 @@
       -webkit-overflow-scrolling: touch;
       overscroll-behavior: contain;
       touch-action: pan-y;
-      padding: 24px 0 0;
+      padding: 64px 0 0;
       margin: 0;
-      scroll-padding-top: 24px;
+      scroll-padding-top: 64px;
     }
 
     .about-item {
       width: 100vw;
       margin: 0;
-      padding: 0 0 58px 0;
+      padding: 0 0 62px 0;
       background: #ffffff;
-      scroll-margin-top: 24px;
+      scroll-margin-top: 64px;
     }
 
     .about-item.has-image {
-      padding-top: 34px;
+      padding-top: 42px;
     }
 
     .about-item.is-text-only {
       display: block;
       min-height: 0;
-      padding: 0 34px 34px;
+      padding: 0 34px 40px;
       background: #ffffff;
     }
 
     .about-item.is-quote {
       padding-top: 0;
-      padding-bottom: 34px;
+      padding-bottom: 44px;
     }
 
     .about-image-title {
-      padding: 0 34px 22px;
+      padding: 0 34px 32px;
       margin: 0;
       font-family: var(--font-main);
-      font-size: 19px;
+      font-size: 20.8px;
       line-height: 1.22;
       font-weight: var(--weight-semibold);
       letter-spacing: -0.004em;
       color: var(--text-black);
       text-align: center;
       white-space: pre-line;
+    }
+
+    #about-page-3 .about-image-title {
+      padding-bottom: 34px;
     }
 
     .about-image-crop {
@@ -761,7 +771,7 @@
     }
 
     .about-text {
-      padding: 15px 34px 0;
+      padding: 18px 34px 0;
       background: #ffffff;
     }
 
@@ -772,9 +782,9 @@
     }
 
     .about-caption {
-      margin: 0 0 16px 0;
+      margin: 0 0 18px 0;
       font-family: var(--font-main);
-      font-size: 19px;
+      font-size: 20.8px;
       line-height: 1.24;
       font-weight: var(--weight-semibold);
       letter-spacing: -0.004em;
@@ -788,9 +798,9 @@
     }
 
     .about-copy p {
-      margin: 0 0 14px 0;
+      margin: 0 0 15px 0;
       font-family: var(--font-main);
-      font-size: 14.2px;
+      font-size: 15.6px;
       line-height: 1.58;
       font-weight: var(--weight-regular);
       letter-spacing: 0;
@@ -808,7 +818,7 @@
     .about-item.is-quote .about-copy p {
       margin: 0 auto 10px;
       max-width: 29em;
-      font-size: 21px;
+      font-size: 23px;
       line-height: 1.34;
       font-weight: var(--weight-regular);
       letter-spacing: -0.008em;
@@ -820,10 +830,10 @@
     }
 
     .about-item.is-quote .about-copy p.quote-reference {
-      margin-top: 13px;
+      margin-top: 14px;
       margin-bottom: 0;
       max-width: 31em;
-      font-size: 10px;
+      font-size: 11px;
       line-height: 1.32;
       font-weight: var(--weight-regular);
       letter-spacing: 0.02em;
@@ -883,20 +893,20 @@
       border: none;
       background: transparent;
       font-family: var(--font-main);
-      font-size: 29px;
+      font-size: 31px;
       font-weight: var(--weight-regular);
       cursor: pointer;
     }
 
     .drawer-nav button {
       width: 100%;
-      padding: 18px 0;
+      padding: 19px 0;
       border: none;
       border-bottom: 1px solid rgba(17, 17, 17, 0.12);
       background: transparent;
       text-align: left;
       font-family: var(--font-main);
-      font-size: 16px;
+      font-size: 17.2px;
       line-height: 1.25;
       font-weight: var(--weight-medium);
       letter-spacing: 0;
@@ -996,10 +1006,11 @@
   </aside>
 
   <script>
-    const ASSET_VERSION = "2026-07-10-1";
+    const ASSET_VERSION = "2026-07-10-2";
 
     const VIGNETTE_FOLDER = "Vignettes/";
     const ABOUT_FOLDER = "apropos-mobile/";
+    const ABOUT_TOP_OFFSET = 64;
 
     const ABOUT_ITEMS = [
       { num: 1, hasImage: false, isQuote: true },
@@ -1109,7 +1120,7 @@
     let transitionToken = 0;
     let pageRequestToken = 0;
     let infoToken = 0;
-    let homeScrollTimer = null;
+    let homeDotAnimationFrame = null;
     let aboutScrollTimer = null;
     let resizeTimer = null;
 
@@ -1338,6 +1349,16 @@
       requestAnimationFrame(updateHomeProjectDots);
     }
 
+    function positionAboutPage(validPage) {
+      trimAllAboutImages();
+
+      if (validPage === ABOUT_PAGES[0]) {
+        aboutFeed.scrollTo({ top: 0, behavior: "auto" });
+      } else {
+        scrollToAboutPage(validPage, "auto");
+      }
+    }
+
     function showAbout(targetPage = ABOUT_PAGES[0]) {
       home.classList.add("hidden");
       site.classList.remove("hidden");
@@ -1356,9 +1377,14 @@
       aboutFeed.scrollTop = 0;
 
       requestAnimationFrame(() => {
-        trimAllAboutImages();
-        scrollToAboutPage(validPage, "auto");
+        requestAnimationFrame(() => {
+          positionAboutPage(validPage);
+        });
       });
+
+      setTimeout(() => {
+        positionAboutPage(validPage);
+      }, 120);
     }
 
     function scrollToAboutPage(num, behavior = "smooth") {
@@ -1369,7 +1395,7 @@
       }
 
       aboutFeed.scrollTo({
-        top: Math.max(0, target.offsetTop - 24),
+        top: Math.max(0, target.offsetTop - ABOUT_TOP_OFFSET),
         behavior
       });
     }
@@ -1384,7 +1410,7 @@
         const element = document.getElementById(`about-page-${num}`);
         if (!element) return;
 
-        const distance = Math.abs((element.offsetTop - 24) - aboutFeed.scrollTop);
+        const distance = Math.abs((element.offsetTop - ABOUT_TOP_OFFSET) - aboutFeed.scrollTop);
 
         if (distance < nearestDistance) {
           nearestDistance = distance;
@@ -1980,29 +2006,35 @@
         homeProjectDots.appendChild(dot);
       });
 
+      const marker = document.createElement("span");
+      marker.id = "home-project-dot-marker";
+      marker.className = "home-project-dot-marker";
+      homeProjectDots.appendChild(marker);
+
       updateHomeProjectDots();
     }
 
     function updateHomeProjectDots() {
       const cards = Array.from(projectGrid.querySelectorAll(".project-card"));
-      const dots = Array.from(homeProjectDots.querySelectorAll(".home-project-dot"));
+      const marker = document.getElementById("home-project-dot-marker");
 
-      if (!cards.length || !dots.length) return;
+      if (!cards.length || !marker) return;
 
-      let activeIndex = 0;
-      let nearestDistance = Infinity;
+      const cardHeight = cards[0].offsetHeight || 1;
+      const maxProgress = Math.max(0, cards.length - 1);
+      const rawProgress = projectGrid.scrollTop / cardHeight;
+      const progress = Math.max(0, Math.min(maxProgress, rawProgress));
+      const dotStep = 16;
 
-      cards.forEach((card, index) => {
-        const distance = Math.abs(card.offsetTop - projectGrid.scrollTop);
+      marker.style.transform = `translateY(${progress * dotStep}px)`;
+    }
 
-        if (distance < nearestDistance) {
-          nearestDistance = distance;
-          activeIndex = index;
-        }
-      });
+    function requestHomeDotUpdate() {
+      if (homeDotAnimationFrame) return;
 
-      dots.forEach((dot, index) => {
-        dot.classList.toggle("active", index === activeIndex);
+      homeDotAnimationFrame = requestAnimationFrame(() => {
+        homeDotAnimationFrame = null;
+        updateHomeProjectDots();
       });
     }
 
@@ -2154,10 +2186,7 @@
     prevPageButton.addEventListener("click", previousPage);
     nextPageButton.addEventListener("click", nextPage);
 
-    projectGrid.addEventListener("scroll", () => {
-      clearTimeout(homeScrollTimer);
-      homeScrollTimer = setTimeout(updateHomeProjectDots, 60);
-    });
+    projectGrid.addEventListener("scroll", requestHomeDotUpdate, { passive: true });
 
     documentWrap.addEventListener("pointerdown", e => startGesture(e.clientX, e.clientY));
     documentWrap.addEventListener("pointerup", e => endProjectGesture(e.clientX, e.clientY));
