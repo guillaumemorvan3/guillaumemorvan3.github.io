@@ -156,6 +156,7 @@
     .mobile-menu-button span::after { top: 9px; }
 
     .summary {
+      position: relative;
       width: 100vw;
       height: calc(100dvh - 84px);
       padding: 0;
@@ -245,6 +246,34 @@
       font-weight: var(--weight-regular);
       color: #222;
       text-align: center;
+    }
+
+    .home-project-dots {
+      position: absolute;
+      left: 16px;
+      top: 50%;
+      z-index: 40;
+      display: flex;
+      flex-direction: column;
+      gap: 9px;
+      transform: translateY(-50%);
+      pointer-events: auto;
+    }
+
+    .home-project-dot {
+      width: 7px;
+      height: 7px;
+      padding: 0;
+      border: none;
+      border-radius: 999px;
+      background: rgba(17, 17, 17, 0.24);
+      cursor: pointer;
+      transition: background 180ms ease, transform 180ms ease, height 180ms ease;
+    }
+
+    .home-project-dot.active {
+      height: 18px;
+      background: rgba(17, 17, 17, 0.62);
     }
 
     .viewer {
@@ -656,39 +685,37 @@
       -webkit-overflow-scrolling: touch;
       overscroll-behavior: contain;
       touch-action: pan-y;
-      padding: 0;
+      padding: 24px 0 0;
       margin: 0;
+      scroll-padding-top: 24px;
     }
 
     .about-item {
       width: 100vw;
       margin: 0;
-      padding: 0 0 54px 0;
+      padding: 0 0 58px 0;
       background: #ffffff;
+      scroll-margin-top: 24px;
     }
 
     .about-item.has-image {
-      padding-top: 30px;
+      padding-top: 34px;
     }
 
     .about-item.is-text-only {
       display: block;
       min-height: 0;
-      padding: 26px 34px 26px;
+      padding: 0 34px 34px;
       background: #ffffff;
     }
 
     .about-item.is-quote {
-      padding-top: 18px;
-      padding-bottom: 28px;
-    }
-
-    .about-item:first-child.is-quote {
-      padding-top: 8px;
+      padding-top: 0;
+      padding-bottom: 34px;
     }
 
     .about-image-title {
-      padding: 0 34px 14px;
+      padding: 0 34px 22px;
       margin: 0;
       font-family: var(--font-main);
       font-size: 19px;
@@ -709,6 +736,12 @@
       padding: 0;
     }
 
+    .about-image-crop.is-contained {
+      width: 100vw;
+      padding: 0 34px;
+      overflow: visible;
+    }
+
     .about-page-image {
       width: 100vw;
       height: auto;
@@ -720,8 +753,15 @@
       -webkit-user-drag: none;
     }
 
+    .about-image-crop.is-contained .about-page-image {
+      width: 100%;
+      height: auto;
+      object-fit: contain;
+      object-position: center;
+    }
+
     .about-text {
-      padding: 13px 34px 0;
+      padding: 15px 34px 0;
       background: #ffffff;
     }
 
@@ -897,6 +937,7 @@
     </header>
 
     <main id="summary" class="summary">
+      <div id="home-project-dots" class="home-project-dots"></div>
       <div id="project-grid" class="project-grid"></div>
     </main>
 
@@ -955,16 +996,16 @@
   </aside>
 
   <script>
-    const ASSET_VERSION = "2026-07-08-7";
+    const ASSET_VERSION = "2026-07-10-1";
 
     const VIGNETTE_FOLDER = "Vignettes/";
     const ABOUT_FOLDER = "apropos-mobile/";
 
     const ABOUT_ITEMS = [
       { num: 1, hasImage: false, isQuote: true },
-      { num: 2, hasImage: true, isQuote: false },
-      { num: 3, hasImage: true, isQuote: false },
-      { num: 4, hasImage: true, isQuote: false },
+      { num: 2, hasImage: true, isQuote: false, imageMode: "standard" },
+      { num: 3, hasImage: true, isQuote: false, imageMode: "contained" },
+      { num: 4, hasImage: true, isQuote: false, imageMode: "contained" },
       { num: 5, hasImage: false, isQuote: true }
     ];
 
@@ -1068,6 +1109,7 @@
     let transitionToken = 0;
     let pageRequestToken = 0;
     let infoToken = 0;
+    let homeScrollTimer = null;
     let aboutScrollTimer = null;
     let resizeTimer = null;
 
@@ -1095,6 +1137,7 @@
     const drawer = document.getElementById("drawer");
     const overlay = document.getElementById("overlay");
     const projectGrid = document.getElementById("project-grid");
+    const homeProjectDots = document.getElementById("home-project-dots");
 
     const mobileCurrentTitle = document.getElementById("mobile-current-title");
     const mobileIndexButton = document.getElementById("mobile-index-button");
@@ -1291,6 +1334,8 @@
 
       closeDrawer();
       clearUrl();
+
+      requestAnimationFrame(updateHomeProjectDots);
     }
 
     function showAbout(targetPage = ABOUT_PAGES[0]) {
@@ -1324,7 +1369,7 @@
       }
 
       aboutFeed.scrollTo({
-        top: target.offsetTop,
+        top: Math.max(0, target.offsetTop - 24),
         behavior
       });
     }
@@ -1339,7 +1384,7 @@
         const element = document.getElementById(`about-page-${num}`);
         if (!element) return;
 
-        const distance = Math.abs(element.offsetTop - aboutFeed.scrollTop);
+        const distance = Math.abs((element.offsetTop - 24) - aboutFeed.scrollTop);
 
         if (distance < nearestDistance) {
           nearestDistance = distance;
@@ -1658,7 +1703,8 @@
 
     function trimWhiteBottom(img) {
       const wrapper = img.closest(".about-image-crop");
-      if (!wrapper || !img.naturalWidth || !img.naturalHeight) return;
+      if (!wrapper || wrapper.classList.contains("is-contained")) return;
+      if (!img.naturalWidth || !img.naturalHeight) return;
 
       try {
         const scanWidth = Math.min(420, img.naturalWidth);
@@ -1894,6 +1940,7 @@
       PROJECTS.forEach((project, index) => {
         const button = document.createElement("button");
         button.className = "project-card";
+        button.dataset.index = String(index);
 
         button.innerHTML = `
           <img class="thumb" src="${getVignetteSrc(project.thumb)}" alt="${project.fullTitle}" />
@@ -1906,6 +1953,56 @@
 
         button.addEventListener("click", () => showViewer(project, project.start, "none"));
         projectGrid.appendChild(button);
+      });
+    }
+
+    function buildHomeProjectDots() {
+      homeProjectDots.innerHTML = "";
+
+      PROJECTS.forEach((project, index) => {
+        const dot = document.createElement("button");
+        dot.className = "home-project-dot";
+        dot.setAttribute("aria-label", `Voir ${project.title}`);
+        dot.dataset.index = String(index);
+
+        dot.addEventListener("click", event => {
+          event.stopPropagation();
+
+          const card = projectGrid.querySelector(`.project-card[data-index="${index}"]`);
+          if (!card) return;
+
+          projectGrid.scrollTo({
+            top: card.offsetTop,
+            behavior: "smooth"
+          });
+        });
+
+        homeProjectDots.appendChild(dot);
+      });
+
+      updateHomeProjectDots();
+    }
+
+    function updateHomeProjectDots() {
+      const cards = Array.from(projectGrid.querySelectorAll(".project-card"));
+      const dots = Array.from(homeProjectDots.querySelectorAll(".home-project-dot"));
+
+      if (!cards.length || !dots.length) return;
+
+      let activeIndex = 0;
+      let nearestDistance = Infinity;
+
+      cards.forEach((card, index) => {
+        const distance = Math.abs(card.offsetTop - projectGrid.scrollTop);
+
+        if (distance < nearestDistance) {
+          nearestDistance = distance;
+          activeIndex = index;
+        }
+      });
+
+      dots.forEach((dot, index) => {
+        dot.classList.toggle("active", index === activeIndex);
       });
     }
 
@@ -1959,6 +2056,10 @@
 
           const imageCrop = document.createElement("div");
           imageCrop.className = "about-image-crop";
+
+          if (item.imageMode === "contained") {
+            imageCrop.classList.add("is-contained");
+          }
 
           const img = document.createElement("img");
           img.className = "about-page-image";
@@ -2053,6 +2154,11 @@
     prevPageButton.addEventListener("click", previousPage);
     nextPageButton.addEventListener("click", nextPage);
 
+    projectGrid.addEventListener("scroll", () => {
+      clearTimeout(homeScrollTimer);
+      homeScrollTimer = setTimeout(updateHomeProjectDots, 60);
+    });
+
     documentWrap.addEventListener("pointerdown", e => startGesture(e.clientX, e.clientY));
     documentWrap.addEventListener("pointerup", e => endProjectGesture(e.clientX, e.clientY));
     documentWrap.addEventListener("pointercancel", () => { gestureActive = false; });
@@ -2065,10 +2171,14 @@
 
     window.addEventListener("resize", () => {
       clearTimeout(resizeTimer);
-      resizeTimer = setTimeout(trimAllAboutImages, 150);
+      resizeTimer = setTimeout(() => {
+        trimAllAboutImages();
+        updateHomeProjectDots();
+      }, 150);
     });
 
     buildProjectCards();
+    buildHomeProjectDots();
     buildProjectIndex();
     buildAboutFeed();
 
