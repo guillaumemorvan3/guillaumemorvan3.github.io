@@ -13,7 +13,6 @@
     :root {
       --cover-focus-x: 54%;
       --cover-focus-y: 47%;
-      --cover-zoom: 0.90;
 
       --font-main: "Afacad", Arial, Helvetica, sans-serif;
 
@@ -57,12 +56,11 @@
     .home-image {
       width: 100%;
       height: 100%;
-      object-fit: contain;
+      object-fit: cover;
       object-position: var(--cover-focus-x) var(--cover-focus-y);
-      transform: scale(var(--cover-zoom));
-      transform-origin: var(--cover-focus-x) var(--cover-focus-y);
+      transform: none;
       display: block;
-      will-change: transform;
+      background: #111;
     }
 
     .home-name {
@@ -887,6 +885,8 @@
 
     .contact-image-wrap {
       width: 100vw;
+      height: auto;
+      overflow: hidden;
       margin: 0;
       padding: 0 34px;
       background: #ffffff;
@@ -904,7 +904,7 @@
     }
 
     .contact-text {
-      padding: 18px 34px 0;
+      padding: 8px 34px 0;
       background: #ffffff;
     }
 
@@ -1004,7 +1004,7 @@
 
 <body>
   <section id="home" class="home">
-    <img src="cover.jpg" alt="Guillaume Morvan — Portfolio" class="home-image" />
+    <img id="home-cover-image" class="home-image" alt="Guillaume Morvan — Portfolio" loading="eager" fetchpriority="high" decoding="async" />
     <button id="home-name" class="home-name">Guillaume Morvan</button>
   </section>
 
@@ -1091,7 +1091,13 @@
   </aside>
 
   <script>
-    const ASSET_VERSION = "2026-07-16-2";
+    const ASSET_VERSION = "2026-07-16-3";
+
+    const COVER_IMAGES = [
+      "cover-mobile.webp",
+      "cover-mobile.jpg",
+      "cover.jpg"
+    ];
 
     const VIGNETTE_FOLDER = "Vignettes/";
     const ABOUT_FOLDER = "parcours-mobile/";
@@ -1214,6 +1220,7 @@
     const textCache = new Map();
 
     const home = document.getElementById("home");
+    const homeCoverImage = document.getElementById("home-cover-image");
     const site = document.getElementById("site");
     const summary = document.getElementById("summary");
     const about = document.getElementById("about");
@@ -1250,45 +1257,66 @@
     const mobileIndexPanel = document.getElementById("mobile-index-panel");
     const mobileIndexList = document.getElementById("mobile-index-list");
 
+    function assetUrl(path) {
+      return encodeURI(path) + `?v=${ASSET_VERSION}`;
+    }
+
+    function loadBestCoverImage(index = 0) {
+      if (index >= COVER_IMAGES.length) return;
+
+      const src = assetUrl(COVER_IMAGES[index]);
+      const tester = new Image();
+
+      tester.onload = () => {
+        homeCoverImage.src = src;
+      };
+
+      tester.onerror = () => {
+        loadBestCoverImage(index + 1);
+      };
+
+      tester.src = src;
+    }
+
     function getImageSrc(project, num) {
-      return encodeURI(`${project.folder}${project.filePrefix} (${num}).jpg`) + `?v=${ASSET_VERSION}`;
+      return assetUrl(`${project.folder}${project.filePrefix} (${num}).jpg`);
     }
 
     function getProjectCaptionSrc(project, num) {
-      return encodeURI(`${project.folder}caption (${num}).txt`) + `?v=${ASSET_VERSION}`;
+      return assetUrl(`${project.folder}caption (${num}).txt`);
     }
 
     function getAboutImageSrc(num) {
-      return encodeURI(`${ABOUT_FOLDER}page (${num}).jpg`) + `?v=${ASSET_VERSION}`;
+      return assetUrl(`${ABOUT_FOLDER}page (${num}).jpg`);
     }
 
     function getAboutTextSrc(num) {
-      return encodeURI(`${ABOUT_FOLDER}page (${num}).txt`) + `?v=${ASSET_VERSION}`;
+      return assetUrl(`${ABOUT_FOLDER}page (${num}).txt`);
     }
 
     function getAboutCaptionSrc(num) {
-      return encodeURI(`${ABOUT_FOLDER}caption (${num}).txt`) + `?v=${ASSET_VERSION}`;
+      return assetUrl(`${ABOUT_FOLDER}caption (${num}).txt`);
     }
 
     function getContactImageSrc() {
-      return encodeURI(`${CONTACT_FOLDER}page (${CONTACT_PAGE}).jpg`) + `?v=${ASSET_VERSION}`;
+      return assetUrl(`${CONTACT_FOLDER}page (${CONTACT_PAGE}).jpg`);
     }
 
     function getContactTextSrc() {
-      return encodeURI(`${CONTACT_FOLDER}page (${CONTACT_PAGE}).txt`) + `?v=${ASSET_VERSION}`;
+      return assetUrl(`${CONTACT_FOLDER}page (${CONTACT_PAGE}).txt`);
     }
 
     function getContactCaptionSrc() {
-      return encodeURI(`${CONTACT_FOLDER}caption (${CONTACT_PAGE}).txt`) + `?v=${ASSET_VERSION}`;
+      return assetUrl(`${CONTACT_FOLDER}caption (${CONTACT_PAGE}).txt`);
     }
 
     function getVignetteSrc(filename) {
-      return encodeURI(`${VIGNETTE_FOLDER}${filename}`) + `?v=${ASSET_VERSION}`;
+      return assetUrl(`${VIGNETTE_FOLDER}${filename}`);
     }
 
     function getInfoSrc(project) {
       if (!project.infoFile) return "";
-      return encodeURI(project.infoFile) + `?v=${ASSET_VERSION}`;
+      return assetUrl(project.infoFile);
     }
 
     function preloadImage(src) {
@@ -1492,6 +1520,10 @@
       contactText.classList.add("hidden");
 
       contactImage.src = getContactImageSrc();
+
+      contactImage.onload = () => {
+        trimWhiteBottomGeneric(contactImage, contactImage.closest(".contact-image-wrap"));
+      };
 
       const caption = await fetchTextFileCached(getContactCaptionSrc());
       const body = await fetchTextFileCached(getContactTextSrc());
@@ -1885,9 +1917,8 @@
       }
     }
 
-    function trimWhiteBottom(img) {
-      const wrapper = img.closest(".about-image-crop");
-      if (!wrapper || wrapper.classList.contains("is-contained")) return;
+    function trimWhiteBottomGeneric(img, wrapper) {
+      if (!wrapper) return;
       if (!img.naturalWidth || !img.naturalHeight) return;
 
       try {
@@ -1932,11 +1963,11 @@
           }
         }
 
-        const safetyMargin = Math.round(scanHeight * 0.025);
+        const safetyMargin = Math.round(scanHeight * 0.018);
         const cropY = Math.min(scanHeight, bottomContentY + safetyMargin);
         const ratio = cropY / scanHeight;
 
-        if (ratio > 0.98) {
+        if (ratio > 0.985) {
           wrapper.style.height = "auto";
           return;
         }
@@ -1951,12 +1982,22 @@
       }
     }
 
+    function trimWhiteBottom(img) {
+      const wrapper = img.closest(".about-image-crop");
+      if (!wrapper || wrapper.classList.contains("is-contained")) return;
+      trimWhiteBottomGeneric(img, wrapper);
+    }
+
     function trimAllAboutImages() {
       document.querySelectorAll(".about-page-image").forEach(img => {
         if (img.complete) {
           trimWhiteBottom(img);
         }
       });
+
+      if (contactImage.complete) {
+        trimWhiteBottomGeneric(contactImage, contactImage.closest(".contact-image-wrap"));
+      }
     }
 
     function looksLikeQuoteReference(line) {
@@ -2304,6 +2345,8 @@
     function preventGestureScroll(e) {
       e.preventDefault();
     }
+
+    loadBestCoverImage();
 
     home.addEventListener("click", showSummary);
 
