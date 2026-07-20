@@ -8,11 +8,8 @@
   <script>
     const isMobile = window.innerWidth <= 700;
 
-    if (isMobile) {
-      window.location.replace("mobile.html");
-    } else {
-      window.location.replace("desktop.html");
-    }
+    const target = isMobile ? "mobile.html" : "desktop.html";
+    window.location.replace(target + window.location.search);
   </script>
 </head>
 
