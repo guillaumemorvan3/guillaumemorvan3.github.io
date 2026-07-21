@@ -242,6 +242,18 @@
     .nav-prev { left: 8px; }
     .nav-next { right: 8px; }
 
+    .viewer .nav-side::before {
+      content: "";
+      position: absolute;
+      top: 50%;
+      width: clamp(72px, 7vw, 112px);
+      height: calc(100vh - 44px);
+      transform: translateY(-50%);
+    }
+
+    .viewer .nav-prev::before { left: -8px; }
+    .viewer .nav-next::before { right: -8px; }
+
     .drawer {
       position: fixed;
       top: 0;
