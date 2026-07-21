@@ -231,7 +231,7 @@
       color: #111;
       font-size: 34px;
       line-height: 1;
-      opacity: 0.16;
+      opacity: 0.28;
       z-index: 10;
       cursor: pointer;
     }
@@ -397,40 +397,16 @@
 
     const PROJECTS = [
       {
-        slug: "melle",
-        title: "Melle",
-        fullTitle: "Station ferroviaire Melle",
-        type: "Projet urbain et bâtiment mixte",
-        line: "Évolutivité et appropriation des espaces.",
-        thumb: "melle.jpg",
+        slug: "edwood",
+        title: "Edwood",
+        fullTitle: "Edwood",
+        type: "Construction bois",
+        line: "Le chantier comme école de la réalité constructive.",
+        thumb: "edwood.jpg",
         folder: "pages/",
         filePrefix: "page",
-        start: 4,
-        end: 8
-      },
-      {
-        slug: "saint-joseph",
-        title: "Saint-Joseph",
-        fullTitle: "Église Saint-Joseph",
-        type: "Réhabilitation patrimoniale",
-        line: "Révéler les qualités cachées du patrimoine.",
-        thumb: "saint-joseph.jpg",
-        folder: "pages/",
-        filePrefix: "page",
-        start: 9,
-        end: 17
-      },
-      {
-        slug: "ferme-nord",
-        title: "Ferme Nord",
-        fullTitle: "Ferme Nord",
-        type: "Réhabilitation et extension",
-        line: "L’harmonieux contraste.",
-        thumb: "ferme-nord.jpg",
-        folder: "pages/",
-        filePrefix: "page",
-        start: 18,
-        end: 33
+        start: 40,
+        end: 43
       },
       {
         slug: "tank",
@@ -445,16 +421,40 @@
         end: 39
       },
       {
-        slug: "edwood",
-        title: "Edwood",
-        fullTitle: "Edwood",
-        type: "Construction bois",
-        line: "Le chantier comme école de la réalité constructive.",
-        thumb: "edwood.jpg",
+        slug: "ferme-nord",
+        title: "Ferme Nord",
+        fullTitle: "Ferme Nord",
+        type: "Réhabilitation et extension",
+        line: "L’harmonieux contraste.",
+        thumb: "ferme-nord.jpg",
         folder: "pages/",
         filePrefix: "page",
-        start: 40,
-        end: 43
+        start: 18,
+        end: 33
+      },
+      {
+        slug: "saint-joseph",
+        title: "Saint-Joseph",
+        fullTitle: "Église Saint-Joseph",
+        type: "Réhabilitation patrimoniale",
+        line: "Révéler les qualités cachées du patrimoine.",
+        thumb: "saint-joseph.jpg",
+        folder: "pages/",
+        filePrefix: "page",
+        start: 9,
+        end: 17
+      },
+      {
+        slug: "melle",
+        title: "Melle",
+        fullTitle: "Station ferroviaire Melle",
+        type: "Projet urbain et bâtiment mixte",
+        line: "Évolutivité et appropriation des espaces.",
+        thumb: "melle.jpg",
+        folder: "pages/",
+        filePrefix: "page",
+        start: 4,
+        end: 8
       }
     ];
 
@@ -623,9 +623,11 @@
         button.innerHTML = `
           <span class="project-title">${String(index + 1).padStart(2, "0")} — ${project.fullTitle}</span>
           <span class="project-subtitle">${project.line}</span>
-          <span class="project-page">Pages ${project.start} à ${project.end}</span>
         `;
-        button.addEventListener("click", () => showViewer(project, project.start));
+        button.addEventListener("click", () => {
+          showViewer(project, project.start);
+          closeDrawer();
+        });
         projectList.appendChild(button);
       });
     }
