@@ -4,6 +4,7 @@
   <meta charset="UTF-8" />
   <meta name="viewport" content="width=device-width, initial-scale=1.0" />
   <title>Guillaume Morvan — Portfolio</title>
+  <link rel="icon" href="data:," />
 
   <style>
     * { box-sizing: border-box; }
@@ -356,7 +357,7 @@
     <main id="about" class="about hidden">
       <div class="about-wrap">
         <button id="about-prev" class="nav-side nav-prev">‹</button>
-        <img id="about-image" src="" alt="À propos — Guillaume Morvan" />
+        <img id="about-image" src="" alt="À propos — Guillaume Morvan" loading="lazy" decoding="async" />
         <button id="about-next" class="nav-side nav-next">›</button>
       </div>
     </main>
@@ -385,7 +386,14 @@
 
     const VIGNETTE_FOLDER = "Vignettes/";
     const ABOUT_FOLDER = "apropos/";
-    const ABOUT_TOTAL = 2;
+    const ABOUT_ASSET_VERSION = "2026-07-21-1";
+    const ABOUT_TOTAL = 4;
+    const ABOUT_ALTS = [
+      "Approche architecturale et structure intérieure en bois",
+      "Parcours de Guillaume Morvan, photographies de famille et maquette urbaine",
+      "Croquis d’architecture et chantier de construction bois",
+      "Coordonnées de Guillaume Morvan, portrait et citation de Fernand Pouillon"
+    ];
 
     const PROJECTS = [
       {
@@ -474,7 +482,7 @@
     }
 
     function getAboutSrc(num) {
-      return encodeURI(`${ABOUT_FOLDER}page (${num}).jpg`) + `?v=${ASSET_VERSION}`;
+      return encodeURI(`${ABOUT_FOLDER}page (${num}).jpg`) + `?v=${ABOUT_ASSET_VERSION}`;
     }
 
     function getVignetteSrc(filename) {
@@ -556,6 +564,7 @@
     function goToAboutPage(num) {
       if (num < 1 || num > ABOUT_TOTAL) return;
       currentAboutPage = num;
+      aboutImage.alt = ABOUT_ALTS[currentAboutPage - 1];
       aboutImage.src = getAboutSrc(currentAboutPage);
       updateAboutNavState();
     }

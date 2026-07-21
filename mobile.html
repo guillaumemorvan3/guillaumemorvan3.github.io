@@ -4,6 +4,7 @@
   <meta charset="UTF-8" />
   <meta name="viewport" content="width=device-width, initial-scale=1.0" />
   <title>Guillaume Morvan — Portfolio</title>
+  <link rel="icon" href="data:," />
 
   <link rel="preconnect" href="https://fonts.googleapis.com">
   <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
@@ -699,13 +700,13 @@
     .about-item {
       width: 100vw;
       margin: 0;
-      padding: 0 0 62px 0;
+      padding: 0 0 50px 0;
       background: #ffffff;
       scroll-margin-top: 64px;
     }
 
     .about-item.has-image {
-      padding-top: 42px;
+      padding-top: 36px;
     }
 
     .about-item.is-text-only {
@@ -716,8 +717,16 @@
     }
 
     .about-item.is-quote {
+      padding-top: 40px;
+      padding-bottom: 54px;
+    }
+
+    .about-item.is-visual-pair-start {
+      padding-bottom: 12px;
+    }
+
+    .about-item.is-visual-pair-end {
       padding-top: 0;
-      padding-bottom: 44px;
     }
 
     .about-image-title {
@@ -733,8 +742,49 @@
       white-space: pre-line;
     }
 
+    .about-image-title.has-subtitle {
+      white-space: normal;
+    }
+
+    .about-title-main,
+    .about-title-subtitle {
+      display: block;
+    }
+
+    .about-title-subtitle {
+      margin-top: 2px;
+      font-size: 18px;
+      line-height: 1.2;
+      font-weight: var(--weight-regular);
+      letter-spacing: 0;
+    }
+
     #about-page-3 .about-image-title {
-      padding-bottom: 34px;
+      position: relative;
+      z-index: 1;
+      padding-bottom: 2px;
+      background: #ffffff;
+    }
+
+    #about-page-3 .about-image-crop {
+      margin-top: 0;
+    }
+
+    #about-page-3 .about-image-crop.is-contained,
+    #about-page-4 .about-image-crop.is-contained {
+      overflow: hidden;
+    }
+
+    #about-page-3 .about-page-image {
+      margin-top: calc(-9.9674vw + 31.7778px);
+    }
+
+    #about-page-4 .about-page-image {
+      margin-top: calc(-18.1759vw + 24.3596px);
+    }
+
+    #about-page-3 .about-text {
+      margin-top: calc(-9.1857vw + 6.2463px);
     }
 
     .about-image-crop {
@@ -771,7 +821,7 @@
     }
 
     .about-text {
-      padding: 18px 34px 0;
+      padding: 24px 34px 0;
       background: #ffffff;
     }
 
@@ -838,6 +888,12 @@
       font-weight: var(--weight-regular);
       letter-spacing: 0.02em;
       color: rgba(17, 17, 17, 0.40);
+      text-align: center;
+      text-align-last: center;
+      text-indent: 0;
+    }
+
+    #about-page-6 .about-copy p {
       text-align: center;
       text-align-last: center;
       text-indent: 0;
@@ -1085,8 +1141,7 @@
 
     <div id="drawer-nav" class="drawer-nav">
       <button id="drawer-home">Projets</button>
-      <button id="drawer-about">Parcours</button>
-      <button id="drawer-contact">Contact</button>
+      <button id="drawer-about">À propos</button>
     </div>
   </aside>
 
@@ -1100,15 +1155,61 @@
 
     const VIGNETTE_FOLDER = "Vignettes/";
     const ABOUT_FOLDER = "parcours-mobile/";
+    const ABOUT_ASSET_VERSION = "2026-07-21-1";
     const CONTACT_FOLDER = "contact-mobile/";
     const CONTACT_PAGE = 4;
     const ABOUT_TOP_OFFSET = 64;
 
     const ABOUT_ITEMS = [
-      { num: 1, hasImage: false, hasCaption: false, isQuote: true },
-      { num: 2, hasImage: true, hasCaption: true, isQuote: false, imageMode: "standard" },
-      { num: 3, hasImage: true, hasCaption: true, isQuote: false, imageMode: "contained" },
-      { num: 5, hasImage: false, hasCaption: false, isQuote: true }
+      { num: 1, hasImage: false, hasCaption: false, hasText: true, isQuote: true },
+      {
+        num: 2,
+        hasImage: true,
+        hasCaption: true,
+        hasText: true,
+        isQuote: false,
+        imageMode: "contained",
+        alt: "Structure intérieure en bois en cours de construction"
+      },
+      {
+        num: 3,
+        hasImage: true,
+        hasCaption: true,
+        hasText: true,
+        isQuote: false,
+        imageMode: "contained",
+        alt: "Photographie de famille devant une maison en pierre et maquette urbaine"
+      },
+      {
+        num: 4,
+        hasImage: true,
+        hasCaption: false,
+        hasText: false,
+        isQuote: false,
+        imageMode: "contained",
+        visualPairStart: true,
+        alt: "Croquis d’architecture dessinés à la main"
+      },
+      {
+        num: 5,
+        hasImage: true,
+        hasCaption: false,
+        hasText: false,
+        isQuote: false,
+        imageMode: "contained",
+        visualPairEnd: true,
+        alt: "Pose d’un panneau préfabriqué en bois sur un chantier"
+      },
+      {
+        num: 6,
+        hasImage: true,
+        hasCaption: true,
+        hasText: true,
+        isQuote: false,
+        imageMode: "contained",
+        alt: "Portrait de Guillaume Morvan dans un intérieur en bois"
+      },
+      { num: 8, hasImage: false, hasCaption: false, hasText: true, isQuote: true }
     ];
 
     const ABOUT_PAGES = ABOUT_ITEMS.map(item => item.num);
@@ -1265,6 +1366,10 @@
       return encodeURI(path) + `?v=${ASSET_VERSION}`;
     }
 
+    function aboutAssetUrl(path) {
+      return encodeURI(path) + `?v=${ABOUT_ASSET_VERSION}`;
+    }
+
     function loadBestCoverImage(index = 0) {
       if (index >= COVER_IMAGES.length) return;
 
@@ -1292,17 +1397,19 @@
     }
 
     function getAboutImageSrc(num) {
-      return assetUrl(`${ABOUT_FOLDER}page (${num}).jpg`);
+      return aboutAssetUrl(`${ABOUT_FOLDER}page (${num}).jpg`);
     }
 
     function getAboutTextSrc(num) {
-      return assetUrl(`${ABOUT_FOLDER}page (${num}).txt`);
+      const item = ABOUT_ITEMS.find(item => item.num === num);
+      if (!item || !item.hasText) return "";
+      return aboutAssetUrl(`${ABOUT_FOLDER}page (${num}).txt`);
     }
 
     function getAboutCaptionSrc(num) {
       const item = ABOUT_ITEMS.find(item => item.num === num);
       if (!item || !item.hasCaption) return "";
-      return assetUrl(`${ABOUT_FOLDER}caption (${num}).txt`);
+      return aboutAssetUrl(`${ABOUT_FOLDER}caption (${num}).txt`);
     }
 
     function getContactImageSrc() {
@@ -1594,8 +1701,10 @@
         return;
       }
 
+      const titleRevealOffset = num === 3 ? ABOUT_TOP_OFFSET : 0;
+
       aboutFeed.scrollTo({
-        top: Math.max(0, target.offsetTop - ABOUT_TOP_OFFSET),
+        top: Math.max(0, target.offsetTop - ABOUT_TOP_OFFSET - titleRevealOffset),
         behavior
       });
     }
@@ -2072,7 +2181,19 @@
 
       if (titleContainer) {
         if (caption) {
-          titleContainer.textContent = caption;
+          if (num === 2) {
+            const [mainTitle, ...subtitleLines] = caption.split(/\r?\n/);
+            const subtitle = subtitleLines.join("\n").trim();
+
+            titleContainer.classList.add("has-subtitle");
+            titleContainer.innerHTML = `
+              <span class="about-title-main">${escapeHtml(mainTitle.trim())}</span>
+              <span class="about-title-subtitle">${escapeHtml(subtitle).replace(/\n/g, "<br>")}</span>
+            `;
+          } else {
+            titleContainer.textContent = caption;
+          }
+
           titleContainer.classList.remove("hidden");
         } else {
           titleContainer.classList.add("hidden");
@@ -2273,6 +2394,14 @@
           article.classList.add("is-quote");
         }
 
+        if (item.visualPairStart) {
+          article.classList.add("is-visual-pair-start");
+        }
+
+        if (item.visualPairEnd) {
+          article.classList.add("is-visual-pair-end");
+        }
+
         let titleContainer = null;
 
         if (item.hasImage) {
@@ -2290,7 +2419,7 @@
           const img = document.createElement("img");
           img.className = "about-page-image";
           img.src = getAboutImageSrc(item.num);
-          img.alt = `Parcours — page ${item.num}`;
+          img.alt = item.alt || `À propos — page ${item.num}`;
           img.loading = index === 0 ? "eager" : "lazy";
           img.decoding = "async";
 
@@ -2372,7 +2501,6 @@
 
     document.getElementById("drawer-home").addEventListener("click", showSummary);
     document.getElementById("drawer-about").addEventListener("click", () => showAbout(ABOUT_PAGES[0]));
-    document.getElementById("drawer-contact").addEventListener("click", showContact);
 
     overlay.addEventListener("click", closeDrawer);
 
