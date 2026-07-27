@@ -187,9 +187,7 @@
       height: calc(100vh - 44px);
       padding: 0;
       margin: 0;
-      display: flex;
-      align-items: center;
-      justify-content: center;
+      display: block;
       overflow: hidden;
       background: #ffffff;
     }
@@ -199,16 +197,43 @@
       position: relative;
       width: 100vw;
       height: calc(100vh - 44px);
+      overflow: hidden;
+    }
+
+    .document-scroll {
+      width: 100%;
+      height: 100%;
+      overflow-x: hidden;
+      overflow-y: auto;
+      overscroll-behavior-y: contain;
+      scroll-snap-type: y mandatory;
+      scrollbar-width: none;
+    }
+
+    .document-scroll.is-animating {
+      scroll-snap-type: none;
+    }
+
+    .document-scroll::-webkit-scrollbar {
+      display: none;
+    }
+
+    .document-slide {
+      width: 100%;
+      height: 100%;
+      min-height: 100%;
       display: flex;
       align-items: center;
       justify-content: center;
       overflow: hidden;
+      scroll-snap-align: start;
+      scroll-snap-stop: always;
+      background: #ffffff;
     }
 
-    #about-image,
-    #page-image {
+    .document-slide img {
       max-width: 100vw;
-      max-height: calc(100vh - 44px);
+      max-height: 100%;
       width: auto;
       height: auto;
       display: block;
@@ -219,40 +244,85 @@
       touch-action: pan-y;
     }
 
-    .nav-side {
-      position: fixed;
-      top: calc(44px + (100vh - 44px) / 2);
-      transform: translateY(-50%);
-      width: 44px;
-      height: 72px;
+    .nav-zone {
+      position: absolute;
+      left: 0;
+      width: 100%;
+      height: clamp(72px, 12vh, 104px);
       padding: 0;
       border: none;
-      background: transparent;
       color: #111;
-      font-size: 34px;
-      line-height: 1;
-      opacity: 0.28;
+      opacity: 0;
       z-index: 10;
-      cursor: pointer;
+      transition: opacity 0.2s ease;
     }
 
-    .nav-side:hover { opacity: 0.75; }
-    .nav-side:disabled { opacity: 0.04; cursor: default; }
+    .nav-zone:hover:not(:disabled),
+    .nav-zone:focus-visible:not(:disabled) {
+      opacity: 1;
+    }
 
-    .nav-prev { left: 8px; }
-    .nav-next { right: 8px; }
+    .nav-zone:focus-visible {
+      outline: 1px solid rgba(17, 17, 17, 0.3);
+      outline-offset: -4px;
+    }
 
-    .viewer .nav-side::before {
+    .nav-zone:disabled {
+      opacity: 0 !important;
+      pointer-events: none;
+      cursor: default;
+    }
+
+    .nav-zone::after {
       content: "";
       position: absolute;
       top: 50%;
-      width: clamp(72px, 7vw, 112px);
-      height: calc(100vh - 44px);
-      transform: translateY(-50%);
+      left: 50%;
+      width: 13px;
+      height: 13px;
+      border-right: 1.5px solid rgba(17, 17, 17, 0.72);
+      border-bottom: 1.5px solid rgba(17, 17, 17, 0.72);
     }
 
-    .viewer .nav-prev::before { left: -8px; }
-    .viewer .nav-next::before { right: -8px; }
+    .nav-up {
+      top: 0;
+      cursor: n-resize;
+      background: linear-gradient(to bottom, rgba(17, 17, 17, 0.055), rgba(17, 17, 17, 0));
+    }
+
+    .nav-up::after {
+      transform: translate(-50%, -30%) rotate(-135deg);
+    }
+
+    .nav-down {
+      bottom: 0;
+      cursor: s-resize;
+      background: linear-gradient(to top, rgba(17, 17, 17, 0.055), rgba(17, 17, 17, 0));
+    }
+
+    .nav-down::after {
+      transform: translate(-50%, -70%) rotate(45deg);
+    }
+
+    .nav-zone.hint:not(:disabled) {
+      animation: navigation-hint 1s ease both;
+    }
+
+    @keyframes navigation-hint {
+      0%, 100% { opacity: 0; }
+      20%, 72% { opacity: 1; }
+    }
+
+    @media (prefers-reduced-motion: reduce) {
+      .nav-zone {
+        transition: none;
+      }
+
+      .nav-zone.hint:not(:hover):not(:focus-visible) {
+        animation: none;
+        opacity: 0;
+      }
+    }
 
     .drawer {
       position: fixed;
@@ -368,17 +438,17 @@
 
     <main id="about" class="about hidden">
       <div class="about-wrap">
-        <button id="about-prev" class="nav-side nav-prev">‹</button>
-        <img id="about-image" src="" alt="À propos — Guillaume Morvan" loading="lazy" decoding="async" />
-        <button id="about-next" class="nav-side nav-next">›</button>
+        <div id="about-scroll" class="document-scroll" aria-label="Planches de la section À propos"></div>
+        <button id="about-prev" class="nav-zone nav-up" aria-label="Planche précédente"></button>
+        <button id="about-next" class="nav-zone nav-down" aria-label="Planche suivante"></button>
       </div>
     </main>
 
     <main id="viewer" class="viewer hidden">
       <div class="document-wrap">
-        <button id="prev-side" class="nav-side nav-prev">‹</button>
-        <img id="page-image" src="" alt="Portfolio Guillaume Morvan" />
-        <button id="next-side" class="nav-side nav-next">›</button>
+        <div id="project-scroll" class="document-scroll" aria-label="Planches du projet"></div>
+        <button id="prev-side" class="nav-zone nav-up" aria-label="Planche précédente"></button>
+        <button id="next-side" class="nav-zone nav-down" aria-label="Planche suivante"></button>
       </div>
     </main>
   </section>
@@ -406,6 +476,14 @@
       "Croquis d’architecture et chantier de construction bois",
       "Coordonnées de Guillaume Morvan, portrait et citation de Fernand Pouillon"
     ];
+    const CONTROLLED_NAVIGATION_DURATION = 740;
+    const CONTROLLED_NAVIGATION_EASING = progress =>
+      1 - Math.pow(1 - progress, 5) * (1 + 0.35 * progress);
+    const CONTROLLED_NAVIGATION_LOCK = 100;
+    const TRACKPAD_EVENT_INTERVAL = 28;
+    const TRACKPAD_SEQUENCE_HOLD = 180;
+    const DISCRETE_WHEEL_MIN_DELTA = 80;
+    const DISCRETE_WHEEL_STEP_TOLERANCE = 0.08;
 
     const PROJECTS = [
       {
@@ -473,21 +551,27 @@
     let currentProject = null;
     let currentImage = null;
     let currentAboutPage = 1;
-    let lastWheelTime = 0;
-    let touchStartX = 0;
-    let touchStartY = 0;
+    let scrollFrame = null;
+    let scrollEndTimer = null;
+    let resizeTimer = null;
+    let hintTimer = null;
+    let controlledNavigation = null;
+    let lastWheelEventTime = 0;
+    let trackpadSequenceUntil = 0;
+    let controlledWheelLockUntil = 0;
 
     const home = document.getElementById("home");
     const site = document.getElementById("site");
     const summary = document.getElementById("summary");
     const about = document.getElementById("about");
     const viewer = document.getElementById("viewer");
-    const pageImage = document.getElementById("page-image");
-    const aboutImage = document.getElementById("about-image");
+    const projectScroll = document.getElementById("project-scroll");
+    const aboutScroll = document.getElementById("about-scroll");
     const drawer = document.getElementById("drawer");
     const overlay = document.getElementById("overlay");
     const projectGrid = document.getElementById("project-grid");
     const projectList = document.getElementById("project-list");
+    const prefersReducedMotion = window.matchMedia("(prefers-reduced-motion: reduce)");
 
     function getImageSrc(project, num) {
       return encodeURI(`${project.folder}${project.filePrefix} (${num}).jpg`) + `?v=${ASSET_VERSION}`;
@@ -499,6 +583,234 @@
 
     function getVignetteSrc(filename) {
       return encodeURI(`${VIGNETTE_FOLDER}${filename}`) + `?v=${ASSET_VERSION}`;
+    }
+
+    function getPageRange(start, end) {
+      return Array.from({ length: end - start + 1 }, (_, index) => start + index);
+    }
+
+    function buildDocumentSlides(scroller, pages, getSrc, getAlt, activePage) {
+      const fragment = document.createDocumentFragment();
+
+      pages.forEach(page => {
+        const slide = document.createElement("section");
+        const image = document.createElement("img");
+
+        slide.className = "document-slide";
+        slide.dataset.page = page;
+
+        image.src = getSrc(page);
+        image.alt = getAlt(page);
+        image.decoding = "async";
+        image.loading = page === activePage ? "eager" : "lazy";
+
+        if (page === activePage) image.fetchPriority = "high";
+
+        slide.appendChild(image);
+        fragment.appendChild(slide);
+      });
+
+      scroller.replaceChildren(fragment);
+      const activeIndex = Math.max(0, pages.indexOf(activePage));
+      scroller.scrollTop = activeIndex * scroller.clientHeight;
+    }
+
+    function getClosestDocumentPage(scroller) {
+      const slides = scroller.querySelectorAll(".document-slide");
+      if (!slides.length || !scroller.clientHeight) return null;
+
+      const index = Math.max(
+        0,
+        Math.min(slides.length - 1, Math.round(scroller.scrollTop / scroller.clientHeight))
+      );
+
+      return parseInt(slides[index].dataset.page, 10);
+    }
+
+    function scrollToDocumentPage(scroller, page, smooth = true) {
+      const slide = scroller.querySelector(`.document-slide[data-page="${page}"]`);
+      if (!slide) return;
+
+      scroller.scrollTo({
+        top: slide.offsetTop,
+        behavior: smooth && !prefersReducedMotion.matches ? "smooth" : "auto"
+      });
+    }
+
+    function cancelControlledNavigation() {
+      if (!controlledNavigation) return;
+
+      cancelAnimationFrame(controlledNavigation.frame);
+      controlledNavigation.scroller.classList.remove("is-animating");
+      controlledNavigation = null;
+    }
+
+    function animateDocumentPage(scroller, page) {
+      if (controlledNavigation) return false;
+
+      const slide = scroller.querySelector(`.document-slide[data-page="${page}"]`);
+      if (!slide) return false;
+
+      const start = scroller.scrollTop;
+      const end = slide.offsetTop;
+      const distance = end - start;
+
+      if (Math.abs(distance) <= 1 || prefersReducedMotion.matches) {
+        scroller.scrollTop = end;
+        syncActivePage(scroller);
+        return true;
+      }
+
+      const startTime = performance.now();
+      scroller.classList.add("is-animating");
+      controlledNavigation = { scroller, page, frame: null };
+
+      function step(now) {
+        if (!controlledNavigation || controlledNavigation.scroller !== scroller) return;
+
+        const progress = Math.min(1, (now - startTime) / CONTROLLED_NAVIGATION_DURATION);
+        scroller.scrollTop = start + distance * CONTROLLED_NAVIGATION_EASING(progress);
+
+        if (progress < 1) {
+          controlledNavigation.frame = requestAnimationFrame(step);
+          return;
+        }
+
+        scroller.scrollTop = end;
+        scroller.classList.remove("is-animating");
+        controlledNavigation = null;
+        syncActivePage(scroller);
+      }
+
+      controlledNavigation.frame = requestAnimationFrame(step);
+      return true;
+    }
+
+    function navigateDocument(scroller, direction) {
+      if (controlledNavigation) return false;
+
+      const slides = Array.from(scroller.querySelectorAll(".document-slide"));
+      const currentPage = getClosestDocumentPage(scroller);
+      const currentIndex = slides.findIndex(slide => parseInt(slide.dataset.page, 10) === currentPage);
+      const targetIndex = currentIndex + direction;
+
+      if (currentIndex < 0 || targetIndex < 0 || targetIndex >= slides.length) return false;
+
+      return animateDocumentPage(scroller, parseInt(slides[targetIndex].dataset.page, 10));
+    }
+
+    function isDiscreteWheelStep(value, step) {
+      const ratio = value / step;
+      return Math.abs(ratio - Math.round(ratio)) <= DISCRETE_WHEEL_STEP_TOLERANCE;
+    }
+
+    function isClearlyDiscreteWheel(e) {
+      const now = performance.now();
+      const gap = lastWheelEventTime ? now - lastWheelEventTime : Infinity;
+      const deltaY = Math.abs(e.deltaY);
+      const deltaX = Math.abs(e.deltaX);
+      lastWheelEventTime = now;
+
+      if (!deltaY) return false;
+      if (e.deltaMode === 1 || e.deltaMode === 2) return true;
+      if (e.deltaMode !== 0) return false;
+
+      const looksContinuous = gap < TRACKPAD_EVENT_INTERVAL;
+      const looksFineGrained =
+        deltaY < DISCRETE_WHEEL_MIN_DELTA ||
+        !Number.isInteger(e.deltaY) ||
+        deltaX > 0.5 ||
+        looksContinuous;
+
+      if (looksFineGrained) {
+        trackpadSequenceUntil = now + TRACKPAD_SEQUENCE_HOLD;
+      }
+
+      if (now < trackpadSequenceUntil) return false;
+
+      const hasDiscreteStep =
+        isDiscreteWheelStep(deltaY, 100) ||
+        isDiscreteWheelStep(deltaY, 120);
+
+      return hasDiscreteStep && (gap === Infinity || gap >= TRACKPAD_EVENT_INTERVAL);
+    }
+
+    function handleWheelNavigation(e, scroller, forwardNative = false) {
+      const now = performance.now();
+
+      if (controlledNavigation || now < controlledWheelLockUntil) {
+        e.preventDefault();
+        return;
+      }
+
+      if (isClearlyDiscreteWheel(e)) {
+        e.preventDefault();
+        const moved = navigateDocument(scroller, e.deltaY > 0 ? 1 : -1);
+        controlledWheelLockUntil = now + (moved
+          ? CONTROLLED_NAVIGATION_DURATION + CONTROLLED_NAVIGATION_LOCK
+          : CONTROLLED_NAVIGATION_LOCK);
+        return;
+      }
+
+      if (forwardNative) {
+        scroller.scrollBy({ top: e.deltaY, behavior: "auto" });
+      }
+    }
+
+    function syncActivePage(scroller) {
+      const page = getClosestDocumentPage(scroller);
+      if (!page) return;
+
+      if (scroller === projectScroll && !viewer.classList.contains("hidden") && currentProject) {
+        if (page === currentImage) return;
+        currentImage = page;
+        updateUrl(currentImage);
+        updateNavState();
+      }
+
+      if (scroller === aboutScroll && !about.classList.contains("hidden")) {
+        if (page === currentAboutPage) return;
+        currentAboutPage = page;
+        updateAboutNavState();
+      }
+    }
+
+    function settleDocumentScroll(scroller) {
+      if (controlledNavigation && controlledNavigation.scroller === scroller) return;
+
+      const page = getClosestDocumentPage(scroller);
+      if (!page) return;
+
+      const slide = scroller.querySelector(`.document-slide[data-page="${page}"]`);
+      if (!slide) return;
+
+      syncActivePage(scroller);
+
+      if (Math.abs(scroller.scrollTop - slide.offsetTop) > 1) {
+        scrollToDocumentPage(scroller, page, true);
+      }
+    }
+
+    function handleDocumentScroll(e) {
+      const scroller = e.currentTarget;
+
+      if (scrollFrame) cancelAnimationFrame(scrollFrame);
+      scrollFrame = requestAnimationFrame(() => syncActivePage(scroller));
+
+      clearTimeout(scrollEndTimer);
+      scrollEndTimer = setTimeout(() => settleDocumentScroll(scroller), 160);
+    }
+
+    function showInitialNavigationHint(button) {
+      clearTimeout(hintTimer);
+      button.classList.remove("hint");
+
+      if (button.disabled || prefersReducedMotion.matches) return;
+
+      requestAnimationFrame(() => {
+        button.classList.add("hint");
+        hintTimer = setTimeout(() => button.classList.remove("hint"), 1050);
+      });
     }
 
     function clearUrl() {
@@ -513,6 +825,10 @@
     }
 
     function hideAllMainViews() {
+      cancelControlledNavigation();
+      controlledWheelLockUntil = 0;
+      lastWheelEventTime = 0;
+      trackpadSequenceUntil = 0;
       summary.classList.add("hidden");
       about.classList.add("hidden");
       viewer.classList.add("hidden");
@@ -538,55 +854,82 @@
       currentImage = null;
       closeDrawer();
       clearUrl();
-      goToAboutPage(1);
+      buildDocumentSlides(
+        aboutScroll,
+        getPageRange(1, ABOUT_TOTAL),
+        getAboutSrc,
+        page => ABOUT_ALTS[page - 1],
+        1
+      );
+      goToAboutPage(1, false);
+      showInitialNavigationHint(document.getElementById("about-next"));
     }
 
     function showViewer(project, targetPage) {
+      const requestedPage = parseInt(targetPage, 10);
+      const target = requestedPage >= project.start && requestedPage <= project.end
+        ? requestedPage
+        : project.start;
+
       currentProject = project;
       home.classList.add("hidden");
       site.classList.remove("hidden");
       hideAllMainViews();
       viewer.classList.remove("hidden");
-      goToPage(targetPage || project.start, false);
+      buildDocumentSlides(
+        projectScroll,
+        getPageRange(project.start, project.end),
+        page => getImageSrc(project, page),
+        () => "Portfolio Guillaume Morvan",
+        target
+      );
+      goToPage(target, false, false);
+      showInitialNavigationHint(document.getElementById("next-side"));
     }
 
-    function goToPage(num, close = true) {
+    function goToPage(num, close = true, smooth = true) {
       const target = parseInt(num, 10);
       if (!currentProject || !target) return;
       if (target < currentProject.start || target > currentProject.end) return;
 
-      currentImage = target;
-      pageImage.src = getImageSrc(currentProject, currentImage);
-      updateUrl(currentImage);
-      updateNavState();
+      if (!smooth || prefersReducedMotion.matches) {
+        currentImage = target;
+        updateUrl(currentImage);
+        updateNavState();
+      }
+
+      scrollToDocumentPage(projectScroll, target, smooth);
 
       if (close) closeDrawer();
     }
 
     function previousPage() {
-      if (!currentProject || currentImage <= currentProject.start) return;
-      goToPage(currentImage - 1, false);
+      if (!currentProject) return;
+      navigateDocument(projectScroll, -1);
     }
 
     function nextPage() {
-      if (!currentProject || currentImage >= currentProject.end) return;
-      goToPage(currentImage + 1, false);
+      if (!currentProject) return;
+      navigateDocument(projectScroll, 1);
     }
 
-    function goToAboutPage(num) {
+    function goToAboutPage(num, smooth = true) {
       if (num < 1 || num > ABOUT_TOTAL) return;
-      currentAboutPage = num;
-      aboutImage.alt = ABOUT_ALTS[currentAboutPage - 1];
-      aboutImage.src = getAboutSrc(currentAboutPage);
-      updateAboutNavState();
+
+      if (!smooth || prefersReducedMotion.matches) {
+        currentAboutPage = num;
+        updateAboutNavState();
+      }
+
+      scrollToDocumentPage(aboutScroll, num, smooth);
     }
 
     function previousAboutPage() {
-      if (currentAboutPage > 1) goToAboutPage(currentAboutPage - 1);
+      navigateDocument(aboutScroll, -1);
     }
 
     function nextAboutPage() {
-      if (currentAboutPage < ABOUT_TOTAL) goToAboutPage(currentAboutPage + 1);
+      navigateDocument(aboutScroll, 1);
     }
 
     function updateNavState() {
@@ -644,35 +987,16 @@
       });
     }
 
-    function handleWheel(e, previousFunction, nextFunction) {
-      e.preventDefault();
-      const now = Date.now();
-      if (now - lastWheelTime < 420) return;
-      if (Math.abs(e.deltaY) < 20) return;
-      if (e.deltaY > 0) nextFunction();
-      else previousFunction();
-      lastWheelTime = now;
-    }
+    function realignActiveDocument() {
+      cancelControlledNavigation();
 
-    function handleTouchStart(e) {
-      touchStartX = e.changedTouches[0].screenX;
-      touchStartY = e.changedTouches[0].screenY;
-    }
+      if (!viewer.classList.contains("hidden") && currentImage) {
+        scrollToDocumentPage(projectScroll, currentImage, false);
+      }
 
-    function handleProjectTouchEnd(e) {
-      const dx = e.changedTouches[0].screenX - touchStartX;
-      const dy = e.changedTouches[0].screenY - touchStartY;
-      if (Math.abs(dx) < 45 || Math.abs(dx) < Math.abs(dy)) return;
-      if (dx < 0) nextPage();
-      else previousPage();
-    }
-
-    function handleAboutTouchEnd(e) {
-      const dx = e.changedTouches[0].screenX - touchStartX;
-      const dy = e.changedTouches[0].screenY - touchStartY;
-      if (Math.abs(dx) < 45 || Math.abs(dx) < Math.abs(dy)) return;
-      if (dx < 0) nextAboutPage();
-      else previousAboutPage();
+      if (!about.classList.contains("hidden") && currentAboutPage) {
+        scrollToDocumentPage(aboutScroll, currentAboutPage, false);
+      }
     }
 
     home.addEventListener("click", showSummary);
@@ -693,27 +1017,71 @@
     document.getElementById("about-prev").addEventListener("click", previousAboutPage);
     document.getElementById("about-next").addEventListener("click", nextAboutPage);
 
-    pageImage.addEventListener("wheel", e => handleWheel(e, previousPage, nextPage), { passive: false });
-    aboutImage.addEventListener("wheel", e => handleWheel(e, previousAboutPage, nextAboutPage), { passive: false });
+    projectScroll.addEventListener("scroll", handleDocumentScroll, { passive: true });
+    aboutScroll.addEventListener("scroll", handleDocumentScroll, { passive: true });
+    projectScroll.addEventListener(
+      "wheel",
+      e => handleWheelNavigation(e, projectScroll),
+      { passive: false }
+    );
+    aboutScroll.addEventListener(
+      "wheel",
+      e => handleWheelNavigation(e, aboutScroll),
+      { passive: false }
+    );
 
-    pageImage.addEventListener("touchstart", handleTouchStart, { passive: true });
-    pageImage.addEventListener("touchend", handleProjectTouchEnd, { passive: true });
-
-    aboutImage.addEventListener("touchstart", handleTouchStart, { passive: true });
-    aboutImage.addEventListener("touchend", handleAboutTouchEnd, { passive: true });
+    document.getElementById("prev-side").addEventListener(
+      "wheel",
+      e => handleWheelNavigation(e, projectScroll, true),
+      { passive: false }
+    );
+    document.getElementById("next-side").addEventListener(
+      "wheel",
+      e => handleWheelNavigation(e, projectScroll, true),
+      { passive: false }
+    );
+    document.getElementById("about-prev").addEventListener(
+      "wheel",
+      e => handleWheelNavigation(e, aboutScroll, true),
+      { passive: false }
+    );
+    document.getElementById("about-next").addEventListener(
+      "wheel",
+      e => handleWheelNavigation(e, aboutScroll, true),
+      { passive: false }
+    );
 
     document.addEventListener("keydown", e => {
-      if (e.key === "Escape") closeDrawer();
-
-      if (e.key === "ArrowLeft") {
-        if (!viewer.classList.contains("hidden")) previousPage();
-        if (!about.classList.contains("hidden")) previousAboutPage();
+      if (e.key === "Escape") {
+        closeDrawer();
+        return;
       }
 
-      if (e.key === "ArrowRight") {
-        if (!viewer.classList.contains("hidden")) nextPage();
-        if (!about.classList.contains("hidden")) nextAboutPage();
+      if (drawer.classList.contains("open")) return;
+
+      const viewerIsOpen = !viewer.classList.contains("hidden");
+      const aboutIsOpen = !about.classList.contains("hidden");
+      const previousKey = e.key === "ArrowUp" || e.key === "PageUp";
+      const nextKey = e.key === "ArrowDown" || e.key === "PageDown";
+
+      if ((!viewerIsOpen && !aboutIsOpen) || (!previousKey && !nextKey)) return;
+
+      e.preventDefault();
+
+      if (previousKey) {
+        if (viewerIsOpen) previousPage();
+        if (aboutIsOpen) previousAboutPage();
       }
+
+      if (nextKey) {
+        if (viewerIsOpen) nextPage();
+        if (aboutIsOpen) nextAboutPage();
+      }
+    });
+
+    window.addEventListener("resize", () => {
+      clearTimeout(resizeTimer);
+      resizeTimer = setTimeout(realignActiveDocument, 120);
     });
 
     buildProjectCards();
