@@ -479,6 +479,13 @@
     const CONTROLLED_NAVIGATION_DURATION = 740;
     const CONTROLLED_NAVIGATION_EASING = progress =>
       1 - Math.pow(1 - progress, 5) * (1 + 0.35 * progress);
+    const CONTROLLED_NAVIGATION_EASING_VELOCITY = progress =>
+      Math.pow(1 - progress, 4) * (4.65 + 2.1 * progress);
+    const CONTROLLED_NAVIGATION_EXTRA_PAGE_DURATION = 110;
+    const CONTROLLED_NAVIGATION_MIN_DURATION = 240;
+    const CONTROLLED_NAVIGATION_MAX_DURATION = 1300;
+    const CONTROLLED_NAVIGATION_MAX_FORWARD_VELOCITY = 2.4;
+    const CONTROLLED_NAVIGATION_MAX_REVERSE_VELOCITY = 0.8;
     const CONTROLLED_NAVIGATION_LOCK = 100;
     const TRACKPAD_EVENT_INTERVAL = 28;
     const TRACKPAD_SEQUENCE_HOLD = 180;
@@ -558,7 +565,7 @@
     let controlledNavigation = null;
     let lastWheelEventTime = 0;
     let trackpadSequenceUntil = 0;
-    let controlledWheelLockUntil = 0;
+    let lastDiscreteWheelStep = 0;
 
     const home = document.getElementById("home");
     const site = document.getElementById("site");
@@ -645,58 +652,228 @@
       controlledNavigation = null;
     }
 
-    function animateDocumentPage(scroller, page) {
-      if (controlledNavigation) return false;
+    function getAdaptiveNavigationDuration(scroller, start, end) {
+      const remainingPages = Math.abs(end - start) / Math.max(1, scroller.clientHeight);
+      const duration = remainingPages <= 1
+        ? CONTROLLED_NAVIGATION_DURATION * remainingPages
+        : CONTROLLED_NAVIGATION_DURATION +
+          (remainingPages - 1) * CONTROLLED_NAVIGATION_EXTRA_PAGE_DURATION;
 
+      return Math.max(
+        CONTROLLED_NAVIGATION_MIN_DURATION,
+        Math.min(CONTROLLED_NAVIGATION_MAX_DURATION, duration)
+      );
+    }
+
+    function createContinuationCoefficients(start, velocity, end, duration) {
+      const seconds = duration / 1000;
+      const distance = end - start;
+      const scaledVelocity = velocity * seconds;
+
+      return [
+        start,
+        scaledVelocity,
+        0,
+        10 * distance - 6 * scaledVelocity,
+        -15 * distance + 8 * scaledVelocity,
+        6 * distance - 3 * scaledVelocity
+      ];
+    }
+
+    function getStableContinuationVelocity(start, velocity, end, duration) {
+      const distance = end - start;
+      if (!distance) return 0;
+
+      const seconds = duration / 1000;
+      const normalizedVelocity = velocity * seconds / distance;
+      const stableVelocity = Math.max(
+        -CONTROLLED_NAVIGATION_MAX_REVERSE_VELOCITY,
+        Math.min(CONTROLLED_NAVIGATION_MAX_FORWARD_VELOCITY, normalizedVelocity)
+      );
+
+      return stableVelocity * distance / seconds;
+    }
+
+    function sampleControlledNavigation(state, now) {
+      if (state.settledAt !== null) {
+        return {
+          progress: 1,
+          position: state.targetTop,
+          velocity: 0
+        };
+      }
+
+      const progress = Math.min(
+        1,
+        Math.max(0, (now - state.segmentStartTime) / state.segmentDuration)
+      );
+      const seconds = state.segmentDuration / 1000;
+
+      if (!state.coefficients) {
+        const distance = state.targetTop - state.segmentStartTop;
+        return {
+          progress,
+          position:
+            state.segmentStartTop + distance * CONTROLLED_NAVIGATION_EASING(progress),
+          velocity:
+            distance * CONTROLLED_NAVIGATION_EASING_VELOCITY(progress) / seconds
+        };
+      }
+
+      const [c0, c1, c2, c3, c4, c5] = state.coefficients;
+      const progress2 = progress * progress;
+      const progress3 = progress2 * progress;
+      const progress4 = progress3 * progress;
+      const progress5 = progress4 * progress;
+
+      return {
+        progress,
+        position:
+          c0 + c1 * progress + c2 * progress2 + c3 * progress3 +
+          c4 * progress4 + c5 * progress5,
+        velocity:
+          (c1 + 2 * c2 * progress + 3 * c3 * progress2 +
+          4 * c4 * progress3 + 5 * c5 * progress4) / seconds
+      };
+    }
+
+    function finishControlledNavigation(state) {
+      if (controlledNavigation !== state) return;
+
+      state.scroller.scrollTop = state.targetTop;
+      state.scroller.classList.remove("is-animating");
+      controlledNavigation = null;
+      syncActivePage(state.scroller);
+    }
+
+    function stepControlledNavigation(now) {
+      const state = controlledNavigation;
+      if (!state) return;
+
+      const sample = sampleControlledNavigation(state, now);
+      state.scroller.scrollTop = sample.position;
+
+      if (sample.progress < 1) {
+        state.frame = requestAnimationFrame(stepControlledNavigation);
+        return;
+      }
+
+      state.scroller.scrollTop = state.targetTop;
+      syncActivePage(state.scroller);
+
+      if (state.settledAt === null) state.settledAt = now;
+
+      if (now - state.settledAt < CONTROLLED_NAVIGATION_LOCK) {
+        state.frame = requestAnimationFrame(stepControlledNavigation);
+        return;
+      }
+
+      finishControlledNavigation(state);
+    }
+
+    function retargetControlledNavigation(state, targetIndex, now) {
+      const slide = state.slides[targetIndex];
+      if (!slide) return false;
+
+      const sample = sampleControlledNavigation(state, now);
+      const targetTop = slide.offsetTop;
+      const duration = getAdaptiveNavigationDuration(
+        state.scroller,
+        sample.position,
+        targetTop
+      );
+      const velocity = getStableContinuationVelocity(
+        sample.position,
+        sample.velocity,
+        targetTop,
+        duration
+      );
+
+      state.scroller.scrollTop = sample.position;
+      state.targetIndex = targetIndex;
+      state.targetTop = targetTop;
+      state.segmentStartTime = now;
+      state.segmentStartTop = sample.position;
+      state.segmentDuration = duration;
+      state.coefficients = createContinuationCoefficients(
+        sample.position,
+        velocity,
+        targetTop,
+        duration
+      );
+      state.settledAt = null;
+      return true;
+    }
+
+    function animateDocumentPage(scroller, page, targetIndex) {
       const slide = scroller.querySelector(`.document-slide[data-page="${page}"]`);
       if (!slide) return false;
 
-      const start = scroller.scrollTop;
-      const end = slide.offsetTop;
-      const distance = end - start;
-
-      if (Math.abs(distance) <= 1 || prefersReducedMotion.matches) {
-        scroller.scrollTop = end;
+      if (prefersReducedMotion.matches) {
+        cancelControlledNavigation();
+        scroller.scrollTop = slide.offsetTop;
         syncActivePage(scroller);
         return true;
       }
 
-      const startTime = performance.now();
-      scroller.classList.add("is-animating");
-      controlledNavigation = { scroller, page, frame: null };
+      const now = performance.now();
 
-      function step(now) {
-        if (!controlledNavigation || controlledNavigation.scroller !== scroller) return;
-
-        const progress = Math.min(1, (now - startTime) / CONTROLLED_NAVIGATION_DURATION);
-        scroller.scrollTop = start + distance * CONTROLLED_NAVIGATION_EASING(progress);
-
-        if (progress < 1) {
-          controlledNavigation.frame = requestAnimationFrame(step);
-          return;
-        }
-
-        scroller.scrollTop = end;
-        scroller.classList.remove("is-animating");
-        controlledNavigation = null;
-        syncActivePage(scroller);
+      if (controlledNavigation && controlledNavigation.scroller !== scroller) {
+        cancelControlledNavigation();
       }
 
-      controlledNavigation.frame = requestAnimationFrame(step);
+      if (controlledNavigation) {
+        return retargetControlledNavigation(controlledNavigation, targetIndex, now);
+      }
+
+      const start = scroller.scrollTop;
+      const end = slide.offsetTop;
+      if (Math.abs(end - start) <= 1) return false;
+
+      const slides = Array.from(scroller.querySelectorAll(".document-slide"));
+      scroller.classList.add("is-animating");
+      controlledNavigation = {
+        scroller,
+        slides,
+        targetIndex,
+        targetTop: end,
+        segmentStartTime: now,
+        segmentStartTop: start,
+        segmentDuration: getAdaptiveNavigationDuration(scroller, start, end),
+        coefficients: null,
+        settledAt: null,
+        frame: requestAnimationFrame(stepControlledNavigation)
+      };
       return true;
     }
 
-    function navigateDocument(scroller, direction) {
-      if (controlledNavigation) return false;
+    function navigateDocument(scroller, direction, actionCount = 1) {
+      if (!direction || actionCount < 1) return false;
 
       const slides = Array.from(scroller.querySelectorAll(".document-slide"));
+      if (!slides.length) return false;
+
+      const activeNavigation =
+        controlledNavigation && controlledNavigation.scroller === scroller
+          ? controlledNavigation
+          : null;
       const currentPage = getClosestDocumentPage(scroller);
-      const currentIndex = slides.findIndex(slide => parseInt(slide.dataset.page, 10) === currentPage);
-      const targetIndex = currentIndex + direction;
+      const visibleIndex = slides.findIndex(
+        slide => parseInt(slide.dataset.page, 10) === currentPage
+      );
+      const originIndex = activeNavigation ? activeNavigation.targetIndex : visibleIndex;
+      const targetIndex = Math.max(
+        0,
+        Math.min(slides.length - 1, originIndex + direction * actionCount)
+      );
 
-      if (currentIndex < 0 || targetIndex < 0 || targetIndex >= slides.length) return false;
+      if (originIndex < 0 || targetIndex === originIndex) return false;
 
-      return animateDocumentPage(scroller, parseInt(slides[targetIndex].dataset.page, 10));
+      return animateDocumentPage(
+        scroller,
+        parseInt(slides[targetIndex].dataset.page, 10),
+        targetIndex
+      );
     }
 
     function isDiscreteWheelStep(value, step) {
@@ -735,21 +912,36 @@
       return hasDiscreteStep && (gap === Infinity || gap >= TRACKPAD_EVENT_INTERVAL);
     }
 
-    function handleWheelNavigation(e, scroller, forwardNative = false) {
-      const now = performance.now();
+    function getDiscreteWheelActionCount(e) {
+      if (e.deltaMode !== 0) return 1;
 
-      if (controlledNavigation || now < controlledWheelLockUntil) {
+      const deltaY = Math.abs(e.deltaY);
+      const matchingSteps = [100, 120].filter(
+        step => isDiscreteWheelStep(deltaY, step)
+      );
+
+      if (!matchingSteps.length) return 1;
+
+      const step = matchingSteps.includes(lastDiscreteWheelStep)
+        ? lastDiscreteWheelStep
+        : matchingSteps[0];
+      lastDiscreteWheelStep = step;
+      return Math.max(1, Math.round(deltaY / step));
+    }
+
+    function handleWheelNavigation(e, scroller, forwardNative = false) {
+      if (isClearlyDiscreteWheel(e)) {
         e.preventDefault();
+        navigateDocument(
+          scroller,
+          e.deltaY > 0 ? 1 : -1,
+          getDiscreteWheelActionCount(e)
+        );
         return;
       }
 
-      if (isClearlyDiscreteWheel(e)) {
-        e.preventDefault();
-        const moved = navigateDocument(scroller, e.deltaY > 0 ? 1 : -1);
-        controlledWheelLockUntil = now + (moved
-          ? CONTROLLED_NAVIGATION_DURATION + CONTROLLED_NAVIGATION_LOCK
-          : CONTROLLED_NAVIGATION_LOCK);
-        return;
+      if (controlledNavigation && controlledNavigation.scroller === scroller) {
+        cancelControlledNavigation();
       }
 
       if (forwardNative) {
@@ -826,9 +1018,9 @@
 
     function hideAllMainViews() {
       cancelControlledNavigation();
-      controlledWheelLockUntil = 0;
       lastWheelEventTime = 0;
       trackpadSequenceUntil = 0;
+      lastDiscreteWheelStep = 0;
       summary.classList.add("hidden");
       about.classList.add("hidden");
       viewer.classList.add("hidden");
