@@ -487,8 +487,15 @@
     const CONTROLLED_NAVIGATION_MAX_FORWARD_VELOCITY = 2.4;
     const CONTROLLED_NAVIGATION_MAX_REVERSE_VELOCITY = 0.8;
     const CONTROLLED_NAVIGATION_LOCK = 100;
-    const TRACKPAD_EVENT_INTERVAL = 28;
-    const TRACKPAD_SEQUENCE_HOLD = 180;
+    const WHEEL_SEQUENCE_DEFAULT_TIMEOUT = 180;
+    const WHEEL_SEQUENCE_MIN_TIMEOUT = 150;
+    const WHEEL_SEQUENCE_MAX_TIMEOUT = 260;
+    const WHEEL_SEQUENCE_INTERVAL_FACTOR = 3.5;
+    const WHEEL_SEQUENCE_INTERVAL_SMOOTHING = 0.35;
+    const WHEEL_INITIAL_IMPULSE_WINDOW = 110;
+    const WHEEL_REPEAT_COMMAND_INTERVAL = 80;
+    const WHEEL_MAX_ACTIONS_PER_COMMAND = 10;
+    const WHEEL_MOUSE_DELTA_RATIO = 0.72;
     const DISCRETE_WHEEL_MIN_DELTA = 80;
     const DISCRETE_WHEEL_STEP_TOLERANCE = 0.08;
 
@@ -563,9 +570,8 @@
     let resizeTimer = null;
     let hintTimer = null;
     let controlledNavigation = null;
-    let lastWheelEventTime = 0;
-    let trackpadSequenceUntil = 0;
-    let lastDiscreteWheelStep = 0;
+    let wheelSequence = null;
+    let wheelSequenceTimer = null;
 
     const home = document.getElementById("home");
     const site = document.getElementById("site");
@@ -881,62 +887,211 @@
       return Math.abs(ratio - Math.round(ratio)) <= DISCRETE_WHEEL_STEP_TOLERANCE;
     }
 
-    function isClearlyDiscreteWheel(e) {
-      const now = performance.now();
-      const gap = lastWheelEventTime ? now - lastWheelEventTime : Infinity;
+    function classifyWheelSequence(e) {
       const deltaY = Math.abs(e.deltaY);
       const deltaX = Math.abs(e.deltaX);
-      lastWheelEventTime = now;
 
-      if (!deltaY) return false;
-      if (e.deltaMode === 1 || e.deltaMode === 2) return true;
-      if (e.deltaMode !== 0) return false;
+      if (!deltaY) return "trackpad";
+      if (e.deltaMode === 1 || e.deltaMode === 2) return "mouse";
+      if (e.deltaMode !== 0) return "trackpad";
 
-      const looksContinuous = gap < TRACKPAD_EVENT_INTERVAL;
       const looksFineGrained =
         deltaY < DISCRETE_WHEEL_MIN_DELTA ||
         !Number.isInteger(e.deltaY) ||
-        deltaX > 0.5 ||
-        looksContinuous;
-
-      if (looksFineGrained) {
-        trackpadSequenceUntil = now + TRACKPAD_SEQUENCE_HOLD;
-      }
-
-      if (now < trackpadSequenceUntil) return false;
+        deltaX > 0.5;
 
       const hasDiscreteStep =
         isDiscreteWheelStep(deltaY, 100) ||
         isDiscreteWheelStep(deltaY, 120);
 
-      return hasDiscreteStep && (gap === Infinity || gap >= TRACKPAD_EVENT_INTERVAL);
+      return !looksFineGrained && hasDiscreteStep ? "mouse" : "trackpad";
     }
 
-    function getDiscreteWheelActionCount(e) {
-      if (e.deltaMode !== 0) return 1;
+    function getWheelSequenceTimeout(sequence) {
+      if (!sequence.averageInterval) return WHEEL_SEQUENCE_DEFAULT_TIMEOUT;
 
+      return Math.max(
+        WHEEL_SEQUENCE_MIN_TIMEOUT,
+        Math.min(
+          WHEEL_SEQUENCE_MAX_TIMEOUT,
+          sequence.averageInterval * WHEEL_SEQUENCE_INTERVAL_FACTOR
+        )
+      );
+    }
+
+    function alignMouseWheelSequence(sequence) {
+      const scroller = sequence.scroller;
+      if (
+        controlledNavigation &&
+        controlledNavigation.scroller === scroller
+      ) {
+        return;
+      }
+
+      const slides = Array.from(scroller.querySelectorAll(".document-slide"));
+      if (!slides.length) return;
+
+      const targetIndex = Math.max(
+        0,
+        Math.min(
+          slides.length - 1,
+          Math.round(scroller.scrollTop / Math.max(1, scroller.clientHeight))
+        )
+      );
+      const slide = slides[targetIndex];
+      if (Math.abs(scroller.scrollTop - slide.offsetTop) <= 1) return;
+
+      animateDocumentPage(
+        scroller,
+        parseInt(slide.dataset.page, 10),
+        targetIndex
+      );
+    }
+
+    function endWheelSequence(sequence = wheelSequence) {
+      if (!sequence || wheelSequence !== sequence) return;
+
+      clearTimeout(wheelSequenceTimer);
+      wheelSequenceTimer = null;
+      wheelSequence = null;
+
+      if (sequence.mode === "mouse") alignMouseWheelSequence(sequence);
+    }
+
+    function resetWheelSequence() {
+      clearTimeout(wheelSequenceTimer);
+      wheelSequenceTimer = null;
+      wheelSequence = null;
+    }
+
+    function scheduleWheelSequenceEnd(sequence) {
+      clearTimeout(wheelSequenceTimer);
+      wheelSequenceTimer = setTimeout(
+        () => endWheelSequence(sequence),
+        sequence.inactivityTimeout
+      );
+    }
+
+    function getWheelSequence(e, scroller, now) {
+      const expired =
+        wheelSequence &&
+        now - wheelSequence.lastEventTime > wheelSequence.inactivityTimeout;
+      const changedScroller =
+        wheelSequence && wheelSequence.scroller !== scroller;
+
+      if (expired || changedScroller) endWheelSequence();
+
+      if (!wheelSequence) {
+        wheelSequence = {
+          mode: classifyWheelSequence(e),
+          scroller,
+          startedAt: now,
+          lastEventTime: now,
+          averageInterval: 0,
+          inactivityTimeout: WHEEL_SEQUENCE_DEFAULT_TIMEOUT,
+          direction: 0,
+          lastCommandTime: 0,
+          commandCount: 0,
+          discreteStep: 0,
+          baseDelta: Math.abs(e.deltaY)
+        };
+        scheduleWheelSequenceEnd(wheelSequence);
+        return { sequence: wheelSequence, isStart: true };
+      }
+
+      const interval = now - wheelSequence.lastEventTime;
+      if (interval > 0) {
+        wheelSequence.averageInterval = wheelSequence.averageInterval
+          ? wheelSequence.averageInterval * (1 - WHEEL_SEQUENCE_INTERVAL_SMOOTHING) +
+            interval * WHEEL_SEQUENCE_INTERVAL_SMOOTHING
+          : interval;
+      }
+
+      wheelSequence.lastEventTime = now;
+      wheelSequence.inactivityTimeout = getWheelSequenceTimeout(wheelSequence);
+      scheduleWheelSequenceEnd(wheelSequence);
+      return { sequence: wheelSequence, isStart: false };
+    }
+
+    function getMouseWheelActionCount(e, sequence) {
       const deltaY = Math.abs(e.deltaY);
+
+      if (e.deltaMode === 1) {
+        return Math.max(
+          1,
+          Math.min(WHEEL_MAX_ACTIONS_PER_COMMAND, Math.round(deltaY / 3))
+        );
+      }
+
+      if (e.deltaMode === 2) {
+        return Math.max(
+          1,
+          Math.min(WHEEL_MAX_ACTIONS_PER_COMMAND, Math.round(deltaY))
+        );
+      }
+
+      if (e.deltaMode !== 0) return 0;
+
       const matchingSteps = [100, 120].filter(
         step => isDiscreteWheelStep(deltaY, step)
       );
 
-      if (!matchingSteps.length) return 1;
+      if (matchingSteps.length) {
+        const step = matchingSteps.includes(sequence.discreteStep)
+          ? sequence.discreteStep
+          : matchingSteps[0];
+        sequence.discreteStep = step;
+        return Math.max(
+          1,
+          Math.min(
+            WHEEL_MAX_ACTIONS_PER_COMMAND,
+            Math.round(deltaY / step)
+          )
+        );
+      }
 
-      const step = matchingSteps.includes(lastDiscreteWheelStep)
-        ? lastDiscreteWheelStep
-        : matchingSteps[0];
-      lastDiscreteWheelStep = step;
-      return Math.max(1, Math.round(deltaY / step));
+      const minimumContinuationDelta =
+        sequence.baseDelta * WHEEL_MOUSE_DELTA_RATIO;
+      if (
+        !Number.isInteger(e.deltaY) ||
+        Math.abs(e.deltaX) > 0.5 ||
+        deltaY < minimumContinuationDelta
+      ) {
+        return 0;
+      }
+
+      return 1;
     }
 
     function handleWheelNavigation(e, scroller, forwardNative = false) {
-      if (isClearlyDiscreteWheel(e)) {
+      const now = performance.now();
+      const { sequence, isStart } = getWheelSequence(e, scroller, now);
+
+      if (sequence.mode === "mouse") {
         e.preventDefault();
-        navigateDocument(
-          scroller,
-          e.deltaY > 0 ? 1 : -1,
-          getDiscreteWheelActionCount(e)
-        );
+
+        const direction = Math.sign(e.deltaY);
+        const actionCount = getMouseWheelActionCount(e, sequence);
+        if (!direction || !actionCount) return;
+
+        const directionChanged =
+          sequence.direction && direction !== sequence.direction;
+        const commandInterval = sequence.commandCount <= 1
+          ? WHEEL_INITIAL_IMPULSE_WINDOW
+          : WHEEL_REPEAT_COMMAND_INTERVAL;
+        const canAddCommand =
+          isStart ||
+          directionChanged ||
+          actionCount > 1 ||
+          now - sequence.lastCommandTime >= commandInterval;
+
+        if (!canAddCommand) return;
+
+        if (navigateDocument(scroller, direction, actionCount)) {
+          sequence.direction = direction;
+          sequence.lastCommandTime = now;
+          sequence.commandCount += actionCount;
+        }
         return;
       }
 
@@ -1018,9 +1173,7 @@
 
     function hideAllMainViews() {
       cancelControlledNavigation();
-      lastWheelEventTime = 0;
-      trackpadSequenceUntil = 0;
-      lastDiscreteWheelStep = 0;
+      resetWheelSequence();
       summary.classList.add("hidden");
       about.classList.add("hidden");
       viewer.classList.add("hidden");
