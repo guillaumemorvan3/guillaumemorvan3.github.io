@@ -180,6 +180,13 @@
 
     .project-grid::-webkit-scrollbar { display: none; }
 
+    .research-summary .project-grid { scroll-snap-type: none; }
+    .research-summary .project-card {
+      scroll-snap-align: none;
+      scroll-snap-stop: normal;
+    }
+    .research-summary .home-project-dots { display: none; }
+
     .project-card {
       width: 100vw;
       height: calc(100dvh - 84px);
@@ -211,6 +218,10 @@
       background: #f0f0f0;
       flex: 0 1 auto;
     }
+
+    .research-oostakker .thumb { object-position: 50% 45%; }
+    .research-mandel .thumb { object-position: 52% 50%; }
+    .research-hostellerie .thumb { object-position: 48% 47%; }
 
     .card-text {
       width: 78vw;
@@ -366,6 +377,98 @@
       backdrop-filter: blur(3px);
       -webkit-backdrop-filter: blur(3px);
       pointer-events: none;
+    }
+
+    .image-stage.research-page-active .mobile-page-caption {
+      padding: 8px 10px 9px;
+      font-size: 14.8px;
+      line-height: 1.28;
+      font-weight: var(--weight-regular);
+    }
+
+    .image-stage.research-page-active .mobile-page-caption::before {
+      content: "+";
+      display: block;
+      margin-bottom: 2px;
+      font-size: 18px;
+      line-height: 1;
+      font-weight: var(--weight-regular);
+    }
+
+    .research-intro-panel {
+      position: absolute;
+      left: 34px;
+      right: 34px;
+      top: 37%;
+      bottom: 0;
+      z-index: 24;
+      padding: 12px 0 8px;
+      overflow: hidden;
+      background: #ffffff;
+      text-align: left;
+      pointer-events: none;
+    }
+
+    .image-stage.research-intro-active .current-layer .page-image-layer {
+      top: 0;
+      bottom: auto;
+      height: 37%;
+      object-fit: contain;
+      object-position: center;
+    }
+
+    .research-intro-title {
+      margin: 0;
+      font-size: 24px;
+      line-height: 1;
+      font-weight: var(--weight-semibold);
+      letter-spacing: 0;
+    }
+
+    .research-intro-location {
+      margin: 4px 0 0;
+      font-size: 14.2px;
+      line-height: 1.2;
+      font-weight: var(--weight-regular);
+      color: var(--text-soft);
+    }
+
+    .research-intro-meta {
+      margin: 12px 0 0;
+      padding: 8px 0 7px;
+      list-style: none;
+      border-top: 1px solid rgba(17, 17, 17, 0.42);
+      border-bottom: 1px solid rgba(17, 17, 17, 0.42);
+    }
+
+    .research-intro-meta li {
+      margin: 0;
+      font-size: 11.4px;
+      line-height: 1.28;
+      font-weight: var(--weight-medium);
+      letter-spacing: 0.025em;
+      text-transform: uppercase;
+    }
+
+    .research-intro-copy {
+      margin: 11px 0 0;
+      font-size: 13.5px;
+      line-height: 1.34;
+      font-weight: var(--weight-regular);
+      color: rgba(17, 17, 17, 0.88);
+    }
+
+    .research-intro-themes {
+      margin-top: 11px;
+      font-size: 10.8px;
+      line-height: 1.34;
+      font-weight: var(--weight-semibold);
+      letter-spacing: 0.085em;
+      text-transform: uppercase;
+    }
+
+    .research-intro-themes span {
+      display: block;
     }
 
     .image-stage.animate-next-page .previous-layer {
@@ -564,6 +667,57 @@
       padding: 34px 34px 34px;
       overflow-y: auto;
       touch-action: pan-y;
+    }
+
+    .research-mobile-viewer {
+      position: relative;
+      width: 100vw;
+      height: calc(100dvh - 84px);
+      display: grid;
+      grid-template-rows: minmax(0, 1fr) 52px;
+      overflow: hidden;
+      background: #ffffff;
+    }
+
+    .research-mobile-scroll {
+      width: 100%;
+      height: 100%;
+      display: flex;
+      flex-direction: column;
+      gap: 32px;
+      padding: 32px 16px 84px;
+      overflow-y: auto;
+      overflow-x: hidden;
+      -webkit-overflow-scrolling: touch;
+      overscroll-behavior: contain;
+      touch-action: pan-y;
+      background: #ffffff;
+    }
+
+    .research-mobile-scroll img {
+      display: block;
+      width: 100%;
+      max-width: 100%;
+      height: auto;
+      object-fit: contain;
+      object-position: center;
+      flex: 0 0 auto;
+    }
+
+    #research-mobile-current-title {
+      grid-column: 2;
+      justify-self: center;
+      max-width: 42vw;
+      overflow: hidden;
+      color: rgba(17, 17, 17, 0.9);
+      font-family: var(--font-main);
+      font-size: 18.4px;
+      font-weight: var(--weight-semibold);
+      line-height: 1.15;
+      text-align: center;
+      text-overflow: ellipsis;
+      white-space: nowrap;
+      cursor: pointer;
     }
 
     .info-title {
@@ -1080,6 +1234,11 @@
       <div id="project-grid" class="project-grid"></div>
     </main>
 
+    <main id="research-summary" class="summary research-summary hidden">
+      <div id="research-project-dots" class="home-project-dots"></div>
+      <div id="research-project-grid" class="project-grid"></div>
+    </main>
+
     <main id="about" class="about hidden">
       <div id="about-feed" class="about-feed"></div>
     </main>
@@ -1107,6 +1266,7 @@
           <div id="current-layer" class="page-layer current-layer">
             <img id="page-image" class="page-image-layer" src="" alt="Portfolio Guillaume Morvan" />
             <div id="mobile-page-caption" class="mobile-page-caption hidden"></div>
+            <div id="research-intro-panel" class="research-intro-panel hidden"></div>
           </div>
         </div>
       </div>
@@ -1131,6 +1291,24 @@
         <div id="mobile-index-list" class="index-list"></div>
       </div>
     </main>
+
+    <main id="research-mobile-viewer" class="research-mobile-viewer hidden">
+      <div id="research-mobile-scroll" class="research-mobile-scroll" aria-label="Documents de la recherche"></div>
+
+      <div class="mobile-project-bottom">
+        <button id="research-mobile-index-button" class="mobile-index-button">Index</button>
+        <div id="research-mobile-current-title">Recherche</div>
+        <button id="research-mobile-info-button" class="mobile-info-button">Info</button>
+      </div>
+
+      <div id="research-mobile-info-panel" class="bottom-panel">
+        <div id="research-mobile-info-content" class="info-text"></div>
+      </div>
+
+      <div id="research-mobile-index-panel" class="bottom-panel">
+        <div id="research-mobile-index-list" class="index-list"></div>
+      </div>
+    </main>
   </section>
 
   <div id="overlay" class="overlay"></div>
@@ -1142,12 +1320,14 @@
 
     <div id="drawer-nav" class="drawer-nav">
       <button id="drawer-home">Projets</button>
+      <button id="drawer-researches">Recherches</button>
       <button id="drawer-about">À propos</button>
     </div>
   </aside>
 
+  <script src="researches/research-data.js?v=20260803-2"></script>
   <script>
-    const ASSET_VERSION = "2026-07-21-2";
+    const ASSET_VERSION = "2026-07-30-recherches-5";
 
     const COVER_IMAGES = [
       "cover-mobile.jpg",
@@ -1306,8 +1486,26 @@
       }
     ];
 
+    const RESEARCH_ASSET_VERSION = window.RESEARCH_DATA.version;
+    const RESEARCHES = window.RESEARCH_DATA.order.map(key => {
+      const item = window.RESEARCH_DATA.items[key];
+      return {
+        ...item,
+        key,
+        kind: "research",
+        displayTitle: item.title,
+        fullTitle: item.title,
+        type: item.kind,
+        line: item.summary,
+        thumbPath: item.coverMobile,
+        start: 1,
+        end: item.mobile.length
+      };
+    });
+
     let currentProject = null;
     let currentImage = null;
+    let currentMode = "projects";
     let currentAboutPage = ABOUT_PAGES[0];
 
     let gestureStartX = 0;
@@ -1321,6 +1519,8 @@
     let homeDotAnimationFrame = null;
     let aboutScrollTimer = null;
     let resizeTimer = null;
+    let activeResearchKey = null;
+    const researchMobileScrollPositions = new Map();
 
     const imageCache = new Map();
     const textCache = new Map();
@@ -1329,6 +1529,7 @@
     const homeCoverImage = document.getElementById("home-cover-image");
     const site = document.getElementById("site");
     const summary = document.getElementById("summary");
+    const researchSummary = document.getElementById("research-summary");
     const about = document.getElementById("about");
     const aboutFeed = document.getElementById("about-feed");
     const contact = document.getElementById("contact");
@@ -1337,6 +1538,15 @@
     const contactImage = document.getElementById("contact-image");
     const contactText = document.getElementById("contact-text");
     const viewer = document.getElementById("viewer");
+    const researchMobileViewer = document.getElementById("research-mobile-viewer");
+    const researchMobileScroll = document.getElementById("research-mobile-scroll");
+    const researchMobileIndexButton = document.getElementById("research-mobile-index-button");
+    const researchMobileCurrentTitle = document.getElementById("research-mobile-current-title");
+    const researchMobileInfoButton = document.getElementById("research-mobile-info-button");
+    const researchMobileInfoPanel = document.getElementById("research-mobile-info-panel");
+    const researchMobileInfoContent = document.getElementById("research-mobile-info-content");
+    const researchMobileIndexPanel = document.getElementById("research-mobile-index-panel");
+    const researchMobileIndexList = document.getElementById("research-mobile-index-list");
 
     const documentWrap = document.getElementById("document-wrap");
     const imageStage = document.getElementById("image-stage");
@@ -1346,6 +1556,7 @@
 
     const previousPageCaption = document.getElementById("previous-page-caption");
     const mobilePageCaption = document.getElementById("mobile-page-caption");
+    const researchIntroPanel = document.getElementById("research-intro-panel");
     const prevPageButton = document.getElementById("prev-page-button");
     const nextPageButton = document.getElementById("next-page-button");
 
@@ -1353,6 +1564,8 @@
     const overlay = document.getElementById("overlay");
     const projectGrid = document.getElementById("project-grid");
     const homeProjectDots = document.getElementById("home-project-dots");
+    const researchProjectGrid = document.getElementById("research-project-grid");
+    const researchProjectDots = document.getElementById("research-project-dots");
 
     const mobileCurrentTitle = document.getElementById("mobile-current-title");
     const mobileIndexButton = document.getElementById("mobile-index-button");
@@ -1425,8 +1638,11 @@
       return assetUrl(`${CONTACT_FOLDER}caption (${CONTACT_PAGE}).txt`);
     }
 
-    function getVignetteSrc(filename) {
-      return assetUrl(`${VIGNETTE_FOLDER}${filename}`);
+    function getVignetteSrc(project) {
+      if (project.thumbPath) {
+        return encodeURI(project.thumbPath) + `?v=${RESEARCH_ASSET_VERSION}`;
+      }
+      return assetUrl(`${project.thumbFolder || VIGNETTE_FOLDER}${project.thumb}`);
     }
 
     function getInfoSrc(project) {
@@ -1481,9 +1697,10 @@
         }
       });
 
-      const projectIndex = PROJECTS.findIndex(item => item.slug === project.slug);
-      const previousProject = PROJECTS[projectIndex - 1];
-      const nextProject = PROJECTS[projectIndex + 1];
+      const collection = project.kind === "research" ? RESEARCHES : PROJECTS;
+      const projectIndex = collection.findIndex(item => item.slug === project.slug);
+      const previousProject = collection[projectIndex - 1];
+      const nextProject = collection[projectIndex + 1];
 
       if (previousProject) {
         preloadImage(getImageSrc(previousProject, previousProject.start));
@@ -1546,9 +1763,15 @@
 
       url.searchParams.delete("about");
       url.searchParams.delete("contact");
+      url.searchParams.delete("project");
+      url.searchParams.delete("research");
+      url.searchParams.delete("section");
 
       if (currentProject) {
-        url.searchParams.set("project", currentProject.slug);
+        url.searchParams.set(
+          currentMode === "researches" ? "research" : "project",
+          currentProject.slug
+        );
       }
 
       url.searchParams.set("page", num);
@@ -1559,6 +1782,8 @@
       const url = new URL(window.location);
 
       url.searchParams.delete("project");
+      url.searchParams.delete("research");
+      url.searchParams.delete("section");
       url.searchParams.delete("contact");
       url.searchParams.set("about", "true");
       url.searchParams.set("page", num);
@@ -1570,6 +1795,8 @@
       const url = new URL(window.location);
 
       url.searchParams.delete("project");
+      url.searchParams.delete("research");
+      url.searchParams.delete("section");
       url.searchParams.delete("about");
       url.searchParams.delete("page");
       url.searchParams.set("contact", "true");
@@ -1577,18 +1804,136 @@
       history.replaceState({}, "", url);
     }
 
+    function researchMobileAssetUrl(fileName) {
+      return encodeURI(`researches/assets/${fileName}`) + `?v=${RESEARCH_ASSET_VERSION}`;
+    }
+
+    function updateResearchMobileUrl(project) {
+      const url = new URL(window.location);
+      url.search = "";
+      url.searchParams.set("research", project.slug);
+      history.replaceState({}, "", url);
+    }
+
+    function closeResearchMobileInfo() {
+      researchMobileInfoPanel.classList.remove("open");
+    }
+
+    function closeResearchMobileIndex() {
+      researchMobileIndexPanel.classList.remove("open");
+    }
+
+    function closeResearchMobilePanels() {
+      closeResearchMobileInfo();
+      closeResearchMobileIndex();
+    }
+
+    function toggleResearchMobileInfo() {
+      closeDrawer();
+      closeResearchMobileIndex();
+      researchMobileInfoPanel.classList.toggle("open");
+      if (researchMobileInfoPanel.classList.contains("open")) researchMobileInfoPanel.scrollTop = 0;
+    }
+
+    function toggleResearchMobileIndex() {
+      closeDrawer();
+      closeResearchMobileInfo();
+      researchMobileIndexPanel.classList.toggle("open");
+      if (researchMobileIndexPanel.classList.contains("open")) researchMobileIndexPanel.scrollTop = 0;
+    }
+
+    function renderResearchMobileInfo(project) {
+      researchMobileInfoContent.innerHTML = `
+        <article class="research-info">
+          <h2 class="info-title">${escapeHtml(project.summary)}</h2>
+          <ul class="info-meta">
+            ${project.meta.map(item => `<li>${escapeHtml(item)}</li>`).join("")}
+          </ul>
+          <div class="info-body">
+            ${project.paragraphs.map(paragraph => `<p>${escapeHtml(paragraph)}</p>`).join("")}
+          </div>
+        </article>
+      `;
+    }
+
+    function buildResearchMobileIndex() {
+      researchMobileIndexList.innerHTML = "";
+      RESEARCHES.forEach((project, index) => {
+        const button = document.createElement("button");
+        button.innerHTML = `
+          <span class="index-number">${String(index + 1).padStart(2, "0")}</span>
+          <span class="index-title">${escapeHtml(project.title)}</span>
+          <span class="index-subtitle">${escapeHtml(project.type)}</span>
+        `;
+        button.addEventListener("click", () => {
+          closeResearchMobileIndex();
+          showResearchMobileViewer(project);
+        });
+        researchMobileIndexList.appendChild(button);
+      });
+    }
+
+    function buildResearchMobileStream(project) {
+      const fragment = document.createDocumentFragment();
+      researchMobileScroll.innerHTML = "";
+
+      project.mobile.forEach((fileName, index) => {
+        const image = document.createElement("img");
+        image.src = researchMobileAssetUrl(fileName);
+        image.alt = `${project.title} — document ${fileName.match(/(\d+)/)?.[1] || ""}`;
+        image.loading = index < 2 ? "eager" : "lazy";
+        image.decoding = "async";
+        fragment.appendChild(image);
+      });
+
+      researchMobileScroll.appendChild(fragment);
+    }
+
+    function showResearchMobileViewer(project) {
+      home.classList.add("hidden");
+      site.classList.remove("hidden");
+      hideAllMainViews();
+
+      currentProject = project;
+      currentImage = null;
+      currentMode = "researches";
+      activeResearchKey = project.key;
+
+      buildResearchMobileStream(project);
+      renderResearchMobileInfo(project);
+      buildResearchMobileIndex();
+      researchMobileCurrentTitle.textContent = project.displayTitle || project.title;
+      researchMobileViewer.classList.remove("hidden");
+      closeDrawer();
+      closeResearchMobilePanels();
+      updateResearchMobileUrl(project);
+
+      requestAnimationFrame(() => {
+        researchMobileScroll.scrollTop = researchMobileScrollPositions.get(project.key) || 0;
+      });
+    }
+
     function hideAllMainViews() {
+      if (!researchMobileViewer.classList.contains("hidden") && activeResearchKey) {
+        researchMobileScrollPositions.set(activeResearchKey, researchMobileScroll.scrollTop);
+      }
       summary.classList.add("hidden");
+      researchSummary.classList.add("hidden");
       about.classList.add("hidden");
       contact.classList.add("hidden");
       viewer.classList.add("hidden");
+      researchMobileViewer.classList.add("hidden");
       closeInfoPanel();
       closeIndexPanel();
+      closeResearchMobilePanels();
     }
 
     function showHome() {
+      hideAllMainViews();
       currentProject = null;
       currentImage = null;
+      currentMode = "home";
+      activeResearchKey = null;
 
       site.classList.add("hidden");
       home.classList.remove("hidden");
@@ -1607,11 +1952,33 @@
 
       currentProject = null;
       currentImage = null;
+      currentMode = "projects";
+      activeResearchKey = null;
 
       closeDrawer();
       clearUrl();
 
-      requestAnimationFrame(updateHomeProjectDots);
+      requestAnimationFrame(updateAllHomeProjectDots);
+    }
+
+    function showResearchSummary() {
+      home.classList.add("hidden");
+      site.classList.remove("hidden");
+      hideAllMainViews();
+      researchSummary.classList.remove("hidden");
+
+      currentProject = null;
+      currentImage = null;
+      currentMode = "researches";
+      activeResearchKey = null;
+
+      closeDrawer();
+      const url = new URL(window.location);
+      url.search = "";
+      url.searchParams.set("section", "researches");
+      history.replaceState({}, "", url);
+
+      requestAnimationFrame(updateAllHomeProjectDots);
     }
 
     function showContact() {
@@ -1622,6 +1989,7 @@
 
       currentProject = null;
       currentImage = null;
+      currentMode = "contact";
 
       contactFeed.scrollTop = 0;
       loadContactPage();
@@ -1675,6 +2043,7 @@
 
       currentProject = null;
       currentImage = null;
+      currentMode = "about";
 
       closeDrawer();
 
@@ -1736,6 +2105,7 @@
 
     function showViewer(project, targetPage, direction = "none") {
       currentProject = project;
+      currentMode = project.kind === "research" ? "researches" : "projects";
 
       home.classList.add("hidden");
       site.classList.remove("hidden");
@@ -1743,8 +2113,56 @@
       viewer.classList.remove("hidden");
 
       mobileCurrentTitle.textContent = project.displayTitle || project.title;
-      loadProjectInfo(project);
+      buildProjectIndex();
+
+      if (project.kind === "research") {
+        infoToken++;
+        mobileInfoButton.classList.add("hidden");
+        mobileInfoText.innerHTML = "";
+        closeInfoPanel();
+      } else {
+        mobileInfoButton.classList.remove("hidden");
+        loadProjectInfo(project);
+      }
+
       goToPage(targetPage || project.start, direction);
+    }
+
+    function renderResearchIntro(project, page) {
+      const isResearch = project && project.kind === "research";
+      const isIntro = isResearch && page === project.start;
+
+      imageStage.classList.toggle("research-page-active", isResearch);
+      imageStage.classList.toggle("research-intro-active", isIntro);
+      researchIntroPanel.classList.toggle("hidden", !isIntro);
+
+      if (!isIntro) {
+        researchIntroPanel.innerHTML = "";
+        return;
+      }
+
+      const locationHtml = project.introLocation
+        ? `<p class="research-intro-location">${escapeHtml(project.introLocation)}</p>`
+        : "";
+
+      const metaHtml = Array.isArray(project.introMeta) && project.introMeta.length
+        ? `
+          <ul class="research-intro-meta">
+            ${project.introMeta.map(item => `<li>${escapeHtml(item)}</li>`).join("")}
+          </ul>
+        `
+        : "";
+
+      researchIntroPanel.innerHTML = `
+        <h1 class="research-intro-title">${escapeHtml(project.fullTitle || project.title)}</h1>
+        ${locationHtml}
+        ${metaHtml}
+        <p class="research-intro-copy">${escapeHtml(project.introText || "")}</p>
+        <div class="research-intro-themes">
+          <span>${escapeHtml(project.introTheme || project.type || "")}</span>
+          <span>${escapeHtml(project.introSingularity || project.line || "")}</span>
+        </div>
+      `;
     }
 
     async function setImageWithTransition(src, direction, caption) {
@@ -1817,6 +2235,7 @@
       const captionSrc = getProjectCaptionSrc(projectAtRequest, imageAtRequest);
 
       currentImage = target;
+      renderResearchIntro(projectAtRequest, imageAtRequest);
       closeInfoPanel();
       closeIndexPanel();
 
@@ -1849,20 +2268,22 @@
     function previousProject() {
       if (!currentProject) return;
 
-      const index = PROJECTS.findIndex(project => project.slug === currentProject.slug);
+      const collection = currentMode === "researches" ? RESEARCHES : PROJECTS;
+      const index = collection.findIndex(project => project.slug === currentProject.slug);
       if (index <= 0) return;
 
-      const previous = PROJECTS[index - 1];
+      const previous = collection[index - 1];
       showViewer(previous, previous.start, "animate-prev-project");
     }
 
     function nextProject() {
       if (!currentProject) return;
 
-      const index = PROJECTS.findIndex(project => project.slug === currentProject.slug);
-      if (index < 0 || index >= PROJECTS.length - 1) return;
+      const collection = currentMode === "researches" ? RESEARCHES : PROJECTS;
+      const index = collection.findIndex(project => project.slug === currentProject.slug);
+      if (index < 0 || index >= collection.length - 1) return;
 
-      const next = PROJECTS[index + 1];
+      const next = collection[index + 1];
       showViewer(next, next.start, "animate-next-project");
     }
 
@@ -2246,6 +2667,7 @@
 
     function openInfoPanel() {
       if (viewer.classList.contains("hidden")) return;
+      if (!currentProject) return;
       closeDrawer();
       closeIndexPanel();
       mobileInfoPanel.classList.add("open");
@@ -2276,16 +2698,19 @@
       else openIndexPanel();
     }
 
-    function buildProjectCards() {
-      projectGrid.innerHTML = "";
+    function buildProjectCards(container, items) {
+      container.innerHTML = "";
 
-      PROJECTS.forEach((project, index) => {
+      items.forEach((project, index) => {
         const button = document.createElement("button");
         button.className = "project-card";
         button.dataset.index = String(index);
+        if (project.kind === "research") {
+          button.classList.add("research-card", `research-${project.key}`);
+        }
 
         button.innerHTML = `
-          <img class="thumb" src="${getVignetteSrc(project.thumb)}" alt="${project.fullTitle}" />
+          <img class="thumb" src="${getVignetteSrc(project)}" alt="${project.fullTitle}" />
           <span class="card-text">
             <span class="card-title">${String(index + 1).padStart(2, "0")} — ${project.title}</span>
             <span class="card-type">${project.type}</span>
@@ -2293,15 +2718,18 @@
           </span>
         `;
 
-        button.addEventListener("click", () => showViewer(project, project.start, "none"));
-        projectGrid.appendChild(button);
+        button.addEventListener("click", () => {
+          if (project.kind === "research") showResearchMobileViewer(project);
+          else showViewer(project, project.start, "none");
+        });
+        container.appendChild(button);
       });
     }
 
-    function buildHomeProjectDots() {
-      homeProjectDots.innerHTML = "";
+    function buildHomeProjectDots(dotsContainer, grid, items, markerId) {
+      dotsContainer.innerHTML = "";
 
-      PROJECTS.forEach((project, index) => {
+      items.forEach((project, index) => {
         const dot = document.createElement("button");
         dot.className = "home-project-dot";
         dot.setAttribute("aria-label", `Voir ${project.title}`);
@@ -2310,35 +2738,35 @@
         dot.addEventListener("click", event => {
           event.stopPropagation();
 
-          const card = projectGrid.querySelector(`.project-card[data-index="${index}"]`);
+          const card = grid.querySelector(`.project-card[data-index="${index}"]`);
           if (!card) return;
 
-          projectGrid.scrollTo({
+          grid.scrollTo({
             top: card.offsetTop,
             behavior: "smooth"
           });
         });
 
-        homeProjectDots.appendChild(dot);
+        dotsContainer.appendChild(dot);
       });
 
       const marker = document.createElement("span");
-      marker.id = "home-project-dot-marker";
+      marker.id = markerId;
       marker.className = "home-project-dot-marker";
-      homeProjectDots.appendChild(marker);
+      dotsContainer.appendChild(marker);
 
-      updateHomeProjectDots();
+      updateHomeProjectDots(grid, markerId);
     }
 
-    function updateHomeProjectDots() {
-      const cards = Array.from(projectGrid.querySelectorAll(".project-card"));
-      const marker = document.getElementById("home-project-dot-marker");
+    function updateHomeProjectDots(grid, markerId) {
+      const cards = Array.from(grid.querySelectorAll(".project-card"));
+      const marker = document.getElementById(markerId);
 
       if (!cards.length || !marker) return;
 
       const cardHeight = cards[0].offsetHeight || 1;
       const maxProgress = Math.max(0, cards.length - 1);
-      const rawProgress = projectGrid.scrollTop / cardHeight;
+      const rawProgress = grid.scrollTop / cardHeight;
       const progress = Math.max(0, Math.min(maxProgress, rawProgress));
       const dotStep = 16;
 
@@ -2350,14 +2778,20 @@
 
       homeDotAnimationFrame = requestAnimationFrame(() => {
         homeDotAnimationFrame = null;
-        updateHomeProjectDots();
+        updateAllHomeProjectDots();
       });
+    }
+
+    function updateAllHomeProjectDots() {
+      updateHomeProjectDots(projectGrid, "home-project-dot-marker");
+      updateHomeProjectDots(researchProjectGrid, "research-project-dot-marker");
     }
 
     function buildProjectIndex() {
       mobileIndexList.innerHTML = "";
 
-      PROJECTS.forEach((project, index) => {
+      const collection = currentMode === "researches" ? RESEARCHES : PROJECTS;
+      collection.forEach((project, index) => {
         const button = document.createElement("button");
 
         button.innerHTML = `
@@ -2501,18 +2935,26 @@
     document.getElementById("close-drawer").addEventListener("click", closeDrawer);
 
     document.getElementById("drawer-home").addEventListener("click", showSummary);
+    document.getElementById("drawer-researches").addEventListener("click", showResearchSummary);
     document.getElementById("drawer-about").addEventListener("click", () => showAbout(ABOUT_PAGES[0]));
 
     overlay.addEventListener("click", closeDrawer);
 
-    mobileCurrentTitle.addEventListener("click", showSummary);
+    mobileCurrentTitle.addEventListener("click", () => {
+      if (currentMode === "researches") showResearchSummary();
+      else showSummary();
+    });
     mobileIndexButton.addEventListener("click", toggleIndexPanel);
     mobileInfoButton.addEventListener("click", toggleInfoPanel);
+    researchMobileCurrentTitle.addEventListener("click", showResearchSummary);
+    researchMobileIndexButton.addEventListener("click", toggleResearchMobileIndex);
+    researchMobileInfoButton.addEventListener("click", toggleResearchMobileInfo);
 
     prevPageButton.addEventListener("click", previousPage);
     nextPageButton.addEventListener("click", nextPage);
 
     projectGrid.addEventListener("scroll", requestHomeDotUpdate, { passive: true });
+    researchProjectGrid.addEventListener("scroll", requestHomeDotUpdate, { passive: true });
 
     documentWrap.addEventListener("pointerdown", e => startGesture(e.clientX, e.clientY));
     documentWrap.addEventListener("pointerup", e => endProjectGesture(e.clientX, e.clientY));
@@ -2524,31 +2966,52 @@
       aboutScrollTimer = setTimeout(updateAboutPageFromScroll, 120);
     });
 
+    document.addEventListener("keydown", event => {
+      if (event.key !== "Escape") return;
+      if (researchMobileInfoPanel.classList.contains("open") || researchMobileIndexPanel.classList.contains("open")) {
+        closeResearchMobilePanels();
+      }
+    });
+
     window.addEventListener("resize", () => {
       clearTimeout(resizeTimer);
       resizeTimer = setTimeout(() => {
         trimAllAboutImages();
-        updateHomeProjectDots();
+        updateAllHomeProjectDots();
       }, 150);
     });
 
-    buildProjectCards();
-    buildHomeProjectDots();
+    buildProjectCards(projectGrid, PROJECTS);
+    buildProjectCards(researchProjectGrid, RESEARCHES);
+    buildHomeProjectDots(homeProjectDots, projectGrid, PROJECTS, "home-project-dot-marker");
+    buildHomeProjectDots(researchProjectDots, researchProjectGrid, RESEARCHES, "research-project-dot-marker");
     buildProjectIndex();
     buildAboutFeed();
 
     const params = new URLSearchParams(window.location.search);
     const directPage = parseInt(params.get("page"), 10);
     const directProjectSlug = params.get("project");
+    const directResearchSlug = params.get("research");
+    const directSection = params.get("section");
     const directAbout = params.get("about");
     const directContact = params.get("contact");
 
     let directProject = null;
+    let directResearch = null;
 
     if (directContact) {
       showContact();
     } else if (directAbout) {
       showAbout(directPage || ABOUT_PAGES[0]);
+    } else if (directResearchSlug) {
+      directResearch = RESEARCHES.find(research =>
+        research.slug === directResearchSlug || research.aliases?.includes(directResearchSlug)
+      );
+      if (directResearch) {
+        showResearchMobileViewer(directResearch);
+      }
+    } else if (directSection === "researches") {
+      showResearchSummary();
     } else {
       if (directProjectSlug) {
         directProject = PROJECTS.find(project => project.slug === directProjectSlug);
