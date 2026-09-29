@@ -180,13 +180,6 @@
 
     .project-grid::-webkit-scrollbar { display: none; }
 
-    .research-summary .project-grid { scroll-snap-type: none; }
-    .research-summary .project-card {
-      scroll-snap-align: none;
-      scroll-snap-stop: normal;
-    }
-    .research-summary .home-project-dots { display: none; }
-
     .project-card {
       width: 100vw;
       height: calc(100dvh - 84px);
@@ -243,12 +236,17 @@
 
     .card-type {
       display: block;
+      position: relative;
+      left: 50%;
+      width: calc(100vw - 32px);
+      transform: translateX(-50%);
       font-size: 14px;
       line-height: 1.38;
       font-weight: var(--weight-regular);
       color: #555;
       margin-bottom: 5px;
       text-align: center;
+      white-space: nowrap;
     }
 
     .card-line {
@@ -267,29 +265,29 @@
       z-index: 40;
       display: flex;
       flex-direction: column;
-      gap: 9px;
+      gap: 8px;
       transform: translateY(-50%);
       pointer-events: auto;
     }
 
     .home-project-dot {
-      width: 7px;
-      height: 7px;
+      width: 6px;
+      height: 6px;
       padding: 0;
       border: none;
       border-radius: 999px;
-      background: rgba(17, 17, 17, 0.22);
+      background: rgba(17, 17, 17, 0.16);
       cursor: pointer;
     }
 
     .home-project-dot-marker {
       position: absolute;
       left: 0;
-      top: -5.5px;
-      width: 7px;
-      height: 18px;
+      top: -4.5px;
+      width: 6px;
+      height: 15px;
       border-radius: 999px;
-      background: rgba(17, 17, 17, 0.62);
+      background: rgba(17, 17, 17, 0.48);
       pointer-events: none;
       will-change: transform;
     }
@@ -345,11 +343,12 @@
 
     .page-image-layer {
       position: absolute;
-      inset: 0;
-      width: 100vw;
-      height: 100%;
+      top: 0;
+      left: 16px;
+      width: calc(100vw - 32px);
+      height: auto;
       object-fit: contain;
-      object-position: center;
+      object-position: center top;
       display: block;
       user-select: none;
       -webkit-user-drag: none;
@@ -359,23 +358,21 @@
 
     .mobile-page-caption {
       position: absolute;
-      left: 34px;
-      right: 34px;
-      bottom: 42px;
+      left: 16px;
+      right: 16px;
+      bottom: auto;
       z-index: 20;
       padding: 7px 10px 8px;
       font-family: var(--font-main);
-      font-size: 16.2px;
+      font-size: 15.8px;
       line-height: 1.32;
       font-weight: var(--weight-medium);
       letter-spacing: 0.002em;
-      color: rgba(17, 17, 17, 0.84);
+      color: var(--text-light);
       text-align: center;
       text-transform: none;
       white-space: pre-line;
-      background: rgba(255, 255, 255, 0.76);
-      backdrop-filter: blur(3px);
-      -webkit-backdrop-filter: blur(3px);
+      background: transparent;
       pointer-events: none;
     }
 
@@ -473,38 +470,38 @@
 
     .image-stage.animate-next-page .previous-layer {
       display: block;
-      animation: outLeft 260ms ease forwards;
+      animation: outUp 260ms ease forwards;
     }
 
     .image-stage.animate-next-page .current-layer {
-      animation: inRight 260ms ease forwards;
+      animation: inBottom 260ms ease forwards;
     }
 
     .image-stage.animate-prev-page .previous-layer {
       display: block;
-      animation: outRight 260ms ease forwards;
+      animation: outDown 260ms ease forwards;
     }
 
     .image-stage.animate-prev-page .current-layer {
-      animation: inLeft 260ms ease forwards;
+      animation: inTop 260ms ease forwards;
     }
 
     .image-stage.animate-next-project .previous-layer {
       display: block;
-      animation: outUp 280ms ease forwards;
+      animation: outLeft 280ms ease forwards;
     }
 
     .image-stage.animate-next-project .current-layer {
-      animation: inBottom 280ms ease forwards;
+      animation: inRight 280ms ease forwards;
     }
 
     .image-stage.animate-prev-project .previous-layer {
       display: block;
-      animation: outDown 280ms ease forwards;
+      animation: outRight 280ms ease forwards;
     }
 
     .image-stage.animate-prev-project .current-layer {
-      animation: inTop 280ms ease forwards;
+      animation: inLeft 280ms ease forwards;
     }
 
     @keyframes inRight {
@@ -553,34 +550,9 @@
       display: flex;
       align-items: flex-start;
       justify-content: center;
-      gap: 116px;
       background: #ffffff;
       transform: translateY(-16px);
       z-index: 65;
-    }
-
-    .swipe-arrow-button {
-      border: none;
-      background: transparent;
-      padding: 0;
-      margin: 0;
-      font-family: var(--font-main);
-      font-size: 29px;
-      line-height: 1;
-      color: rgba(17, 17, 17, 0.48);
-      transform: translateY(-5px);
-      cursor: pointer;
-      width: 34px;
-      height: 30px;
-      display: flex;
-      align-items: center;
-      justify-content: center;
-      touch-action: manipulation;
-    }
-
-    .swipe-arrow-button:disabled {
-      opacity: 0.18;
-      cursor: default;
     }
 
     #mobile-counter {
@@ -1272,9 +1244,7 @@
       </div>
 
       <div class="mobile-swipe-indicator">
-        <button id="prev-page-button" class="swipe-arrow-button" aria-label="Page précédente">‹</button>
         <span id="mobile-counter">1/1</span>
-        <button id="next-page-button" class="swipe-arrow-button" aria-label="Page suivante">›</button>
       </div>
 
       <div class="mobile-project-bottom">
@@ -1327,7 +1297,7 @@
 
   <script src="researches/research-data.js?v=20260803-2"></script>
   <script>
-    const ASSET_VERSION = "2026-07-30-recherches-5";
+    const ASSET_VERSION = "2026-09-29-edwood-mobile-1";
 
     const COVER_IMAGES = [
       "cover-mobile.jpg",
@@ -1405,6 +1375,7 @@
         displayTitle: "Edwood",
         fullTitle: "Edwood",
         type: "Construction bois",
+        cardType: "Expérience professionnelle\u00a0: Construction bois",
         line: "Le chantier comme école de la réalité constructive.",
         infoTitle: "Le chantier comme école de la réalité constructive",
         infoFile: "pages-mobile/edwood/info.txt",
@@ -1412,9 +1383,9 @@
         thumb: "edwood.jpg",
         folder: "pages-mobile/edwood/",
         filePrefix: "page",
-        captionPages: [2, 4, 6],
+        captionPages: [2, 3, 4, 5, 6, 7, 8, 9, 10, 11, 12, 13],
         start: 1,
-        end: 7
+        end: 13
       },
       {
         slug: "tank",
@@ -1422,6 +1393,7 @@
         displayTitle: "TANK",
         fullTitle: "TANK Architectes",
         type: "Expérience en agence",
+        cardType: "Expérience professionnelle\u00a0: Agence d'architecture",
         line: "L’architecte dans une pratique engagée pour la qualité.",
         infoTitle: "L’architecte engagé dans la qualité",
         infoFile: "pages-mobile/tank/info.txt",
@@ -1430,6 +1402,7 @@
         folder: "pages-mobile/tank/",
         filePrefix: "page",
         captionPages: [2, 3, 4, 6, 8, 9, 10],
+        captionSourcePages: { 5: 4, 7: 6, 11: 10, 12: 10, 13: 10 },
         start: 1,
         end: 13
       },
@@ -1439,6 +1412,7 @@
         displayTitle: "Ferme Nord",
         fullTitle: "Ferme Nord",
         type: "Réhabilitation et extension",
+        cardType: "PFE\u00a0: Réhabilitation et extension",
         line: "L’harmonieux contraste.",
         infoTitle: "L’harmonieux contraste",
         infoFile: "pages-mobile/ferme-nord/info.txt",
@@ -1447,6 +1421,7 @@
         folder: "pages-mobile/ferme-nord/",
         filePrefix: "page",
         captionPages: [2, 4, 5, 6, 7, 8, 9, 10, 11, 12, 13, 14, 15, 16, 17, 19, 20, 21, 22, 23, 24, 25, 26, 27, 28, 29],
+        captionSourcePages: { 3: 2, 18: 17 },
         start: 1,
         end: 29
       },
@@ -1456,6 +1431,7 @@
         displayTitle: "Saint-Joseph",
         fullTitle: "Église Saint-Joseph",
         type: "Réhabilitation patrimoniale",
+        cardType: "Semestre 8\u00a0: Réhabilitation patrimoniale",
         line: "Révéler les qualités cachées du patrimoine.",
         infoTitle: "Révéler les qualités cachées du patrimoine",
         infoFile: "pages-mobile/saint-joseph/info.txt",
@@ -1464,6 +1440,7 @@
         folder: "pages-mobile/saint-joseph/",
         filePrefix: "page",
         captionPages: [2, 3, 4, 5, 6, 7, 8, 9, 10, 12, 13],
+        captionSourcePages: { 11: 10 },
         start: 1,
         end: 15
       },
@@ -1473,6 +1450,7 @@
         displayTitle: "Melle",
         fullTitle: "Station ferroviaire Melle",
         type: "Projet urbain et bâtiment mixte",
+        cardType: "Semestre 7\u00a0: Projet urbain et bâtiment mixte",
         line: "Évolutivité et appropriation des espaces.",
         infoTitle: "Évolutivité et appropriation de l’espace commun",
         infoFile: "pages-mobile/melle/info.txt",
@@ -1487,6 +1465,12 @@
     ];
 
     const RESEARCH_ASSET_VERSION = window.RESEARCH_DATA.version;
+    const RESEARCH_CARD_TYPES = {
+      oostakker: "Semestre 8\u00a0: Infrastructure énergétique",
+      mandel: "Semestre 7\u00a0: Gestion des ressources",
+      hostellerie: "Semestre 9\u00a0: Réhabilitation énergétique"
+    };
+
     const RESEARCHES = window.RESEARCH_DATA.order.map(key => {
       const item = window.RESEARCH_DATA.items[key];
       return {
@@ -1496,6 +1480,7 @@
         displayTitle: item.title,
         fullTitle: item.title,
         type: item.kind,
+        cardType: RESEARCH_CARD_TYPES[key],
         line: item.summary,
         thumbPath: item.coverMobile,
         start: 1,
@@ -1557,8 +1542,6 @@
     const previousPageCaption = document.getElementById("previous-page-caption");
     const mobilePageCaption = document.getElementById("mobile-page-caption");
     const researchIntroPanel = document.getElementById("research-intro-panel");
-    const prevPageButton = document.getElementById("prev-page-button");
-    const nextPageButton = document.getElementById("next-page-button");
 
     const drawer = document.getElementById("drawer");
     const overlay = document.getElementById("overlay");
@@ -1606,8 +1589,11 @@
     }
 
     function getProjectCaptionSrc(project, num) {
-      if (!project.captionPages.includes(num)) return "";
-      return assetUrl(`${project.folder}caption (${num}).txt`);
+      const captionPage = project.captionPages.includes(num)
+        ? num
+        : project.captionSourcePages?.[num];
+      if (!captionPage) return "";
+      return assetUrl(`${project.folder}caption (${captionPage}).txt`);
     }
 
     function getAboutImageSrc(num) {
@@ -1752,6 +1738,49 @@
 
       element.textContent = cleanCaption;
       element.classList.remove("hidden");
+    }
+
+    function layoutProjectLayer(image, caption) {
+      if (!image.naturalWidth || !image.naturalHeight) return;
+
+      const stageWidth = imageStage.clientWidth;
+      const stageHeight = imageStage.clientHeight;
+      const sideMargin = 16;
+      const captionGap = 12;
+      const navigationOverlap = 16;
+      const originalScale = Math.min(
+        stageWidth / image.naturalWidth,
+        stageHeight / image.naturalHeight
+      );
+      const originalHeight = image.naturalHeight * originalScale;
+      const imageTop = Math.max(0, (stageHeight - originalHeight) / 2);
+      const captionHeight = caption.classList.contains("hidden") ? 0 : caption.scrollHeight;
+      const availableHeight = Math.max(
+        1,
+        stageHeight - imageTop - (captionHeight ? captionHeight + captionGap + navigationOverlap : 0)
+      );
+      const containedScale = Math.min(
+        (stageWidth - sideMargin * 2) / image.naturalWidth,
+        availableHeight / image.naturalHeight
+      );
+      const imageWidth = image.naturalWidth * containedScale;
+      const imageHeight = image.naturalHeight * containedScale;
+
+      image.style.left = `${(stageWidth - imageWidth) / 2}px`;
+      image.style.top = `${imageTop}px`;
+      image.style.width = `${imageWidth}px`;
+      image.style.height = `${imageHeight}px`;
+
+      caption.style.left = `${sideMargin}px`;
+      caption.style.right = `${sideMargin}px`;
+      caption.style.bottom = "auto";
+      caption.style.top = `${imageTop + imageHeight + captionGap}px`;
+    }
+
+    function scheduleProjectLayerLayout(image, caption) {
+      const layout = () => requestAnimationFrame(() => layoutProjectLayer(image, caption));
+      if (image.complete && image.naturalWidth) layout();
+      else image.addEventListener("load", layout, { once: true });
     }
 
     function clearUrl() {
@@ -2187,6 +2216,7 @@
         previousLayer.style.display = "none";
         pageImage.src = src;
         setCaptionElement(mobilePageCaption, caption);
+        scheduleProjectLayerLayout(pageImage, mobilePageCaption);
         preloadImage(src);
         return true;
       }
@@ -2195,8 +2225,10 @@
       if (token !== transitionToken) return false;
 
       previousImage.src = currentSrc;
+      previousImage.style.cssText = pageImage.style.cssText;
 
       previousPageCaption.textContent = currentCaptionText;
+      previousPageCaption.style.cssText = mobilePageCaption.style.cssText;
       if (currentCaptionHidden || !currentCaptionText) {
         previousPageCaption.classList.add("hidden");
       } else {
@@ -2206,6 +2238,7 @@
       previousLayer.style.display = "block";
       pageImage.src = src;
       setCaptionElement(mobilePageCaption, caption);
+      scheduleProjectLayerLayout(pageImage, mobilePageCaption);
 
       void imageStage.offsetWidth;
       imageStage.classList.add(direction);
@@ -2265,28 +2298,6 @@
       goToPage(currentImage + 1, "animate-next-page");
     }
 
-    function previousProject() {
-      if (!currentProject) return;
-
-      const collection = currentMode === "researches" ? RESEARCHES : PROJECTS;
-      const index = collection.findIndex(project => project.slug === currentProject.slug);
-      if (index <= 0) return;
-
-      const previous = collection[index - 1];
-      showViewer(previous, previous.start, "animate-prev-project");
-    }
-
-    function nextProject() {
-      if (!currentProject) return;
-
-      const collection = currentMode === "researches" ? RESEARCHES : PROJECTS;
-      const index = collection.findIndex(project => project.slug === currentProject.slug);
-      if (index < 0 || index >= collection.length - 1) return;
-
-      const next = collection[index + 1];
-      showViewer(next, next.start, "animate-next-project");
-    }
-
     function updateMobileProjectUi() {
       if (!currentProject || currentImage === null) return;
 
@@ -2295,9 +2306,6 @@
 
       mobileCounter.textContent = `${index}/${total}`;
       mobileCurrentTitle.textContent = currentProject.displayTitle || currentProject.title;
-
-      prevPageButton.disabled = currentImage <= currentProject.start;
-      nextPageButton.disabled = currentImage >= currentProject.end;
     }
 
     function renderProjectFallbackInfo(project) {
@@ -2713,7 +2721,7 @@
           <img class="thumb" src="${getVignetteSrc(project)}" alt="${project.fullTitle}" />
           <span class="card-text">
             <span class="card-title">${String(index + 1).padStart(2, "0")} — ${project.title}</span>
-            <span class="card-type">${project.type}</span>
+            <span class="card-type">${project.cardType || project.type}</span>
             <span class="card-line">${project.line}</span>
           </span>
         `;
@@ -2722,6 +2730,7 @@
           if (project.kind === "research") showResearchMobileViewer(project);
           else showViewer(project, project.start, "none");
         });
+        button.querySelector(".thumb").addEventListener("load", requestHomeDotUpdate, { once: true });
         container.appendChild(button);
       });
     }
@@ -2768,8 +2777,24 @@
       const maxProgress = Math.max(0, cards.length - 1);
       const rawProgress = grid.scrollTop / cardHeight;
       const progress = Math.max(0, Math.min(maxProgress, rawProgress));
-      const dotStep = 16;
+      const previousIndex = Math.floor(progress);
+      const nextIndex = Math.ceil(progress);
+      const transitionProgress = progress - previousIndex;
+      const imageCenter = index => {
+        const card = cards[index];
+        const image = card?.querySelector(".thumb");
+        if (!card || !image) return grid.clientHeight / 2;
 
+        const cardRect = card.getBoundingClientRect();
+        const imageRect = image.getBoundingClientRect();
+        return imageRect.top - cardRect.top + imageRect.height / 2;
+      };
+      const previousCenter = imageCenter(previousIndex);
+      const nextCenter = imageCenter(nextIndex);
+      const currentCenter = previousCenter + (nextCenter - previousCenter) * transitionProgress;
+      const dotStep = 14;
+
+      marker.parentElement.style.top = `${currentCenter}px`;
       marker.style.transform = `translateY(${progress * dotStep}px)`;
     }
 
@@ -2889,31 +2914,23 @@
 
       gestureActive = false;
 
-      const now = Date.now();
-      if (now - lastGestureTime < 220) return;
-      lastGestureTime = now;
-
       const dx = x - gestureStartX;
       const dy = y - gestureStartY;
 
       const absX = Math.abs(dx);
       const absY = Math.abs(dy);
 
-      if (absX < SWIPE_MIN && absY < SWIPE_MIN) return;
+      if (absY < SWIPE_MIN || absY <= absX * DIRECTION_RATIO) return;
+
+      const now = Date.now();
+      if (now - lastGestureTime < 220) return;
+      lastGestureTime = now;
 
       closeInfoPanel();
       closeIndexPanel();
 
-      if (absX > absY * DIRECTION_RATIO) {
-        if (dx < 0) nextPage();
-        else previousPage();
-        return;
-      }
-
-      if (absY > absX * DIRECTION_RATIO) {
-        if (dy < 0) nextProject();
-        else previousProject();
-      }
+      if (dy < 0) nextPage();
+      else previousPage();
     }
 
     function preventGestureScroll(e) {
@@ -2950,9 +2967,6 @@
     researchMobileIndexButton.addEventListener("click", toggleResearchMobileIndex);
     researchMobileInfoButton.addEventListener("click", toggleResearchMobileInfo);
 
-    prevPageButton.addEventListener("click", previousPage);
-    nextPageButton.addEventListener("click", nextPage);
-
     projectGrid.addEventListener("scroll", requestHomeDotUpdate, { passive: true });
     researchProjectGrid.addEventListener("scroll", requestHomeDotUpdate, { passive: true });
 
@@ -2978,6 +2992,9 @@
       resizeTimer = setTimeout(() => {
         trimAllAboutImages();
         updateAllHomeProjectDots();
+        if (!viewer.classList.contains("hidden")) {
+          layoutProjectLayer(pageImage, mobilePageCaption);
+        }
       }, 150);
     });
 
